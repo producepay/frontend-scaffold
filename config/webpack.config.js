@@ -347,6 +347,7 @@ module.exports = function(webpackEnv) {
                 ),
                 
                 plugins: [
+                  'lodash',
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -546,7 +547,9 @@ module.exports = function(webpackEnv) {
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
         }),
       isEnvProduction &&
-        new PurgecssPlugin({ paths: [paths.appHtml, ...glob.sync(`${paths.appSrc}/*`)] }),
+        new PurgecssPlugin({
+          paths: glob.sync([paths.appHtml, `${paths.appSrc}/**/*`], { nodir: true }),
+        }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
       // having to parse `index.html`.
