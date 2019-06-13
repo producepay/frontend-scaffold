@@ -42,7 +42,7 @@ function PricingGraphView(props) {
       ),
     );
   }
-  console.log(activePriceReports);
+
   return (
     <div className="h-full">
       {isEmpty(priceReports) ? (

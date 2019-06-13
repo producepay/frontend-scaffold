@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import getISOWeek from 'date-fns/get_iso_week';
 import subWeeks from 'date-fns/sub_weeks';
@@ -6,6 +6,7 @@ import endOfWeek from 'date-fns/end_of_week';
 import format from 'date-fns/format';
 
 import { orderByDateStr, takeNth } from '../../../helpers/lodash';
+import { useWidth } from '../../../helpers/dom';
 import createTooltipRenderer from './tooltip';
 
 import { ResponsiveLine } from '@nivo/line';
@@ -82,8 +83,7 @@ function getNivoDataConfig(currentYearReports, lastYearReports, startWeek) {
 }
 
 function MovementGraphView({ commodityName, startWeek, currentYearReports, lastYearReports }) {
-  const wrapperRef = useRef(null);
-  const wrapperWidth = wrapperRef.current ? wrapperRef.current.getBoundingClientRect().width : 0;
+  const { ref, width } = useWidth();
 
   const nivoDataConfig = getNivoDataConfig(
     orderByDateStr(currentYearReports, 'reportDate', 'asc'),
@@ -128,7 +128,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
       },
     ],
     enableSlices: 'x',
-    sliceTooltip: createTooltipRenderer(wrapperWidth, rawData),
+    sliceTooltip: createTooltipRenderer(width, rawData),
   };
 
   const commonAxisBottomProps = {
@@ -155,7 +155,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
       />
 
       <div className="py-4 md:py-8 px-6 md:px-8">
-        <div ref={wrapperRef} className="h-100">
+        <div ref={ref} className="h-100">
           <div className="sm:hidden h-full">
             <ResponsiveLine
               {...commonGraphProps}

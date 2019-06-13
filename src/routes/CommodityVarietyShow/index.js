@@ -48,13 +48,6 @@ const FETCH_DATA = gql`
     $currentYearMovementFilters: MovementReportFilterInputs,
     $lastYearMovementFilters: MovementReportFilterInputs
   ) {
-    commodities(uuids: $commodityUuids) {
-      name
-      imageUrls {
-        original
-      }
-    }
-
     summaryPricingData: shippingPointPriceReports(
       group: $summaryPricingGroups
       filter: $summaryPricingFilters

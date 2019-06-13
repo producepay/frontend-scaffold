@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveLine } from '@nivo/line';
 import _ from 'lodash';
@@ -10,6 +10,7 @@ import cx from 'classnames';
 
 import { orderByDateStr, takeNth } from '../../../helpers/lodash';
 import { getUTCDate } from '../../../helpers/dates';
+import { useWidth } from '../../../helpers/dom';
 import { formatPrice } from '../../../helpers/format';
 
 import Legend from '../../../components/elements/Nivo/Legend';
@@ -20,8 +21,7 @@ const formatDateNumber = (dateNumber) => format(new Date(dateNumber), 'MMM D');
 function PriceLineGraph(props) {
   const { priceReportsForSku, activeItems, onChange } = props;
 
-  const wrapperRef = useRef(null);
-  const wrapperWidth = wrapperRef.current ? wrapperRef.current.getBoundingClientRect().width : 0;
+  const { ref, width } = useWidth();
 
   const graphData = _.map(
     _.groupBy(priceReportsForSku, 'cityName'),
@@ -45,7 +45,7 @@ function PriceLineGraph(props) {
 
   const allPrices = _.map(priceReportsForSku, 'resolvedAveragePrice');
   const maxPrice = _.max(allPrices);
-  console.log(graphData);
+
   const commonLineGraphProps = {
     data: graphData,
     colors: { scheme: 'category10' },
@@ -61,7 +61,7 @@ function PriceLineGraph(props) {
     sliceTooltip: ({ slice }) => (
       <TooltipWrapper
         title={_.get(slice, 'points[0].data.xFormatted')}
-        flipTooltipDisplay={slice.x > (wrapperWidth / 2)}
+        flipTooltipDisplay={slice.x > (width / 2)}
       >
         <table className='max-w-xs'>
           <tbody>
@@ -94,7 +94,7 @@ function PriceLineGraph(props) {
 
   return (
     <React.Fragment>
-      <div ref={wrapperRef} className='h-100'>
+      <div ref={ref} className='h-100'>
         {/* MOBILE */}
         <div className='sm:hidden h-full'>
           <ResponsiveLine

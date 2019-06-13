@@ -61,7 +61,6 @@ const getMovementPercentages = (thisYearMovement, lastYearMovement) => {
 
 function SummaryHeader(props) {
   const {
-    loading,
     pricingData,
     thisYearMovementData,
     lastYearMovementData,
@@ -79,9 +78,7 @@ function SummaryHeader(props) {
     ), 0)
   ), 0);
 
-  return loading ? (
-    null
-  ) : (
+  return (
     <SummaryHeaderView
       pricingPercentages={pricingPercentages}
       movementPercentages={movementPercentages}

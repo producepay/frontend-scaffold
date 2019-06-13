@@ -1,4 +1,6 @@
 import React from 'react';
+import gql from 'graphql-tag';
+import { useQuery } from 'react-apollo-hooks';
 import { get } from 'lodash';
 
 import { itemFromUuids } from '../../../helpers/commodities-and-varieties';
@@ -12,14 +14,30 @@ import Button from '../../../components/elements/Button';
 import logo from '../../../assets/images/pp-logo.svg';
 import './header-nav.css';
 
+const FETCH_COMMODITY = gql`
+  query fetchCommodity($commodityUuids: [String!]) {
+    commodities(uuids: $commodityUuids) {
+      name
+      imageUrls {
+        original
+      }
+    }
+  }
+`;
+
 const COMMODITY_IMAGE_WIDTH = 64;
 
 function HeaderNav(props) {
-  const { commodityId, varietyId, commodityData } = props;
+  const { commodityId, varietyId } = props;
+
+  const { data } = useQuery(FETCH_COMMODITY, {
+    variables: { commodityUuids: [commodityId] },
+  });
 
   const { token: userToken } = useAuth();
 
   const selectedItem = itemFromUuids(commodityId, varietyId);
+  const commodityData = get(data, 'commodities[0]', {});
   const imageUrl = get(commodityData, 'imageUrls.original', null);
 
   return (

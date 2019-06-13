@@ -36,16 +36,17 @@ function CommodityVarietyShow(props) {
       <HeaderNav
         commodityId={commodityUuid}
         varietyId={varietyUuid}
-        commodityData={get(data, 'commodities[0]', null)}
       />
 
-      <SummaryHeader
-        loading={loading}
-        pricingData={data.summaryPricingData}
-        thisYearMovementData={data.summaryThisYearMovementData}
-        lastYearMovementData={data.summaryLastYearMovementData}
-        growingRegionsData={data.growingRegions || []}
-      />
+      {loading ? null : (
+        <SummaryHeader
+          loading={loading}
+          pricingData={data.summaryPricingData}
+          thisYearMovementData={data.summaryThisYearMovementData}
+          lastYearMovementData={data.summaryLastYearMovementData}
+          growingRegionsData={data.growingRegions || []}
+        />
+      )}
 
       <div className="px-0 pt-3 md:py-6 md:px-20">
         {loading ? (
