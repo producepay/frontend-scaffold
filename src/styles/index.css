@@ -1,3 +1,7 @@
+html {
+  background: #f1f5f8;
+}
+
 body {
   font-family: "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -8,4 +12,13 @@ body {
 
 div, p, input, textarea, select, button {
   color: #43484D;
+}
+
+.anchor-section:before {
+  display: block;
+  content: ' ';
+  margin-top: -100px;
+  height: 100px;
+  visibility: hidden;
+  pointer-events: none;
 }

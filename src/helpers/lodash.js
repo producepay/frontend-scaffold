@@ -1,4 +1,8 @@
+import _ from 'lodash';
+
 export function orderByDateStr(list, key, dir = 'desc') {
+  if (_.isEmpty(list)) return [];
+
   return list.sort((a, b) => {
     return dir === 'desc'
       ? new Date(b[key]) - new Date(a[key])

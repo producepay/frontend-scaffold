@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo-hooks';
+import AppProviders from './contexts/AppProviders';
 
 import Root from './routes/Root';
 
@@ -10,7 +11,9 @@ function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <BrowserRouter>
-        <Root />
+        <AppProviders>
+          <Root />
+        </AppProviders>
       </BrowserRouter>
     </ApolloProvider>
   );
