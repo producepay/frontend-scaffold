@@ -71,7 +71,6 @@ function CommodityVarietyShow(props) {
                 commodityId={commodityUuid}
                 varietyId={varietyUuid}
                 pricingData={data.tablePricingData}
-                pricingMapUrl={get(data, 'latestDailyReportContent.pricingMapUrl', null)}
               />
             </Card>
 
