@@ -61,6 +61,8 @@ export function usePageTracking(props, pageKey) {
   const params = get(props, 'match.params', {});
 
   // eslint-disable-next-line
-  useEffect(() => trackPageView(PAGES[pageKey], { ...queryObj, ...params }), []);
+  useEffect(() => {
+    trackPageView(PAGES[pageKey], { ...queryObj, ...params })
+  }, [queryObj, params]);
 }
 
