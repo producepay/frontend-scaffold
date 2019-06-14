@@ -60,9 +60,11 @@ export function usePageTracking(props, pageKey) {
   const queryObj = qs.parse(get(props, 'location.search', ''), { ignoreQueryPrefix: true });
   const params = get(props, 'match.params', {});
 
-  // eslint-disable-next-line
+  const paramsKey = `${JSON.stringify(queryObj)}-${JSON.stringify(params)}`;
+
   useEffect(() => {
     trackPageView(PAGES[pageKey], { ...queryObj, ...params })
-  }, [queryObj, params]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageKey, paramsKey]);
 }
 
