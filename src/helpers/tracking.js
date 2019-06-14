@@ -6,7 +6,7 @@ export const KEYS = {
 };
 
 export const isSegmentEnabled = () => {
-  return process.env.GATSBY_SEGMENT_ENABLED === 'true';
+  return process.env.REACT_APP_SEGMENT_ENABLED === 'true';
 };
 
 export const identifyUser = (params, ctx = {}) => {
