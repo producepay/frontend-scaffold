@@ -10,6 +10,7 @@ import subISOYears from 'date-fns/sub_iso_years';
 import addWeeks from 'date-fns/add_weeks';
 
 import { gqlF } from '../../helpers/dates';
+import { usePageTracking } from '../../helpers/tracking';
 
 import CommodityVarietyShowView from './view';
 
@@ -107,6 +108,7 @@ const FETCH_DATA = gql`
 
 function CommodityVarietyShow(props) {
   const { match: { params: { commodityUuid, varietyUuid } } } = props;
+  usePageTracking(props, 'COMMODITY_VARIETY_SHOW');
 
   const commonMovementFilters = {
     impExpFlag: ['D', 'I'],

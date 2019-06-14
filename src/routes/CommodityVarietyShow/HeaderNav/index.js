@@ -44,7 +44,7 @@ function HeaderNav(props) {
     <React.Fragment>
       <div className="pl-0 md:pl-8 py-2 h-12 bg-white border-b flex items-center justify-center md:hidden">
         <img
-          src="/static/images/pp-logo.svg"
+          src={logo}
           alt="ProducePay"
           style={{ width: 135 }}
         />
