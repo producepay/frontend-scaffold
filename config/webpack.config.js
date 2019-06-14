@@ -549,6 +549,7 @@ module.exports = function(webpackEnv) {
       isEnvProduction &&
         new PurgecssPlugin({
           paths: glob.sync([paths.appHtml, `${paths.appSrc}/**/*`], { nodir: true }),
+          defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
         }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
