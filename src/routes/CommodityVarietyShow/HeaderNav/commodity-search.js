@@ -60,6 +60,7 @@ function CommoditySearch(props) {
               <TextField
                 {...getInputProps()}
                 innerRef={inputEl}
+                placeholder='Start typing a commodity'
                 onFocus={() => setState({ isOpen: true })}
               />
 
