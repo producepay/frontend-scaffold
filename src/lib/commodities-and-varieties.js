@@ -671,4 +671,14 @@ module.exports = [{
     name: 'Baby Peeled',
     uuid: '984a868f-c1c7-4568-af2b-cd5bd385679e',
   }],
+}, {
+  name: 'Spinach',
+  uuid: '351a14ff-0b64-4907-9034-1c547043c7a6',
+  varieties: [{
+    name: 'Eddoes',
+    uuid: '0ca75f17-a00e-4591-871c-10beb158610b',
+  }, {
+    name: 'Flat',
+    uuid: '9498e70d-038f-4925-935a-5c6a6da5cad0',
+  }],
 }];
