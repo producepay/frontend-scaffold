@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import qs from 'qs';
-import { setCookie, parseCookies } from 'nookies';
+import { parseCookies } from 'nookies';
 import { get } from 'lodash';
 
 export const KEYS = {
@@ -17,30 +17,30 @@ export const isSegmentEnabled = () => {
 
 export const identifyUser = (params, ctx = {}) => {
   const cookies = parseCookies(ctx);
-  const storedToken = get(cookies, 'userToken');
-  const storedEmail = get(cookies, 'userEmail');
+  const storedToken = localStorage.getItem('userToken') || get(cookies, 'userToken');
+  const storedEmail = localStorage.getItem('userEmail') || get(cookies, 'userEmail');
   const isNewToken = params && params.token && storedToken !== params.token;
   const isNewEmail = params && params.email && storedEmail !== params.email;
+
   let token, email;
   if (isNewToken) {
     token = params.token;
-    setCookie(ctx, 'userToken', token, {
-      maxAge: 365 * 10 * 24 * 60 * 60,
-    });
+    localStorage.setItem('userToken', token);
   } else if (storedToken) {
     token = storedToken;
+    localStorage.setItem('userToken', token);
   }
+
   if (isNewEmail) {
     email = params.email;
-    setCookie(ctx, 'userEmail', email, {
-      maxAge: 365 * 10 * 24 * 60 * 60,
-    });
+    localStorage.setItem('userEmail', email);
   } else if (storedEmail) {
     email = storedEmail;
+    localStorage.setItem('userEmail', email);
   }
-  if (isSegmentEnabled()) {
-    window.analytics.identify(token, { email });
-  }
+
+  if (isSegmentEnabled()) window.analytics.identify(token, { email });
+
   return token && email ? { userToken: token, userEmail: email } : {};
 };
 
