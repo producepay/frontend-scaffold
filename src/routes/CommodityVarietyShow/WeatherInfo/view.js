@@ -14,10 +14,7 @@ function WeatherInfoView(props) {
   ) : (
     <React.Fragment>
       <CardHeader
-        titleProps={{
-          id: 'weather-section',
-          className: 'anchor-section',
-        }}
+        anchorId='weather-section'
         title="Weather Alerts for the Next 7 Days"
         subtitle={
           <div className="flex pt-1">

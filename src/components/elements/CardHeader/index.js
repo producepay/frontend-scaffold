@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { omit } from 'lodash';
 
 function CardHeader(props) {
-  const { title, subtitle, className, borderless, titleProps } = props;
+  const { className, anchorId, title, subtitle, borderless } = props;
 
   const wrapperClassName = cx(className, 'py-5 sm:py-6 px-5 sm:px-8', {
     'md:border-b': !borderless,
@@ -12,11 +12,12 @@ function CardHeader(props) {
 
   const titleClassName = cx('font-normal text-xl', {
     'mb-1 sm:mb-2': subtitle,
-  }, titleProps.className || '');
+    'anchor-section': anchorId,
+  });
 
   return (
     <div className={wrapperClassName}>
-      <h2 className={titleClassName} {...omit(titleProps, 'className')}>
+      <h2 id={anchorId} className={titleClassName}>
         {title}
       </h2>
 
@@ -28,18 +29,18 @@ function CardHeader(props) {
 }
 
 CardHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  titleProps: PropTypes.object,
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
+  anchorId: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   borderless: PropTypes.bool,
 };
 
 CardHeader.defaultProps = {
   className: '',
+  anchorId: null,
   subtitle: null,
   borderless: false,
-  titleProps: {},
 };
 
 export default React.memo(CardHeader);
