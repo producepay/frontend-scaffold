@@ -577,7 +577,7 @@ module.exports = [{
     name: 'Various Red Sweet Varieties',
     uuid: '8f7b7460-f365-47fe-93de-9fbefe9e073c',
   }],
-},{
+}, {
   name: 'Potatoes',
   uuid: '33f04e37-2254-400f-b9fb-ec486ad41307',
   varieties: [{
@@ -596,14 +596,14 @@ module.exports = [{
     name: 'Long White',
     uuid: 'b7b7db62-d801-4aad-ad04-b24dcb69edab',
   }],
-},{
+}, {
   name: 'Cauliflower',
   uuid: '0115d36a-03dc-4dc8-bf58-7d08a9ef7e58',
   varieties: [{
     name: 'White',
     uuid: '69a691c4-a4d0-4619-9786-2b747ff1aa0a',
   }],
-},{
+}, {
   name: 'Apples',
   uuid: '5c5525c1-bffd-41e8-b2c8-1d345b2ae833',
   varieties: [{
@@ -660,5 +660,15 @@ module.exports = [{
   }, {
     name: 'Earligold',
     uuid: '4e00b897-24bf-4168-9902-a9e5fc2863b2',
+  }],
+}, {
+  name: 'Carrots',
+  uuid: 'fd0b726d-42e9-410b-bf0e-9704a226ee78',
+  varieties: [{
+    name: 'Variety Unspecified',
+    uuid: null,
+  }, {
+    name: 'Baby Peeled',
+    uuid: '984a868f-c1c7-4568-af2b-cd5bd385679e',
   }],
 }];
