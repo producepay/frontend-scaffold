@@ -681,4 +681,8 @@ module.exports = [{
     name: 'Flat',
     uuid: '9498e70d-038f-4925-935a-5c6a6da5cad0',
   }],
+}, {
+  name: 'Green Beans',
+  uuid: '2c2ce764-8cb9-4ee0-9aac-ea1e16b536e1',
+  varietyUuid: '886dcf42-fb8d-4e33-ab54-2092815d7400',
 }];
