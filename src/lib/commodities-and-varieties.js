@@ -583,37 +583,24 @@ module.exports = [{
   varieties: [{
     name: 'Russet',
     uuid: 'ddc02b2e-6d51-4943-8b4a-1db664cd5282',
-  },
-  {
+  }, {
     name: 'Round White',
     uuid: '43075e6d-3f9d-4084-a8fc-a5973358a4ea',
-  },
-  {
+  }, {
     name: 'Round Red',
     uuid: '3ff64c7b-c11b-4826-9e86-6a35fb08e7c0',
-  },
-  {
+  }, {
     name: 'Yellow',
     uuid: '6d0c38f6-e23d-46da-b7f2-9ccbfd17abc7',
-  },
-  {
+  }, {
     name: 'Long White',
     uuid: 'b7b7db62-d801-4aad-ad04-b24dcb69edab',
-  },
-  {
-    name: 'Purple',
-    uuid: '4a5830fb-2248-4237-96b2-62048553911a',
-  },
-  {
-    name: 'Fingerling',
-    uuid: 'd81ba6b8-6bf6-45b5-adb3-fc6ba4d48972',
-  },
-  {
-    name: 'Round Red/Yellow Flesh',
-    uuid: 'e4d06e64-62ef-4d95-af11-9888bfefc3de',
-  },
-  {
-    name: 'Mixed Varieties',
-    uuid: '53739935-5e4c-4b06-bbf2-18e829634f0a',
+  }],
+},{
+  name: 'Cauliflower',
+  uuid: '0115d36a-03dc-4dc8-bf58-7d08a9ef7e58',
+  varieties: [{
+    "name": "White",
+    "uuid": "69a691c4-a4d0-4619-9786-2b747ff1aa0a",
   }],
 }];
