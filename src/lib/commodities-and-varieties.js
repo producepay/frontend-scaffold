@@ -600,7 +600,65 @@ module.exports = [{
   name: 'Cauliflower',
   uuid: '0115d36a-03dc-4dc8-bf58-7d08a9ef7e58',
   varieties: [{
-    "name": "White",
-    "uuid": "69a691c4-a4d0-4619-9786-2b747ff1aa0a",
+    name: 'White',
+    uuid: '69a691c4-a4d0-4619-9786-2b747ff1aa0a',
+  }],
+},{
+  name: 'Apples',
+  uuid: '5c5525c1-bffd-41e8-b2c8-1d345b2ae833',
+  varieties: [{
+    name: 'Red Delicious',
+    uuid: 'a73fc283-3111-46f9-8f04-da2ab1fce3eb',
+  }, {
+    name: 'Golden Delicious',
+    uuid: '811caa9f-fcc5-48b9-919e-20295923c0fe',
+  }, {
+    name: 'Fuji',
+    uuid: 'acbadb82-e653-4575-b50c-76460e68c360',
+  }, {
+    name: 'Gala',
+    uuid: '27941a5a-896e-478a-9853-766d7746de7f',
+  }, {
+    name: 'Red Rome',
+    uuid: '91ffcf83-88ff-47fc-bde9-355eab24c3ec',
+  }, {
+    name: 'Mcintosh',
+    uuid: '27a9adf5-0b19-4361-affb-8b6401ae4afe',
+  }, {
+    name: 'Empire',
+    uuid: 'a2938348-5da7-439e-9081-93ab6d460c1f',
+  }, {
+    name: 'Red Type',
+    uuid: 'd248dfce-ace9-4922-806b-83f00e50fa7b',
+  }, {
+    name: 'Granny Smith',
+    uuid: 'f994d0f0-9511-49dd-acfd-34d4eb7669c1',
+  }, {
+    name: 'Braeburn',
+    uuid: '52860c53-a354-4367-aaa5-26ac1c1ff74f',
+  }, {
+    name: 'Jonagold',
+    uuid: '372121a5-6dfc-4a00-b79f-e861f55717f6',
+  }, {
+    name: 'Cortland',
+    uuid: '0a72303c-dcaf-41db-ac1e-887ed16b3c2b',
+  }, {
+    name: 'Royal Gala',
+    uuid: 'c9ca569f-8fff-4ae0-a840-58b6999c9a57',
+  }, {
+    name: 'Gold Type',
+    uuid: 'd6d81b9c-7a4e-413a-b3d6-baed1fc9b6f4',
+  }, {
+    name: 'Honeycrisp',
+    uuid: 'b7260800-e702-4d7a-b246-70da974605b1',
+  }, {
+    name: 'Pink Lady/Cripps Pink',
+    uuid: 'ccb08eac-549f-450d-929d-e42558e99e16',
+  }, {
+    name: 'Ginger Gold',
+    uuid: '236e4df0-c783-4c8d-bff3-4e0180d6394f',
+  }, {
+    name: 'Earligold',
+    uuid: '4e00b897-24bf-4168-9902-a9e5fc2863b2',
   }],
 }];
