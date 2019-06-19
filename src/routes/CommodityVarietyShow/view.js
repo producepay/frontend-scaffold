@@ -1,5 +1,5 @@
 import React from 'react';
-import { get, isEmpty } from 'lodash';
+import { get } from 'lodash';
 import { itemFromUuids } from '../../helpers/commodities-and-varieties';
 
 import SummaryHeader from './SummaryHeader';
@@ -12,7 +12,6 @@ import WeatherInfo from './WeatherInfo';
 import { Helmet } from 'react-helmet';
 import Card from '../../components/elements/Card';
 import PageSpinner from '../../components/elements/PageSpinner';
-import EmptyDataSection from '../../components/elements/EmptyDataSection';
 
 const CARD_STYLE = 'mb-3 md:mb-4 border-b md:border-b-0';
 
@@ -74,12 +73,6 @@ function CommodityVarietyShow(props) {
               />
             </Card>
 
-            {isEmpty(data.tablePricingData) ? (
-              <Card className={CARD_STYLE}>
-                <EmptyDataSection title='Pricing Breakdown Not Available' />
-              </Card>
-            ) : null}
-
             <Card className={CARD_STYLE}>
               <PricingGraph
                 commodityId={commodityUuid}
@@ -100,6 +93,7 @@ function CommodityVarietyShow(props) {
             <Card>
               <WeatherInfo
                 growingRegions={get(data, 'growingRegions', [])}
+                commodityName={commodityName}
               />
             </Card>
           </React.Fragment>

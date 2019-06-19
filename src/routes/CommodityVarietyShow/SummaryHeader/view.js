@@ -1,4 +1,5 @@
 import React from 'react';
+import format from 'date-fns/format';
 
 import PercentagesWrapper from './PercentagesWrapper';
 import WeatherSection from './WeatherSection';
@@ -10,7 +11,7 @@ const PERCENTAGE_CNAME = [
 ].join(' ');
 
 function SummaryHeaderView(props) {
-  const { pricingPercentages, movementPercentages, weatherDataAvailable, alertsCount } = props;
+  const { pricingPercentages, dayBefore, movementPercentages, weatherDataAvailable, alertsCount } = props;
 
   const [pricingDayChange, pricingWeekChange] = pricingPercentages;
   const [movementDayChange, movementWeekChange] = movementPercentages;
@@ -25,7 +26,7 @@ function SummaryHeaderView(props) {
           <PercentagesWrapper
             label="Current Pricing"
             firstVal={pricingDayChange}
-            firstLabel="LAST REPORT"
+            firstLabel={pricingDayChange === '--' ? 'YESTERDAY' : `LAST ${format(dayBefore, 'dddd').toUpperCase()}`}
             secondVal={pricingWeekChange}
             secondLabel="7 DAYS AGO"
           />

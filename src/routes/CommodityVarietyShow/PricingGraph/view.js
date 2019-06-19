@@ -51,10 +51,7 @@ function PricingGraphView(props) {
         <React.Fragment>
           <CardHeader
             title="Price Trends, Last 30 Days"
-            titleProps={{
-              id: 'price-trends-section',
-              className: 'anchor-section',
-            }}
+            anchorId='price-trends-section'
           />
 
           <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>

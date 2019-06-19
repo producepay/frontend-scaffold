@@ -25,3 +25,7 @@
 .leading-snug {
   line-height: 1.375;
 }
+
+.leading-relaxed {
+  line-height: 1.625;
+}
