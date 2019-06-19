@@ -1,6 +1,8 @@
 import React from 'react';
 import { isEmpty } from 'lodash';
 
+import { useAuth } from '../../../contexts/auth';
+
 import CardHeader from '../../../components/elements/CardHeader';
 import CheckmarkCircle from '../../../components/icons/CheckmarkCircle';
 import WeatherTable from './table';
@@ -8,14 +10,24 @@ import WeatherTable from './table';
 function WeatherInfoView(props) {
   const { data, commodityName } = props;
 
-  const mailtoSubject = `New Growing Regions for ${commodityName}`;
-  const mailtoHref = `mailto:trading@producepay.com?subject=${mailtoSubject}`;
+  const { email = '' } = useAuth();
+
+  const growingRegionsLink = (
+    <a
+      href={`https://docs.google.com/forms/d/e/1FAIpQLScmGsIpHe6DSBMfl2L2kz7eoZjlaeTB65IMfQLyrFkV66Ylsw/viewform?usp=pp_url&entry.1342184715=${commodityName}&entry.575011244=${email}`}
+      className='block py-3 px-4 border rounded text-grey-darker no-underline text-xs-sm leading-none text-center'
+      target='_blank'
+      rel='noopener noreferrer'
+    >
+      SUGGEST GROWING REGIONS
+    </a>
+  );
 
   return isEmpty(data) ? (
-    <div className='py-5 sm:py-6 px-5 sm:px-8'>
-      <div className='max-w-md mx-auto text-center leading-relaxed'>
-        Want Weather Alerts for {commodityName}? Suggest growing regions by sending an email to <a href={mailtoHref} target='_blank' rel='noopener noreferrer'>trading@producepay.com</a>.
-      </div>
+    <div className='py-5 sm:py-6 px-5 sm:px-8 flex flex-col items-center'>
+      <div className='mb-4'>Want Weather Alerts for {commodityName}?</div>
+
+      {growingRegionsLink}
     </div>
   ) : (
     <React.Fragment>
@@ -32,16 +44,7 @@ function WeatherInfoView(props) {
           </div>
         }
         borderless
-        actionItem={(
-          <a
-            href={mailtoHref}
-            className='block py-3 px-4 border rounded text-grey-darker no-underline text-xs-sm leading-none text-center'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            SUGGEST GROWING REGIONS
-          </a>
-        )}
+        actionItem={growingRegionsLink}
       />
 
       <div className="px-5 sm:px-8 pb-5 sm:pb-8">
