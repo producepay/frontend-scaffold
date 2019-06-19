@@ -1,45 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { omit } from 'lodash';
 
 function CardHeader(props) {
-  const { title, subtitle, className, borderless, titleProps } = props;
+  const { className, anchorId, title, subtitle, borderless, actionItem } = props;
 
   const wrapperClassName = cx(className, 'py-5 sm:py-6 px-5 sm:px-8', {
     'md:border-b': !borderless,
+    'flex flex-col sm:flex-row justify-between sm:items-center': actionItem,
   });
 
   const titleClassName = cx('font-normal text-xl', {
     'mb-1 sm:mb-2': subtitle,
-  }, titleProps.className || '');
+    'anchor-section': anchorId,
+  });
 
   return (
     <div className={wrapperClassName}>
-      <h2 className={titleClassName} {...omit(titleProps, 'className')}>
-        {title}
-      </h2>
+      <div>
+        <h2 id={anchorId} className={titleClassName}>
+          {title}
+        </h2>
 
-      {subtitle ? (
-        <div className="text-xs-sm sm:text-sm">{subtitle}</div>
+        {subtitle ? (
+          <div className="text-xs-sm sm:text-sm">{subtitle}</div>
+        ) : null}
+      </div>
+
+      {actionItem ? (
+        <div className='pt-4 sm:pt-0 sm:pl-4 w-full sm:w-auto'>
+          {actionItem}
+        </div>
       ) : null}
     </div>
   );
 }
 
 CardHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  titleProps: PropTypes.object,
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
+  anchorId: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   borderless: PropTypes.bool,
+  actionItem: PropTypes.node,
 };
 
 CardHeader.defaultProps = {
   className: '',
+  anchorId: null,
   subtitle: null,
   borderless: false,
-  titleProps: {},
+  actionItem: null,
 };
 
 export default React.memo(CardHeader);

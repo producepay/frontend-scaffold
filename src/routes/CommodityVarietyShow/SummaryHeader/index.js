@@ -23,7 +23,7 @@ const getPriceAveragesForSku = (reportsForSku, latestDate, dayBeforeDate, weekBe
   };
 };
 
-const getPricingPercentages = priceReports => {
+const getPricingPercentagesAndDayBefore = priceReports => {
   const orderedReportDates = _.uniq(_.map(orderByDateStr(priceReports, 'reportDate'), 'reportDate'));
 
   const latestDate = orderedReportDates[0];
@@ -40,10 +40,13 @@ const getPricingPercentages = priceReports => {
   const dayOverDayVals = _.reject(_.map(skuKeyedAverages, 'dayOverDay'), _.isNull);
   const weekOverWeekVals = _.reject(_.map(skuKeyedAverages, 'weekOverWeek'), _.isNull);
 
-  return [
-    _.isEmpty(dayOverDayVals) ? '--' : _.round(_.mean(dayOverDayVals)),
-    _.isEmpty(weekOverWeekVals) ? '--' : _.round(_.mean(weekOverWeekVals)),
-  ];
+  return {
+    pricingPercentages: [
+      _.isEmpty(dayOverDayVals) ? '--' : _.round(_.mean(dayOverDayVals)),
+      _.isEmpty(weekOverWeekVals) ? '--' : _.round(_.mean(weekOverWeekVals)),
+    ],
+    dayBefore: getUTCDate(dayBeforeDate),
+  };
 };
 
 const getMovementPercentages = (thisYearMovement, lastYearMovement) => {
@@ -67,7 +70,10 @@ function SummaryHeader(props) {
     growingRegionsData,
   } = props;
 
-  const pricingPercentages = getPricingPercentages(_.filter(pricingData, 'resolvedAveragePrice'));
+  const {
+    pricingPercentages,
+    dayBefore,
+  } = getPricingPercentagesAndDayBefore(_.filter(pricingData, 'resolvedAveragePrice'));
 
   const movementPercentages = getMovementPercentages(thisYearMovementData, lastYearMovementData);
 
@@ -81,6 +87,7 @@ function SummaryHeader(props) {
   return (
     <SummaryHeaderView
       pricingPercentages={pricingPercentages}
+      dayBefore={dayBefore}
       movementPercentages={movementPercentages}
       weatherDataAvailable={weatherDataAvailable}
       alertsCount={alertsCount}
