@@ -33,7 +33,7 @@ function PricingDetails(props) {
   const { commodityId, varietyId, pricingData } = props;
 
   const commodityVarietyName = nameFromUuids(commodityId, varietyId);
-  const [latestReportDate, latestReports] = getLatestReportsAndDate(pricingData);
+  const [latestReportDate, latestReports] = getLatestReportsAndDate(_.filter(pricingData, 'resolvedAveragePrice'));
 
   const { data } = useQuery(FETCH_DAILY_REPORT_CONTENT, {
     variables: {
