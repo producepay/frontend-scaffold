@@ -703,8 +703,8 @@ module.exports = [{
   name: 'Spinach',
   uuid: '351a14ff-0b64-4907-9034-1c547043c7a6',
   varieties: [{
-    name: 'Eddoes',
-    uuid: '0ca75f17-a00e-4591-871c-10beb158610b',
+    name: 'Variety Unspecified',
+    uuid: null,
   }, {
     name: 'Flat',
     uuid: '9498e70d-038f-4925-935a-5c6a6da5cad0',
@@ -713,4 +713,17 @@ module.exports = [{
   name: 'Green Beans',
   uuid: '2c2ce764-8cb9-4ee0-9aac-ea1e16b536e1',
   varietyUuid: '886dcf42-fb8d-4e33-ab54-2092815d7400',
+}, {
+  name: 'Beans',
+  uuid: '2c2ce764-8cb9-4ee0-9aac-ea1e16b536e1',
+  varieties: [{
+    name: 'Haricot Vert (French Type)',
+    uuid: '87cef7a4-6202-4f37-a5ee-585ca0926a21',
+  }, {
+    name: 'Kentucky Wonder Type',
+    uuid: '9e0bc3d1-1ef9-4aa9-96d1-3147f0392f8d',
+  }, {
+    name: 'Variety Unspecified',
+    uuid: null,
+  }],
 }];
