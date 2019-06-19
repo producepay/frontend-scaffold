@@ -600,6 +600,9 @@ module.exports = [{
   name: 'Cauliflower',
   uuid: '0115d36a-03dc-4dc8-bf58-7d08a9ef7e58',
   varieties: [{
+    name: 'Variety Unspecified',
+    uuid: null,
+  }, {
     name: 'White',
     uuid: '69a691c4-a4d0-4619-9786-2b747ff1aa0a',
   }],
@@ -660,7 +663,32 @@ module.exports = [{
   }, {
     name: 'Earligold',
     uuid: '4e00b897-24bf-4168-9902-a9e5fc2863b2',
-  }],
+  }, {
+    name: 'Macoun',
+    uuid: 'b13e0a53-8dca-4b12-9ecf-6c66856d1fd0',
+  }, {
+    name: 'Gold Supreme',
+    uuid: '19e6b440-c262-4a84-9d07-e0cbc60d7602',
+  }, {
+    name: 'Red Stayman',
+    uuid: 'b9d89ac6-3549-4917-9659-23eadb90bc60',
+  }, {
+    name: 'Paula Red',
+    uuid: '2641d766-b50a-45a9-9a1d-dff0271f98b8',
+  }, {
+    name: 'Jonamac',
+    uuid: '6aed65f9-3e50-4376-bdd7-804f163bf95d',
+  }, {
+    name: 'Rome',
+    uuid: '9ab6ccab-e4ab-42cc-a8bd-78c464f11962',
+  }, {
+    name: 'Stayman',
+    uuid: '3c02b882-fb52-40bc-b4ad-bf40f9f02292',
+  }, {
+    name: 'Law Rome',
+    uuid: '81f29639-3a07-4759-9f92-ab06bc640a51',
+  },
+  ],
 }, {
   name: 'Carrots',
   uuid: 'fd0b726d-42e9-410b-bf0e-9704a226ee78',
