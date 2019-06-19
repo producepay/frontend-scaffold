@@ -93,6 +93,7 @@ function CommodityVarietyShow(props) {
             <Card>
               <WeatherInfo
                 growingRegions={get(data, 'growingRegions', [])}
+                commodityName={commodityName}
               />
             </Card>
           </React.Fragment>

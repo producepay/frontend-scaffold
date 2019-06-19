@@ -4,7 +4,7 @@ import _ from 'lodash';
 import WeatherInfoView from './view';
 
 function WeatherInfo(props) {
-  const { growingRegions } = props;
+  const { growingRegions, commodityName } = props;
 
   const sortedGrowingRegions = _.sortBy(growingRegions, 'name');
   const weatherData = _.map(sortedGrowingRegions, (gr) => {
@@ -29,6 +29,7 @@ function WeatherInfo(props) {
   return (
     <WeatherInfoView
       data={weatherData}
+      commodityName={commodityName}
     />
   );
 }
