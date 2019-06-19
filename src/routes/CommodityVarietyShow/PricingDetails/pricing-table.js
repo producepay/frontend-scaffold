@@ -11,6 +11,7 @@ import ChevronDown from '../../../components/icons/ChevronDown';
 import ChevronUp from '../../../components/icons/ChevronUp';
 import UpArrow from '../../../components/icons/UpArrow';
 import DownArrow from '../../../components/icons/DownArrow';
+import PricingSubtable from './pricing-subtable';
 
 const AVG_TABLE_HEADER_CNAME = 'text-grey-dark text-xxs-xs tracking-wide pb-2';
 
@@ -114,46 +115,31 @@ const PricingTable = props => {
           })}
         >
           <Grid container spacing={32}>
-            {_.map(cityGroupedLatestReports, (reports, cityName) => (
-              <Grid key={cityName} md="1/2" spacing={32}>
-                <table className="w-full">
-                  <thead>
-                    <tr>
-                      <TH align="left">{capitalizeEachWord(cityName)}</TH>
-                      <TH size="xs">LOW</TH>
-                      <TH size="xs">HIGH</TH>
-                      <TH size="xs">AVG</TH>
-                    </tr>
-                  </thead>
+            {_.map(cityGroupedLatestReports, (reports, cityName) => {
+              const conventionalReports = reports.filter(r => !r.skuName.includes('Organic'));
+              const organicReports = reports.filter(r => r.skuName.includes('Organic'));
 
-                  <tbody>
-                    {reports.map((report, idx) => {
-                      const className = cx('py-3 px-3 text-sm', {
-                        'bg-grey-lighter': idx % 2 !== 0,
-                      });
+              return (
+                <Grid key={cityName} md="1/2" spacing={32}>
+                  <table className="w-full">
+                    <thead>
+                      <tr>
+                        <TH align="left">{capitalizeEachWord(cityName)}</TH>
+                        <TH size="xs">LOW</TH>
+                        <TH size="xs">HIGH</TH>
+                        <TH size="xs">AVG</TH>
+                      </tr>
+                    </thead>
 
-                      return (
-                        <tr key={report.skuName}>
-                          <td className={className}>{report.skuName}</td>
-                          <td align="center" className={className}>
-                            {formatPrice(report.resolvedLowPriceMin)}
-                          </td>
-                          <td align="center" className={className}>
-                            {formatPrice(report.resolvedHighPriceMax)}
-                          </td>
-                          <td
-                            align="center"
-                            className={cx(className, 'font-semibold')}
-                          >
-                            {formatPrice(report.resolvedAveragePrice)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </Grid>
-            ))}
+                    <tbody>
+                      <PricingSubtable label='CONVENTIONAL' reports={conventionalReports} />
+
+                      <PricingSubtable label='ORGANIC' reports={organicReports} />
+                    </tbody>
+                  </table>
+                </Grid>
+              );
+            })}
           </Grid>
         </div>
       </div>
