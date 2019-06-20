@@ -15,7 +15,7 @@ function WeatherInfoView(props) {
   const growingRegionsLink = (
     <a
       href={`https://docs.google.com/forms/d/e/1FAIpQLScmGsIpHe6DSBMfl2L2kz7eoZjlaeTB65IMfQLyrFkV66Ylsw/viewform?usp=pp_url&entry.1342184715=${commodityName}&entry.575011244=${email}`}
-      className='block py-3 px-4 border rounded text-grey-darker no-underline text-xs-sm leading-none text-center'
+      className='block py-3 px-4 border border-primary rounded text-primary no-underline text-xs-sm leading-none text-center'
       target='_blank'
       rel='noopener noreferrer'
     >
