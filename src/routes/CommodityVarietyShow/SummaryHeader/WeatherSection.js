@@ -12,7 +12,7 @@ function WeatherSection(props) {
   const alertCName = cx(
     'sm:w-1/5 px-4 lg:px-8 py-4 flex items-center justify-start sm:justify-center',
     {
-      'bg-white text-red': hasAlerts,
+      'bg-white text-red-600': hasAlerts,
     },
   );
 
@@ -34,7 +34,7 @@ function WeatherSection(props) {
 
         <span
           className={cx('text-sm-base font-medium leading-tight', {
-            'text-red': hasAlerts,
+            'text-red-600': hasAlerts,
           })}
         >
           {hasAlerts ?

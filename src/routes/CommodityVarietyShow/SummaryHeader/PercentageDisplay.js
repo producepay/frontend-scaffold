@@ -6,7 +6,7 @@ import PercentageArrow from '../../../components/elements/PercentageArrow';
 function PercentageDisplay({ className, value, label }) {
   const percentageCName = cx('flex items-center mr-2', {
     'text-primary': value > 0,
-    'text-red': value < 0,
+    'text-red-600': value < 0,
     'text-gray-700': value === 0,
   });
 

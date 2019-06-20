@@ -66,7 +66,7 @@ function CommoditySearch(props) {
 
               {inputEl.current !== document.activeElement ? (
                 <span
-                  className="text-field-change absolute font-medium cursor-pointer text-primary text-xs"
+                  className="text-field-change absolute font-medium cursor-pointer text-primary text-xs leading-base"
                   onClick={() => {
                     inputEl.current.focus();
                     setState({ inputValue: '', isOpen: true });

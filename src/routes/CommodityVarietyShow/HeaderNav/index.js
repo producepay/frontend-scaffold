@@ -97,7 +97,7 @@ function HeaderNav(props) {
               </div>
             )}
 
-            <div className="ml-8 self-center">
+            <div className="ml-8 self-center -mt-1">
               <img
                 src={logo}
                 alt="ProducePay"
