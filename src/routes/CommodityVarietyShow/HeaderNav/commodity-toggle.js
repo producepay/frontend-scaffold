@@ -14,7 +14,7 @@ import CancelIcon from '../../../components/icons/Cancel';
 import './header-nav.css';
 
 const LIST_ITEM_CLASS =
-  'p-3 text-sm no-underline text-gray-800 font-normal';
+  'p-3 text-sm no-underline font-normal';
 
 function CommodityToggle(props) {
   const { selectedItem } = props;
@@ -46,7 +46,7 @@ function CommodityToggle(props) {
               const cvIds = option.value.split(':');
 
               const itemClassName = cx(LIST_ITEM_CLASS, {
-                'bg-white': !isEqual(option, selectedItem),
+                'bg-white text-gray-800': !isEqual(option, selectedItem),
                 'bg-primary text-white font-semibold': isEqual(
                   option,
                   selectedItem,
