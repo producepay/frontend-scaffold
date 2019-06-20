@@ -60,19 +60,21 @@ function CommoditySearch(props) {
               <TextField
                 {...getInputProps()}
                 innerRef={inputEl}
-                placeholder='Start typing a commodity'
+                placeholder='Start typing a commodity and press enter'
                 onFocus={() => setState({ isOpen: true })}
               />
 
-              <span
-                className="text-field-change absolute font-medium cursor-pointer text-primary text-xs"
-                onClick={() => {
-                  inputEl.current.focus();
-                  setState({ inputValue: '', isOpen: true });
-                }}
-              >
-                CHANGE
-              </span>
+              {inputEl.current !== document.activeElement ? (
+                <span
+                  className="text-field-change absolute font-medium cursor-pointer text-primary text-xs"
+                  onClick={() => {
+                    inputEl.current.focus();
+                    setState({ inputValue: '', isOpen: true });
+                  }}
+                >
+                  CHANGE
+                </span>
+              ) : null}
             </div>
 
             <div

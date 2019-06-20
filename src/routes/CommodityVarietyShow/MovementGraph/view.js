@@ -142,10 +142,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
   ) : (
     <React.Fragment>
       <CardHeader
-        titleProps={{
-          id: 'movement-section',
-          className: 'anchor-section',
-        }}
+        anchorId='movement-section'
         title={
           commodityName
             ? `Movement Report for All ${commodityName} at All Locations`

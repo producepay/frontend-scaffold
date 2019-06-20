@@ -74,6 +74,9 @@ const FETCH_DATA = gql`
 
     tablePricingData: shippingPointPriceReports(group: $tableGroups, filter: $tableFilters) {
       ...pricingDataFragment
+      gradeUsdaName
+      varietyUsdaName
+      sizeUsdaName
     }
 
     graphPricingData: shippingPointPriceReports(group: $graphGroups, filter: $graphFilters) {
@@ -156,7 +159,12 @@ function CommodityVarietyShow(props) {
       },
       summaryPricingGroups: { reportDate: true, skuName: true },
       summaryMovementGroups: { interval: 'week' },
-      tableGroups: commonPricingGroups,
+      tableGroups: {
+        ...commonPricingGroups,
+        gradeUsdaName: true,
+        varietyUsdaName: true,
+        sizeUsdaName: true,
+      },
       tableFilters: {
         commodityUuid: [commodityUuid],
         varietyUuid: [varietyUuid || '0'],

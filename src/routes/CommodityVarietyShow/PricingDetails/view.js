@@ -7,7 +7,6 @@ import pluralize from 'pluralize';
 import { getUTCDate } from '../../../helpers/dates';
 
 import CardHeader from '../../../components/elements/CardHeader';
-import EmptyDataSection from '../../../components/elements/EmptyDataSection';
 import PricingTable from './pricing-table';
 
 function PricingDetailsView(props) {
@@ -60,9 +59,11 @@ function PricingDetailsView(props) {
       )}
     </React.Fragment>
   ) : (
-    <EmptyDataSection
-      title='Aggregate Pricing Not Available'
-    />
+    <div className='py-5 sm:py-6 px-5 sm:px-8'>
+      <div className='max-w-md mx-auto text-center leading-relaxed'>
+        Pricing Details are not available for this commodity. Interested in searching, filtering, and visualizing data from your own ERP? Send an email to <a href='mailto:trading@producepay.com?subject=Interested in ERP Visualization' target='_blank' rel='noopener noreferrer'>trading@producepay.com</a>.
+      </div>
+    </div>
   );
 }
 

@@ -10,10 +10,11 @@ function AuthProvider(props) {
   const { location: { search }, children } = props;
 
   const { token, email } = qs.parse(search, { ignoreQueryPrefix: true });
-  const [user] = useState({ token, email });
+  const [user, setUser] = useState({ token, email });
 
   useEffect(() => {
-    identifyUser({ token, email });
+    const userData = identifyUser({ token, email });
+    setUser(userData);
   }, [token, email]);
 
   return (
