@@ -20,8 +20,9 @@ export function skuNameWithoutVariety(report) {
 
 export function orderReportsBySize(reports, order = 'desc') {
   return _.orderBy(reports, (r) => {
-    const match = r.sizeUsdaName.match(/\d+/);
+    const size = r.sizeUsdaName || '';
+    const match = size.match(/\d+/);
 
-    return match ? Number(match[0]) : r.sizeUsdaName;
+    return match ? Number(match[0]) : size;
   }, order);
 }
