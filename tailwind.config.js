@@ -1,7 +1,4 @@
 module.exports = {
-  prefix: '',
-  important: false,
-  separator: ':',
   theme: {
     colors: {
       primary: '#5CB65B',

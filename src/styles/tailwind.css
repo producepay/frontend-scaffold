@@ -1,9 +1,5 @@
 @tailwind base;
 
-div {
-  line-height: 1.15;
-}
-
 @tailwind components;
 
 @tailwind utilities;
