@@ -8,7 +8,7 @@ function EmptyDataSection(props) {
   const hCName = cx('font-normal', { 'anchor-section': !!anchor });
 
   return (
-    <div className="px-5 py-2 sm:py-4 sm:px-8 text-gray-600 bg-gray-lighter">
+    <div className="px-5 py-2 sm:py-4 sm:px-8 text-gray-600 bg-gray-200">
       <h4 className={hCName} id={anchor}>{title}</h4>
     </div>
   );

@@ -17,7 +17,7 @@ function List(props) {
     ListItemProps,
   } = props;
 
-  const parentClassName = cx('flex flex-col bg-gray-lightest', className);
+  const parentClassName = cx('flex flex-col bg-gray-100', className);
 
   return (
     <div className={parentClassName}>

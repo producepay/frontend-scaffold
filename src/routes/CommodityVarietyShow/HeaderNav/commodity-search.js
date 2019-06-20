@@ -90,7 +90,7 @@ function CommoditySearch(props) {
                 )
                 .map(({ label, value }, idx) => {
                   const itemCN = cx(
-                    'block p-2 text-gray-800 no-underline hover:bg-gray-lighter text-sm',
+                    'block p-2 text-gray-800 no-underline hover:bg-gray-200 text-sm',
                     {
                       'border-t': idx !== 0,
                     },

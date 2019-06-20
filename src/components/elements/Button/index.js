@@ -9,8 +9,8 @@ function Button(props) {
 
   const computedClassName = cx(className, 'button no-underline', {
     'py-2 px-4 rounded': ['solid', 'outlined'].includes(variant),
-    'text-gray-lightest bg-primary': color === 'primary' && variant === 'solid',
-    'bg-gray-light text-gray-800': color === 'secondary' && variant === 'solid',
+    'text-gray-100 bg-primary': color === 'primary' && variant === 'solid',
+    'bg-gray-400 text-gray-800': color === 'secondary' && variant === 'solid',
     'text-primary': color === 'primary' && ['outlined', 'icon', 'text'].includes(variant),
     'text-gray-800': color === 'secondary' && ['outlined', 'icon', 'text'].includes(variant),
     'bg-white border': variant === 'outlined',

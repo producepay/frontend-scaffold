@@ -39,7 +39,7 @@ function WeatherTable(props) {
       <tbody>
         {data.map((gr, index) => {
           const hasAlerts = !isEmpty(gr.weatherAlertsAgg);
-          const bgClassName = cx({ 'bg-grey-lightest': index % 2 !== 0 });
+          const bgClassName = cx({ 'bg-grey-100': index % 2 !== 0 });
           const computedClassName = cx(TABLE_CELL_CLASSES, bgClassName);
           const grNameClassName = cx('py-3 md:py-3 text-sm', bgClassName)
 

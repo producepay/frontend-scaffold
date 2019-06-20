@@ -72,7 +72,7 @@ function CommodityToggle(props) {
       <div className="flex w-full justify-between">
         <div>
           <div className="font-normal text-sm">Daily Market Report For</div>
-          <div className="leading-snug font-bold text-lg">
+          <div className="leading-tight font-bold text-lg">
             {get(selectedItem, 'label')}
           </div>
         </div>
