@@ -41,7 +41,7 @@ export const identifyUser = (params, ctx = {}) => {
 
   if (isSegmentEnabled()) window.analytics.identify(token, { email });
 
-  return token && email ? { userToken: token, userEmail: email } : {};
+  return token && email ? { token, email } : {};
 };
 
 export const trackEvent = (eventName, otherData = {}) => {

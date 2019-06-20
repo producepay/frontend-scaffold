@@ -15,7 +15,7 @@ function PercentageArrow({ value, size }) {
 }
 
 PercentageArrow.propTypes = {
-  value: PropTypes.number.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
