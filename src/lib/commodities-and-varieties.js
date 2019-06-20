@@ -577,4 +577,153 @@ module.exports = [{
     name: 'Various Red Sweet Varieties',
     uuid: '8f7b7460-f365-47fe-93de-9fbefe9e073c',
   }],
+}, {
+  name: 'Potatoes',
+  uuid: '33f04e37-2254-400f-b9fb-ec486ad41307',
+  varieties: [{
+    name: 'Russet',
+    uuid: 'ddc02b2e-6d51-4943-8b4a-1db664cd5282',
+  }, {
+    name: 'Round White',
+    uuid: '43075e6d-3f9d-4084-a8fc-a5973358a4ea',
+  }, {
+    name: 'Round Red',
+    uuid: '3ff64c7b-c11b-4826-9e86-6a35fb08e7c0',
+  }, {
+    name: 'Yellow',
+    uuid: '6d0c38f6-e23d-46da-b7f2-9ccbfd17abc7',
+  }, {
+    name: 'Long White',
+    uuid: 'b7b7db62-d801-4aad-ad04-b24dcb69edab',
+  }],
+}, {
+  name: 'Cauliflower',
+  uuid: '0115d36a-03dc-4dc8-bf58-7d08a9ef7e58',
+  varieties: [{
+    name: 'Variety Unspecified',
+    uuid: null,
+  }, {
+    name: 'White',
+    uuid: '69a691c4-a4d0-4619-9786-2b747ff1aa0a',
+  }],
+}, {
+  name: 'Apples',
+  uuid: '5c5525c1-bffd-41e8-b2c8-1d345b2ae833',
+  varieties: [{
+    name: 'Red Delicious',
+    uuid: 'a73fc283-3111-46f9-8f04-da2ab1fce3eb',
+  }, {
+    name: 'Golden Delicious',
+    uuid: '811caa9f-fcc5-48b9-919e-20295923c0fe',
+  }, {
+    name: 'Fuji',
+    uuid: 'acbadb82-e653-4575-b50c-76460e68c360',
+  }, {
+    name: 'Gala',
+    uuid: '27941a5a-896e-478a-9853-766d7746de7f',
+  }, {
+    name: 'Red Rome',
+    uuid: '91ffcf83-88ff-47fc-bde9-355eab24c3ec',
+  }, {
+    name: 'Mcintosh',
+    uuid: '27a9adf5-0b19-4361-affb-8b6401ae4afe',
+  }, {
+    name: 'Empire',
+    uuid: 'a2938348-5da7-439e-9081-93ab6d460c1f',
+  }, {
+    name: 'Red Type',
+    uuid: 'd248dfce-ace9-4922-806b-83f00e50fa7b',
+  }, {
+    name: 'Granny Smith',
+    uuid: 'f994d0f0-9511-49dd-acfd-34d4eb7669c1',
+  }, {
+    name: 'Braeburn',
+    uuid: '52860c53-a354-4367-aaa5-26ac1c1ff74f',
+  }, {
+    name: 'Jonagold',
+    uuid: '372121a5-6dfc-4a00-b79f-e861f55717f6',
+  }, {
+    name: 'Cortland',
+    uuid: '0a72303c-dcaf-41db-ac1e-887ed16b3c2b',
+  }, {
+    name: 'Royal Gala',
+    uuid: 'c9ca569f-8fff-4ae0-a840-58b6999c9a57',
+  }, {
+    name: 'Gold Type',
+    uuid: 'd6d81b9c-7a4e-413a-b3d6-baed1fc9b6f4',
+  }, {
+    name: 'Honeycrisp',
+    uuid: 'b7260800-e702-4d7a-b246-70da974605b1',
+  }, {
+    name: 'Pink Lady/Cripps Pink',
+    uuid: 'ccb08eac-549f-450d-929d-e42558e99e16',
+  }, {
+    name: 'Ginger Gold',
+    uuid: '236e4df0-c783-4c8d-bff3-4e0180d6394f',
+  }, {
+    name: 'Earligold',
+    uuid: '4e00b897-24bf-4168-9902-a9e5fc2863b2',
+  }, {
+    name: 'Macoun',
+    uuid: 'b13e0a53-8dca-4b12-9ecf-6c66856d1fd0',
+  }, {
+    name: 'Gold Supreme',
+    uuid: '19e6b440-c262-4a84-9d07-e0cbc60d7602',
+  }, {
+    name: 'Red Stayman',
+    uuid: 'b9d89ac6-3549-4917-9659-23eadb90bc60',
+  }, {
+    name: 'Paula Red',
+    uuid: '2641d766-b50a-45a9-9a1d-dff0271f98b8',
+  }, {
+    name: 'Jonamac',
+    uuid: '6aed65f9-3e50-4376-bdd7-804f163bf95d',
+  }, {
+    name: 'Rome',
+    uuid: '9ab6ccab-e4ab-42cc-a8bd-78c464f11962',
+  }, {
+    name: 'Stayman',
+    uuid: '3c02b882-fb52-40bc-b4ad-bf40f9f02292',
+  }, {
+    name: 'Law Rome',
+    uuid: '81f29639-3a07-4759-9f92-ab06bc640a51',
+  },
+  ],
+}, {
+  name: 'Carrots',
+  uuid: 'fd0b726d-42e9-410b-bf0e-9704a226ee78',
+  varieties: [{
+    name: 'Variety Unspecified',
+    uuid: null,
+  }, {
+    name: 'Baby Peeled',
+    uuid: '984a868f-c1c7-4568-af2b-cd5bd385679e',
+  }],
+}, {
+  name: 'Spinach',
+  uuid: '351a14ff-0b64-4907-9034-1c547043c7a6',
+  varieties: [{
+    name: 'Variety Unspecified',
+    uuid: null,
+  }, {
+    name: 'Flat',
+    uuid: '9498e70d-038f-4925-935a-5c6a6da5cad0',
+  }],
+}, {
+  name: 'Beans',
+  uuid: '2c2ce764-8cb9-4ee0-9aac-ea1e16b536e1',
+  varieties: [{
+    name: 'Green',
+    uuid: '886dcf42-fb8d-4e33-ab54-2092815d7400',
+  },
+  {
+    name: 'Haricot Vert (French Type)',
+    uuid: '87cef7a4-6202-4f37-a5ee-585ca0926a21',
+  }, {
+    name: 'Kentucky Wonder Type',
+    uuid: '9e0bc3d1-1ef9-4aa9-96d1-3147f0392f8d',
+  }, {
+    name: 'Variety Unspecified',
+    uuid: null,
+  }],
 }];
