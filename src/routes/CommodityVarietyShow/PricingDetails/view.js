@@ -43,7 +43,7 @@ function PricingDetailsView(props) {
       {pricingMapUrl ? (
         <div className="hidden sm:block py-8 px-5 border-b">
           <img
-            className="block w-full max-w-lg mx-auto"
+            className="block w-full max-w-3xl mx-auto"
             src={pricingMapUrl}
             alt="Pricing Map"
           />
@@ -60,8 +60,8 @@ function PricingDetailsView(props) {
     </React.Fragment>
   ) : (
     <div className='py-5 sm:py-6 px-5 sm:px-8'>
-      <div className='max-w-md mx-auto text-center leading-relaxed'>
-        Pricing Details are not available for this commodity. Interested in searching, filtering, and visualizing data from your own ERP? Send an email to <a href='mailto:trading@producepay.com?subject=Interested in ERP Visualization' target='_blank' rel='noopener noreferrer'>trading@producepay.com</a>.
+      <div className='max-w-xl mx-auto text-center leading-relaxed'>
+        Pricing Details are not available for this commodity. Interested in searching, filtering, and visualizing data from your own ERP? Send an email to <a href='mailto:trading@producepay.com?subject=Interested in ERP Visualization' target='_blank' rel='noopener noreferrer' className='text-primary'>trading@producepay.com</a>.
       </div>
     </div>
   );
