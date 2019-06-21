@@ -1,31 +1,5 @@
-@tailwind preflight;
+@tailwind base;
 
 @tailwind components;
 
 @tailwind utilities;
-
-/* figure out why these aren't included in utilities */
-.inset-y-0 {
-  top: 0;
-  bottom: 0;
-}
-
-.right-0 {
-  right: 0;
-}
-
-.top-0 {
-  top: 0;
-}
-
-.background-position-y-3 {
-  background-position-y: 0.75rem;
-}
-
-.leading-snug {
-  line-height: 1.375;
-}
-
-.leading-relaxed {
-  line-height: 1.625;
-}

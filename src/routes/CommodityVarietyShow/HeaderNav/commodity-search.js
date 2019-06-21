@@ -66,7 +66,7 @@ function CommoditySearch(props) {
 
               {inputEl.current !== document.activeElement ? (
                 <span
-                  className="text-field-change absolute font-medium cursor-pointer text-primary text-xs"
+                  className="text-field-change absolute font-medium cursor-pointer text-primary text-xs leading-base"
                   onClick={() => {
                     inputEl.current.focus();
                     setState({ inputValue: '', isOpen: true });
@@ -90,7 +90,7 @@ function CommoditySearch(props) {
                 )
                 .map(({ label, value }, idx) => {
                   const itemCN = cx(
-                    'block p-2 text-grey-darkest no-underline hover:bg-grey-lighter text-sm',
+                    'block p-2 text-gray-800 no-underline hover:bg-gray-200 text-sm',
                     {
                       'border-t': idx !== 0,
                     },

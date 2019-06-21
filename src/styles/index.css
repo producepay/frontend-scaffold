@@ -14,6 +14,10 @@ div, p, input, textarea, select, button {
   color: #43484D;
 }
 
+div {
+  line-height: 1.15;
+}
+
 .anchor-section:before {
   display: block;
   content: ' ';

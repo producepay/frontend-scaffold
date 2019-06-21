@@ -9,7 +9,7 @@ function TextField(props) {
 
   const computedClassName = cx(
     className,
-    'textfield w-full border rounded outline-none focus:border-blue-light',
+    'textfield w-full border rounded outline-none focus:border-blue-400',
   );
 
   const inputProps = { className: computedClassName, ...rest };

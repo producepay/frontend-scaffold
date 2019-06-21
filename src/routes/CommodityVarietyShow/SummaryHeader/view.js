@@ -8,7 +8,7 @@ import WeatherSection from './WeatherSection';
 const PERCENTAGE_CNAME = [
   'w-full sm:w-1/2 px-4 lg:px-8 py-4',
   'flex flex-row sm:flex-col lg:flex-row items-center sm:items-start justify-between',
-  'no-underline border-b sm:border-b-0 sm:border-r',
+  'border-b sm:border-b-0 sm:border-r',
 ].join(' ');
 
 const getPricingDayLabel = (pricingDayChange, dayBefore) => {
