@@ -13,6 +13,7 @@ module.exports = {
     fontSize: {
       ...defaultConfig.theme.fontSize,
       'xxs-xs': '.6875rem', // 11px
+      'xs-sm': '.8125rem', // 13px
       '6xl': '4rem',
     },
     lineHeight: {

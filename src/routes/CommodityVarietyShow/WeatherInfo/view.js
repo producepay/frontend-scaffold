@@ -44,16 +44,7 @@ function WeatherInfoView(props) {
           </div>
         }
         borderless
-        actionItem={(
-          <a
-            href={mailtoHref}
-            className='block py-3 px-4 border rounded text-gray-700 text-xs-sm leading-none text-center'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            SUGGEST GROWING REGIONS
-          </a>
-        )}
+        actionItem={growingRegionsLink}
       />
 
       <div className="px-5 sm:px-8 pb-5 sm:pb-8">
