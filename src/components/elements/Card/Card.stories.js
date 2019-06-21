@@ -7,7 +7,7 @@ import Card from './index';
 
 storiesOf('Elements/Card', module)
 .add('basic', () => (
-  <Card className='p-4 text-grey-darkest'>
+  <Card className='p-4 text-gray-800'>
     Hello World!
   </Card>
 ));

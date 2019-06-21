@@ -13,7 +13,7 @@ import UpArrow from '../../../components/icons/UpArrow';
 import DownArrow from '../../../components/icons/DownArrow';
 import PricingSubtable from './pricing-subtable';
 
-const AVG_TABLE_HEADER_CNAME = 'text-grey-dark text-xxs-xs tracking-wide pb-2';
+const AVG_TABLE_HEADER_CNAME = 'text-gray-600 text-xxs-xs tracking-wide pb-2';
 
 const PricingTable = props => {
   const { allReports, latestReports, latestReportDate } = props;

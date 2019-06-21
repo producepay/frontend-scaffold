@@ -6,7 +6,7 @@ function TooltipWrapper(props) {
   const { title, flipTooltipDisplay, isHeaderCentered, children } = props;
 
   const headerCN = cx(
-    'py-3 px-4 border-b text-grey-darker text-xs tracking-wide',
+    'py-3 px-4 border-b text-gray-700 text-xs tracking-wide',
     { 'text-center': isHeaderCentered },
   )
 

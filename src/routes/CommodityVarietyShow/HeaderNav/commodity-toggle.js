@@ -14,14 +14,14 @@ import CancelIcon from '../../../components/icons/Cancel';
 import './header-nav.css';
 
 const LIST_ITEM_CLASS =
-  'p-3 text-sm no-underline text-grey-darkest font-normal';
+  'p-3 text-sm no-underline font-normal';
 
 function CommodityToggle(props) {
   const { selectedItem } = props;
 
   const [showMenu, setShowMenu] = useState(false);
   const slideMenuClasses = cx(
-    'w-full bg-white fixed pin-t pin-r pin-l pin-b z-50 cursor-pointer',
+    'w-full bg-white fixed top-0 right-0 left-0 bottom-0 z-50 cursor-pointer',
   );
 
   const slideMenuStyle = {
@@ -46,7 +46,7 @@ function CommodityToggle(props) {
               const cvIds = option.value.split(':');
 
               const itemClassName = cx(LIST_ITEM_CLASS, {
-                'bg-white': !isEqual(option, selectedItem),
+                'bg-white text-gray-800': !isEqual(option, selectedItem),
                 'bg-primary text-white font-semibold': isEqual(
                   option,
                   selectedItem,
@@ -72,7 +72,7 @@ function CommodityToggle(props) {
       <div className="flex w-full justify-between">
         <div>
           <div className="font-normal text-sm">Daily Market Report For</div>
-          <div className="leading-snug font-bold text-lg">
+          <div className="leading-tight font-bold text-lg">
             {get(selectedItem, 'label')}
           </div>
         </div>

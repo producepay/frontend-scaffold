@@ -1,6 +1,5 @@
 import _ from 'lodash';
-
-import commoditiesAndVarieties from '../lib/commodities-and-varieties';
+import commoditiesAndVarieties from 'commodities-and-varieties/src/commodities-and-varieties';
 
 function createUuidKey(commodityUuid, varietyUuid) {
   return _.compact([commodityUuid, varietyUuid]).join(':');
