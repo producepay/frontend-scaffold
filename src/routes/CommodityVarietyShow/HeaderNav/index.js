@@ -50,7 +50,7 @@ function HeaderNav(props) {
         />
       </div>
 
-      <header className="px-4 lg:px-8 py-2 sticky top-0 md:fixed pn-t-3 md:pin-t pin-r pin-l bg-white border-b z-30">
+      <header className="px-4 lg:px-8 py-2 sticky top-0 md:fixed pn-t-3 md:top-0 right-0 left-0 bg-white border-b z-30">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row flex-grow">
             <div

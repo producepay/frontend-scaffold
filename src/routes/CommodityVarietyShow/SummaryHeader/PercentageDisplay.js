@@ -7,7 +7,7 @@ function PercentageDisplay({ className, value, label }) {
   const percentageCName = cx('flex items-center mr-2', {
     'text-primary': value > 0,
     'text-red': value < 0,
-    'text-grey-darker': value === 0,
+    'text-gray-700': value === 0,
   });
 
   return (

@@ -14,14 +14,14 @@ import CancelIcon from '../../../components/icons/Cancel';
 import './header-nav.css';
 
 const LIST_ITEM_CLASS =
-  'p-3 text-sm no-underline text-grey-darkest font-normal';
+  'p-3 text-sm no-underline text-gray-800 font-normal';
 
 function CommodityToggle(props) {
   const { selectedItem } = props;
 
   const [showMenu, setShowMenu] = useState(false);
   const slideMenuClasses = cx(
-    'w-full bg-white fixed pin-t pin-r pin-l pin-b z-50 cursor-pointer',
+    'w-full bg-white fixed top-0 right-0 left-0 bottom-0 z-50 cursor-pointer',
   );
 
   const slideMenuStyle = {

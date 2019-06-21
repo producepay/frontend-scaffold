@@ -10,7 +10,7 @@ function WeatherSection(props) {
   const hasAlerts = alertsCount > 0;
 
   const alertCName = cx(
-    'sm:w-1/5 px-4 lg:px-8 py-4 flex items-center justify-start sm:justify-center no-underline',
+    'sm:w-1/5 px-4 lg:px-8 py-4 flex items-center justify-start sm:justify-center',
     {
       'bg-white text-red': hasAlerts,
     },

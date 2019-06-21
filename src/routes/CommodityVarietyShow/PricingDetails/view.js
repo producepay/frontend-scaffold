@@ -29,7 +29,7 @@ function PricingDetailsView(props) {
           <React.Fragment>
             <span className='pr-2 font-medium'>{commodityVarietyName} as of {dateStr}</span>
 
-            <span className='text-grey-darker'>
+            <span className='text-gray-700'>
               {daysBack > 0 ? `${pluralize('days', daysBack, true)} ago` : 'Today'}
             </span>
           </React.Fragment>

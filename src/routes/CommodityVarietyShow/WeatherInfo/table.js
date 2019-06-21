@@ -10,7 +10,7 @@ import AlertCircle from '../../../components/icons/AlertCircle';
 import CheckmarkCircle from '../../../components/icons/CheckmarkCircle';
 
 const TABLE_CELL_CLASSES = 'px-3 text-sm';
-const ALERT_CELL_CLASS = 'text-red-dark';
+const ALERT_CELL_CLASS = 'text-red-600';
 
 function displayAlerts(weatherAlertsAgg) {
   const alertsWithCount = map(weatherAlertsAgg, (numAlerts, alertType) => [alertType, numAlerts]);

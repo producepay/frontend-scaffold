@@ -15,7 +15,7 @@ function TooltipContent(props) {
   const percentageCName = cx('flex items-center', {
     'text-primary': percentageChange > 0,
     'text-red': percentageChange < 0,
-    'text-grey-darker': percentageChange === 0,
+    'text-gray-700': percentageChange === 0,
   });
 
   return (
