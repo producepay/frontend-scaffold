@@ -18,7 +18,7 @@ export function skuNameWithoutVariety(report) {
   return _.reject(skuName.split(' • '), v => v === varietyUsdaName).join(' • ');
 }
 
-export function orderReportsBySize(reports, order = 'desc') {
+export function orderReportsBySize(reports, order = 'asc') {
   return _.orderBy(reports, (r) => {
     const size = r.sizeUsdaName || '';
     const match = size.match(/\d+/);

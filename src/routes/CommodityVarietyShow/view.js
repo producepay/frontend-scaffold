@@ -30,6 +30,10 @@ function CommodityVarietyShow(props) {
     <React.Fragment>
       <Helmet>
         <title>Daily Produce Report for {commodityName}</title>
+        <meta
+          name='description'
+          content={`The latest pricing, movement, and weather information updated daily for ${commodityName}.`}
+        />
       </Helmet>
 
       <HeaderNav

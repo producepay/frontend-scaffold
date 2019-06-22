@@ -20,10 +20,12 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin')
+const SitemapPlugin = require('sitemap-webpack-plugin').default;
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const modules = require('./modules');
 const getClientEnvironment = require('./env');
+const sitemapUrls = require('./sitemap-urls');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
@@ -568,6 +570,13 @@ module.exports = function(webpackEnv) {
           };
         },
       }),
+      // Generate a sitemap.xml file
+      isEnvProduction &&
+        new SitemapPlugin(
+          process.env.REACT_APP_BASE_URL,
+          sitemapUrls,
+          { lastMod: true, changeFreq: 'daily' }
+        ),
       // Moment.js is an extremely popular library that bundles large locale files
       // by default due to how Webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.
