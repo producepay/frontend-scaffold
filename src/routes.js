@@ -1,6 +1,6 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
-export default {
+module.exports = {
   home: () => '/',
   commodityVarietyShow: (commodityId = ':commodityUuid', varietyId = ':varietyUuid?') => (
     `/commodities-varieties/${_.compact([commodityId, varietyId]).join('/')}`
