@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { find, groupBy, isEmpty, orderBy, map, filter, uniq } from 'lodash';
+import { find, groupBy, isEmpty, orderBy, map, filter, uniq, uniqBy } from 'lodash';
+
+import { trackEvent, KEYS } from '../../../helpers/tracking';
+import { skuNameWithoutVariety } from '../../../helpers/reports';
 
 import EmptyDataSection from '../../../components/elements/EmptyDataSection';
 import CardHeader from '../../../components/elements/CardHeader';
 import Select from '../../../components/elements/Select';
-import { trackEvent, KEYS } from '../../../helpers/tracking';
 import PriceLineGraph from './graph';
 
 function getUniqShippingPointsFromReports(reports) {
@@ -19,13 +21,13 @@ function filterPriceReportsBySku(priceReports, sku) {
 function PricingGraphView(props) {
   const { priceReports } = props;
 
-  const skus = uniq(map(priceReports, 'skuName'));
-  const skuOptions = skus.map(skuName => ({ label: skuName, value: skuName }));
+  const uniqReports = uniqBy(priceReports, 'skuName');
+  const skuOptions = uniqReports.map(r => ({ label: skuNameWithoutVariety(r), value: r.skuName }));
 
   const skuKeyedMap = groupBy(priceReports, 'skuName');
   const bestSku = orderBy(
     skuOptions,
-    ({ label: skuName }) => skuKeyedMap[skuName].length,
+    ({ value: skuName }) => skuKeyedMap[skuName].length,
     'desc',
   )[0] || {};
 
