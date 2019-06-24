@@ -81,6 +81,7 @@ const FETCH_DATA = gql`
 
     graphPricingData: shippingPointPriceReports(group: $graphGroups, filter: $graphFilters) {
       ...pricingDataFragment
+      varietyUsdaName
     }
 
     currentYearMovementReports: movementReports(
@@ -174,7 +175,7 @@ function CommodityVarietyShow(props) {
           endDate: format(subDays(new Date(), 1), 'YYYY/MM/DD'),
         }],
       },
-      graphGroups: commonPricingGroups,
+      graphGroups: { ...commonPricingGroups, varietyUsdaName: true },
       graphFilters: {
         commodityUuid: [commodityUuid],
         varietyUuid: [varietyUuid || '0'],
