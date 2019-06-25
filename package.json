@@ -151,7 +151,8 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^1.0.4",
-    "sitemap-webpack-plugin": "^0.6.0"
+    "cypress": "^3.3.1",
+    "sitemap-webpack-plugin": "^0.6.0",
+    "tailwindcss": "^1.0.4"
   }
 }
