@@ -19,7 +19,7 @@ function filterPriceReportsBySku(priceReports, sku) {
 }
 
 function PricingGraphView(props) {
-  const { priceReports } = props;
+  const { commodityName, priceReports } = props;
 
   const uniqReports = uniqBy(priceReports, 'skuName');
   const skuOptions = uniqReports.map(r => ({ label: skuNameWithoutVariety(r), value: r.skuName }));
@@ -43,6 +43,11 @@ function PricingGraphView(props) {
         filterPriceReportsBySku(priceReports, sku),
       ),
     );
+  }
+
+  function onShippingPointChange(shippingPoints) {
+    trackEvent(KEYS.PRICING_GRAPH_SHIPPING_POINT_CHANGE, { commodityName, shippingPoints })
+    setActiveShippingPoints(shippingPoints);
   }
 
   return (
@@ -74,7 +79,7 @@ function PricingGraphView(props) {
             <PriceLineGraph
               priceReportsForSku={activePriceReports}
               activeItems={activeShippingPoints}
-              onChange={values => setActiveShippingPoints(values)}
+              onChange={onShippingPointChange}
             />
           </div>
         </React.Fragment>
@@ -84,6 +89,7 @@ function PricingGraphView(props) {
 }
 
 PricingGraphView.propTypes = {
+  commodityName: PropTypes.string.isRequired,
   priceReports: PropTypes.arrayOf(
     PropTypes.shape({
       cityName: PropTypes.string,
