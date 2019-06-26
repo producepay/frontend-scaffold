@@ -40,7 +40,7 @@ describe('User interaction', () => {
     });
     cy.get('label div').contains('MEXICO CROSSINGS THROUGH TEXAS');
     cy.get('label div').contains('SOUTH DISTRICT CALIFORNIA');
-    cy.get('label div').contains('PERU IMPORTS - PORTS OF ENTRY PHILADELPHIA AREA AND NEW YORK CITY AREA').prev().click();
+    cy.get('label div').contains('PERU IMPORTS - PORTS OF ENTRY PHILADELPHIA AREA AND NEW YORK CITY AREA').prev().click({force: true});
     cy.get('select').select('Cartons 2 Layer • 48s • Organic');
     cy.get('label div').contains('SOUTH DISTRICT CALIFORNIA');
     cy.get('label div').contains('MEXICO CROSSINGS THROUGH TEXAS').should('not.exist');
