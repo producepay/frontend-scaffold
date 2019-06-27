@@ -30,12 +30,12 @@ function Select(props) {
       <select
         className={cx(selectElClassName, "block appearance-none w-full px-4 py-2 pr-8 rounded leading-tight focus:outline-none")}
         onChange={onChange}
+        value={_.get(selectedItem, 'value')}
       >
         {items.map((item) => (
           <option
             key={item.value}
             value={item.value}
-            selected={item.value === _.get(selectedItem, 'value')}
           >
             {item.label}
           </option>
