@@ -113,7 +113,7 @@ function PriceLineGraph(props) {
       </div>
       <div className='flex flex-col md:flex-row'>
         {latestPricesPerShippingPoint.map(data => (
-          <div className='pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed'>
+          <div key={data.cityName} className='pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed'>
             <div className='text-3xl'>{formatPrice(data.price)}</div>
             <div className='text-sm' style={{color: data.color}}>{data.cityName}</div>
           </div>
