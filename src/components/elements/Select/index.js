@@ -9,18 +9,18 @@ function Select(props) {
     onChange,
     selectedItem,
     className,
-    selectClassName,
+    wrapperClassName,
     chevronColor,
   } = props;
 
   const parentClassName = cx(
     'relative w-full',
-    className,
+    wrapperClassName,
   );
 
   const selectElClassName = cx(
     'bg-white border border-gray-400 hover:border-gray-500',
-    selectClassName,
+    className,
   );
 
   const finalChevronColor = chevronColor === '' ? '#4a5568' : chevronColor;
@@ -61,14 +61,14 @@ Select.propTypes = {
     value: PropTypes.string,
   }),
   onChange: PropTypes.func,
-  selectClassName: PropTypes.string,
+  wrapperClassName: PropTypes.string,
   chevronColor: PropTypes.string,
 };
 
 Select.defaultProps = {
   className: '',
   onChange: () => {},
-  selectClassName: '',
+  wrapperClassName: '',
   chevronColor: '',
 };
 

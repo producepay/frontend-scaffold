@@ -61,7 +61,8 @@ function PricingGraphView(props) {
             anchorId='price-trends-section'
             actionItem={
               <Select
-                className="md:w-1/2"
+                className="bg-primary border-primary text-white"
+                wrapperClassName="md:w-1/2"
                 items={skuOptions}
                 onChange={e => {
                   onSkuChange(e.target.value);
@@ -70,7 +71,6 @@ function PricingGraphView(props) {
                   });
                 }}
                 selectedItem={activeSku}
-                selectClassName="bg-primary border-primary text-white"
                 chevronColor="#FFFFFF"
               />
             }
