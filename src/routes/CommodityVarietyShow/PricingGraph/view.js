@@ -57,12 +57,9 @@ function PricingGraphView(props) {
       ) : (
         <React.Fragment>
           <CardHeader
-            title="Price Trends, Last 30 Days"
+            title="Price Trends"
             anchorId='price-trends-section'
-          />
-
-          <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>
-            <div className="pb-4 md:pt-8">
+            actionItem={
               <Select
                 className="md:w-1/2"
                 items={skuOptions}
@@ -73,7 +70,16 @@ function PricingGraphView(props) {
                   });
                 }}
                 selectedItem={activeSku}
+                selectClassName="bg-primary border-primary text-white"
+                chevronColor="#FFFFFF"
               />
+            }
+            actionItemClassName='pl-4 flex-grow'
+          />
+
+          <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>
+            <div className="pb-4 md:pt-8">
+              <h2 className='text-2xl font-semibold'>{activeSku.label}</h2>
             </div>
 
             <PriceLineGraph

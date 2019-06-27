@@ -46,6 +46,10 @@ function PriceLineGraph(props) {
   const allPrices = _.map(priceReportsForSku, 'resolvedAveragePrice');
   const maxPrice = _.max(allPrices);
 
+  const latestPricesPerShippingPoint = _.map(graphData, (d, index) => ({
+    cityName: d.id, price: _.last(d.data).y, color: schemeCategory10[index % 10],
+  }));
+
   const commonLineGraphProps = {
     data: graphData,
     colors: { scheme: 'category10' },
@@ -94,6 +98,14 @@ function PriceLineGraph(props) {
 
   return (
     <React.Fragment>
+      <div className='flex flex-col md:flex-row'>
+        {latestPricesPerShippingPoint.map(data => (
+          <div className='pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed'>
+            <div className='text-3xl'>{formatPrice(data.price)}</div>
+            <div className='text-sm' style={{color: data.color}}>{data.cityName}</div>
+          </div>
+        ))}
+      </div>
       <div ref={ref} className='h-100'>
         {/* MOBILE */}
         <div className='sm:hidden h-full'>
