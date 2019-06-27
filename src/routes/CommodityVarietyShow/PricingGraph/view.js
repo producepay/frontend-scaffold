@@ -74,7 +74,7 @@ function PricingGraphView(props) {
                 chevronColor="#FFFFFF"
               />
             }
-            actionItemClassName='pl-4 flex-grow'
+            actionItemClassName='pl-0 pt-2 sm:pt-0 sm:pl-4 flex-grow'
           />
 
           <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>
