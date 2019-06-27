@@ -19,7 +19,7 @@ import TooltipWrapper from '../../../components/elements/Nivo/TooltipWrapper';
 const formatDateNumber = (dateNumber) => format(new Date(dateNumber), 'MMM D');
 
 function PriceLineGraph(props) {
-  const { priceReportsForSku, activeItems, onChange } = props;
+  const { priceReportsForSku, activeItems, activeSku, onChange } = props;
 
   const { ref, width } = useWidth();
 
@@ -47,8 +47,13 @@ function PriceLineGraph(props) {
   const maxPrice = _.max(allPrices);
 
   const latestPricesPerShippingPoint = _.map(graphData, (d, index) => ({
-    cityName: d.id, price: _.last(d.data).y, color: schemeCategory10[index % 10],
+    cityName: d.id,
+    price: _.last(d.data).y,
+    reportDate: _.last(d.data).x,
+    color: schemeCategory10[index % 10],
   }));
+
+  const latestReportDate = _.max(_.map(latestPricesPerShippingPoint, 'reportDate'));
 
   const commonLineGraphProps = {
     data: graphData,
@@ -98,6 +103,14 @@ function PriceLineGraph(props) {
 
   return (
     <React.Fragment>
+      <div className="pb-4 md:pt-8 flex flex-col md:flex-row items-baseline">
+        <div>
+          <h2 className='text-2xl font-semibold'>{activeSku.label}</h2>
+        </div>
+        <div className='pl-0 pt-1 md:pt-0 md:pl-3 font-medium'>
+          As of {format(latestReportDate, 'MM/DD/YYYY')}
+        </div>
+      </div>
       <div className='flex flex-col md:flex-row'>
         {latestPricesPerShippingPoint.map(data => (
           <div className='pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed'>

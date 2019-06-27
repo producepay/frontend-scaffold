@@ -78,14 +78,11 @@ function PricingGraphView(props) {
           />
 
           <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>
-            <div className="pb-4 md:pt-8">
-              <h2 className='text-2xl font-semibold'>{activeSku.label}</h2>
-            </div>
-
             <PriceLineGraph
               priceReportsForSku={activePriceReports}
               activeItems={activeShippingPoints}
               onChange={onShippingPointChange}
+              activeSku={activeSku}
             />
           </div>
         </React.Fragment>
