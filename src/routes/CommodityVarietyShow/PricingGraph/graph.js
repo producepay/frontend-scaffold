@@ -38,12 +38,12 @@ function PriceLineGraph(props) {
   const allPrices = _.map(priceReportsForSku, 'resolvedAveragePrice');
   const maxPrice = _.max(allPrices);
 
-  const latestPricesPerShippingPoint = _.map(graphData, (d, index) => ({
+  const latestPricesPerShippingPoint = _.orderBy(_.map(graphData, (d, index) => ({
     cityName: d.id,
     price: _.last(d.data).y,
     reportDate: _.last(d.data).x,
     color: schemeCategory10[index % 10],
-  }));
+  })), 'price');
 
   const latestReportDate = _.max(_.map(latestPricesPerShippingPoint, 'reportDate'));
 
