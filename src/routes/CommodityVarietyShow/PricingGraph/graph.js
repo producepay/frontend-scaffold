@@ -112,7 +112,9 @@ function PriceLineGraph(props) {
               { 'md:pr-12': index !== latestPricesPerShippingPoint.length - 1 },
             )}
           >
-            <div className='text-xl pb-1'>{formatPrice(data.price)}</div>
+            <div className='text-xl pb-1'>
+              {latestReportDate === data.reportDate ? formatPrice(data.price) : '--'}
+            </div>
             <div className='text-xs font-medium' style={{color: data.color}}>{data.cityName}</div>
           </div>
         ))}
