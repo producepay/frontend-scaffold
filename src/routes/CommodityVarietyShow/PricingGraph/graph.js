@@ -88,6 +88,8 @@ function PriceLineGraph(props) {
     ),
   };
 
+  // remove me
+
   const commonAxisBottomProps = {
     format: formatDateNumber,
     tickRotation: 30,
