@@ -103,9 +103,15 @@ function PriceLineGraph(props) {
           As of {format(latestReportDate, 'MM/DD/YYYY')}
         </div>
       </div>
-      <div className='flex flex-col md:flex-row'>
-        {latestPricesPerShippingPoint.map(data => (
-          <div key={data.cityName} className='pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed'>
+      <div className='flex pb-2 flex-col md:flex-row'>
+        {latestPricesPerShippingPoint.map((data, index) => (
+          <div
+            key={data.cityName}
+            className={cx(
+              'pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed',
+              { 'md:pr-4': index !== latestPricesPerShippingPoint.length - 1 },
+            )}
+          >
             <div className='text-3xl'>{formatPrice(data.price)}</div>
             <div className='text-sm' style={{color: data.color}}>{data.cityName}</div>
           </div>
