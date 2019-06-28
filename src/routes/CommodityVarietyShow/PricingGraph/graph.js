@@ -88,8 +88,6 @@ function PriceLineGraph(props) {
     ),
   };
 
-  // remove me
-
   const commonAxisBottomProps = {
     format: formatDateNumber,
     tickRotation: 30,
@@ -99,23 +97,23 @@ function PriceLineGraph(props) {
     <React.Fragment>
       <div className="pb-4 md:pt-8 flex flex-col md:flex-row items-baseline">
         <div>
-          <h2 className='text-2xl font-semibold'>{activeSku.label}</h2>
+          <h2 className='text-xl'>{activeSku.label}</h2>
         </div>
-        <div className='pl-0 pt-1 md:pt-0 md:pl-3 font-medium'>
+        <div className='text-xs-sm text-gray-700 pl-0 pt-1 md:pt-0 md:pl-3'>
           As of {format(latestReportDate, 'MM/DD/YYYY')}
         </div>
       </div>
-      <div className='flex pb-2 flex-col md:flex-row'>
+      <div className='flex pb-4 flex-col md:flex-row'>
         {latestPricesPerShippingPoint.map((data, index) => (
           <div
             key={data.cityName}
             className={cx(
               'pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed',
-              { 'md:pr-4': index !== latestPricesPerShippingPoint.length - 1 },
+              { 'md:pr-12': index !== latestPricesPerShippingPoint.length - 1 },
             )}
           >
-            <div className='text-3xl'>{formatPrice(data.price)}</div>
-            <div className='text-sm' style={{color: data.color}}>{data.cityName}</div>
+            <div className='text-xl pb-1'>{formatPrice(data.price)}</div>
+            <div className='text-xs font-medium' style={{color: data.color}}>{data.cityName}</div>
           </div>
         ))}
       </div>
