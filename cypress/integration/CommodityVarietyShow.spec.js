@@ -34,16 +34,16 @@ describe('Routing', () => {
 });
 
 describe('User interaction', () => {
-  it('can change shipping point & sku filters on pricing graph', () => {
+  it('can change sku filters on pricing graph', () => {
     cy.visit('commodities-varieties/eddd01d8-492e-477d-a7f8-6cdf5cbb42cf/6a4cfac6-0026-43ff-8f4b-a2cc0782b4e1', {
       onBeforeLoad: stubFetch,
     });
-    cy.get('label div').contains('MEXICO CROSSINGS THROUGH TEXAS');
-    cy.get('label div').contains('SOUTH DISTRICT CALIFORNIA');
-    cy.get('label div').contains('PERU IMPORTS - PORTS OF ENTRY PHILADELPHIA AREA AND NEW YORK CITY AREA').prev().click({force: true});
+    cy.get('div div').contains('MEXICO CROSSINGS THROUGH TEXAS');
+    cy.get('div div').contains('SOUTH DISTRICT CALIFORNIA');
+    cy.get('div div').contains('PERU IMPORTS - PORTS OF ENTRY PHILADELPHIA AREA AND NEW YORK CITY AREA').prev().click({force: true});
     cy.get('select').select('Cartons 2 Layer • 48s • Organic');
-    cy.get('label div').contains('SOUTH DISTRICT CALIFORNIA');
-    cy.get('label div').contains('MEXICO CROSSINGS THROUGH TEXAS').should('not.exist');
-    cy.get('label div').contains('PERU IMPORTS - PORTS OF ENTRY PHILADELPHIA AREA AND NEW YORK CITY AREA').should('not.exist');
+    cy.get('div div').contains('SOUTH DISTRICT CALIFORNIA');
+    cy.get('div div').contains('MEXICO CROSSINGS THROUGH TEXAS').should('not.exist');
+    cy.get('div div').contains('PERU IMPORTS - PORTS OF ENTRY PHILADELPHIA AREA AND NEW YORK CITY AREA').should('not.exist');
   });
 });
