@@ -13,13 +13,12 @@ import { getUTCDate } from '../../../helpers/dates';
 import { useWidth } from '../../../helpers/dom';
 import { formatPrice } from '../../../helpers/format';
 
-import Legend from '../../../components/elements/Nivo/Legend';
 import TooltipWrapper from '../../../components/elements/Nivo/TooltipWrapper';
 
 const formatDateNumber = (dateNumber) => format(new Date(dateNumber), 'MMM D');
 
 function PriceLineGraph(props) {
-  const { priceReportsForSku, activeItems, activeSku, onChange } = props;
+  const { priceReportsForSku, activeItems, activeSku } = props;
 
   const { ref, width } = useWidth();
 
@@ -35,13 +34,6 @@ function PriceLineGraph(props) {
   );
 
   const tickValues = eachDay(subDays(new Date(), 30), new Date()).map(date => +date);
-
-  const shippingPoints = _.map(graphData, 'id');
-  // note: schemeCategory10 only has 10 colors, so we wrap the index here
-  const legendData = _.map(shippingPoints, (shippingPoint, index) => ({
-    label: shippingPoint,
-    color: schemeCategory10[index % 10],
-  }));
 
   const allPrices = _.map(priceReportsForSku, 'resolvedAveragePrice');
   const maxPrice = _.max(allPrices);
@@ -154,13 +146,6 @@ function PriceLineGraph(props) {
           />
         </div>
       </div>
-
-      <Legend
-        selectable
-        items={legendData}
-        activeItems={activeItems}
-        onChange={onChange}
-      />
     </React.Fragment>
   );
 }
