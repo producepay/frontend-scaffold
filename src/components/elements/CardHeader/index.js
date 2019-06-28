@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 function CardHeader(props) {
-  const { className, anchorId, title, subtitle, borderless, actionItem } = props;
+  const { className, anchorId, title, subtitle, borderless, actionItem, actionItemClassName } = props;
 
   const wrapperClassName = cx(className, 'py-5 sm:py-6 px-5 sm:px-8', {
     'md:border-b': !borderless,
-    'flex flex-col sm:flex-row justify-between sm:items-center': actionItem,
+    'flex flex-col sm:flex-row sm:items-center': actionItem,
   });
 
   const titleClassName = cx('font-normal text-xl', {
@@ -28,7 +28,7 @@ function CardHeader(props) {
       </div>
 
       {actionItem ? (
-        <div className='pt-4 sm:pt-0 sm:pl-4 w-full sm:w-auto'>
+        <div className={actionItemClassName}>
           {actionItem}
         </div>
       ) : null}
@@ -43,6 +43,7 @@ CardHeader.propTypes = {
   subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   borderless: PropTypes.bool,
   actionItem: PropTypes.node,
+  actionItemClassName: PropTypes.string,
 };
 
 CardHeader.defaultProps = {
@@ -51,6 +52,7 @@ CardHeader.defaultProps = {
   subtitle: null,
   borderless: false,
   actionItem: null,
+  actionItemClassName: '',
 };
 
 export default React.memo(CardHeader);

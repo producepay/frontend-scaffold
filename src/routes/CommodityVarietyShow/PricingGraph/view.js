@@ -52,14 +52,12 @@ function PricingGraphView(props) {
       ) : (
         <React.Fragment>
           <CardHeader
-            title="Price Trends, Last 30 Days"
+            title="Price Trends"
             anchorId='price-trends-section'
-          />
-
-          <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>
-            <div className="pb-4 md:pt-8">
+            actionItem={
               <Select
-                className="md:w-1/2"
+                className="bg-primary border-primary text-white"
+                wrapperClassName="md:w-1/2"
                 items={skuOptions}
                 onChange={e => {
                   onSkuChange(e.target.value);
@@ -68,13 +66,17 @@ function PricingGraphView(props) {
                   });
                 }}
                 selectedItem={activeSku}
+                chevronColor="#FFFFFF"
               />
-            </div>
+            }
+            actionItemClassName='pl-0 pt-2 sm:pt-0 sm:pl-4 flex-grow'
+          />
 
+          <div className={'pb-5 sm:pb-8 px-5 sm:px-8'}>
             <PriceLineGraph
               priceReportsForSku={activePriceReports}
               activeItems={activeShippingPoints}
-              onChange={values => setActiveShippingPoints(values)}
+              activeSku={activeSku}
             />
           </div>
         </React.Fragment>
@@ -84,6 +86,7 @@ function PricingGraphView(props) {
 }
 
 PricingGraphView.propTypes = {
+  commodityName: PropTypes.string.isRequired,
   priceReports: PropTypes.arrayOf(
     PropTypes.shape({
       cityName: PropTypes.string,

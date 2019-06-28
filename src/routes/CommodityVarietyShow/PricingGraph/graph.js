@@ -13,13 +13,12 @@ import { getUTCDate } from '../../../helpers/dates';
 import { useWidth } from '../../../helpers/dom';
 import { formatPrice } from '../../../helpers/format';
 
-import Legend from '../../../components/elements/Nivo/Legend';
 import TooltipWrapper from '../../../components/elements/Nivo/TooltipWrapper';
 
 const formatDateNumber = (dateNumber) => format(new Date(dateNumber), 'MMM D');
 
 function PriceLineGraph(props) {
-  const { priceReportsForSku, activeItems, onChange } = props;
+  const { priceReportsForSku, activeItems, activeSku } = props;
 
   const { ref, width } = useWidth();
 
@@ -36,15 +35,17 @@ function PriceLineGraph(props) {
 
   const tickValues = eachDay(subDays(new Date(), 30), new Date()).map(date => +date);
 
-  const shippingPoints = _.map(graphData, 'id');
-  // note: schemeCategory10 only has 10 colors, so we wrap the index here
-  const legendData = _.map(shippingPoints, (shippingPoint, index) => ({
-    label: shippingPoint,
-    color: schemeCategory10[index % 10],
-  }));
-
   const allPrices = _.map(priceReportsForSku, 'resolvedAveragePrice');
   const maxPrice = _.max(allPrices);
+
+  const latestPricesPerShippingPoint = _.orderBy(_.map(graphData, (d, index) => ({
+    cityName: d.id,
+    price: _.last(d.data).y,
+    reportDate: _.last(d.data).x,
+    color: schemeCategory10[index % 10],
+  })), 'price');
+
+  const latestReportDate = _.max(_.map(latestPricesPerShippingPoint, 'reportDate'));
 
   const commonLineGraphProps = {
     data: graphData,
@@ -94,6 +95,30 @@ function PriceLineGraph(props) {
 
   return (
     <React.Fragment>
+      <div className="pb-4 md:pt-8 flex flex-col md:flex-row items-baseline">
+        <div>
+          <h2 className='text-xl'>{activeSku.label}</h2>
+        </div>
+        <div className='text-xs-sm text-gray-700 pl-0 pt-1 md:pt-0 md:pl-3'>
+          As of {format(latestReportDate, 'MM/DD/YYYY')}
+        </div>
+      </div>
+      <div className='flex pb-4 flex-col md:flex-row'>
+        {latestPricesPerShippingPoint.map((data, index) => (
+          <div
+            key={data.cityName}
+            className={cx(
+              'pb-2 md:pb-0 md:flex-1 lg:w-1/5 leading-relaxed',
+              { 'md:pr-12': index !== latestPricesPerShippingPoint.length - 1 },
+            )}
+          >
+            <div className='text-xl pb-1'>
+              {latestReportDate === data.reportDate ? formatPrice(data.price) : '--'}
+            </div>
+            <div className='text-xs font-medium' style={{color: data.color}}>{data.cityName}</div>
+          </div>
+        ))}
+      </div>
       <div ref={ref} className='h-100'>
         {/* MOBILE */}
         <div className='sm:hidden h-full'>
@@ -129,13 +154,6 @@ function PriceLineGraph(props) {
           />
         </div>
       </div>
-
-      <Legend
-        selectable
-        items={legendData}
-        activeItems={activeItems}
-        onChange={onChange}
-      />
     </React.Fragment>
   );
 }

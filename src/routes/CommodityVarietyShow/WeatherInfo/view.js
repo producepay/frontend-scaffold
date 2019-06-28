@@ -45,6 +45,8 @@ function WeatherInfoView(props) {
         }
         borderless
         actionItem={growingRegionsLink}
+        className='justify-between'
+        actionItemClassName='pt-4 sm:pt-0 sm:pl-4 w-full sm:w-auto'
       />
 
       <div className="px-5 sm:px-8 pb-5 sm:pb-8">

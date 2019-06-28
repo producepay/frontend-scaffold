@@ -5,6 +5,7 @@ import { get } from 'lodash';
 
 export const KEYS = {
   PRICING_GRAPH_SKU_CHANGE: 'PRICING_GRAPH_SKU_CHANGE',
+  PRICING_GRAPH_SHIPPING_POINT_CHANGE: 'PRICING_GRAPH_SHIPPING_POINT_CHANGE',
 };
 
 export const PAGES = {
