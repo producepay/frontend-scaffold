@@ -31,7 +31,7 @@ const getPricingPercentagesAndDayBefore = priceReports => {
   const weekBefore = subWeeks(getUTCDate(latestDate), 1);
   const weekBeforeDate = weekBefore ? formatDateToString(weekBefore) : null;
 
-  const skuKeyedReports = _.groupBy(priceReports, 'skuName');
+  const skuKeyedReports = _.groupBy(priceReports, 'varietySkuName');
   const skuKeyedAverages = _.map(
     skuKeyedReports,
     (skuReports) => getPriceAveragesForSku(skuReports, latestDate, dayBeforeDate, weekBeforeDate),

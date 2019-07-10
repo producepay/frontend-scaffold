@@ -10,14 +10,6 @@ export function getLatestReportsAndDate(reports) {
   return [latestReportDate, latestReports];
 }
 
-export function skuNameWithoutVariety(report) {
-  const { skuName, varietyUsdaName } = report;
-
-  if (!skuName || !varietyUsdaName) return skuName;
-
-  return _.reject(skuName.split(' • '), v => v === varietyUsdaName).join(' • ');
-}
-
 export function orderReportsBySize(reports, order = 'asc') {
   return _.orderBy(reports, (r) => {
     const size = r.sizeUsdaName || '';
