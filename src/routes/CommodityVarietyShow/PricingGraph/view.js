@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { find, groupBy, isEmpty, orderBy, map, filter, uniq, uniqBy } from 'lodash';
 
 import { trackEvent, KEYS } from '../../../helpers/tracking';
-import { skuNameWithoutVariety } from '../../../helpers/reports';
 
 import EmptyDataSection from '../../../components/elements/EmptyDataSection';
 import CardHeader from '../../../components/elements/CardHeader';
@@ -15,19 +14,19 @@ function getUniqShippingPointsFromReports(reports) {
 }
 
 function filterPriceReportsBySku(priceReports, sku) {
-  return filter(priceReports, { skuName: sku });
+  return filter(priceReports, { varietySkuName: sku });
 }
 
 function PricingGraphView(props) {
   const { priceReports } = props;
 
-  const uniqReports = uniqBy(priceReports, 'skuName');
-  const skuOptions = uniqReports.map(r => ({ label: skuNameWithoutVariety(r), value: r.skuName }));
+  const uniqReports = uniqBy(priceReports, 'varietySkuName');
+  const skuOptions = uniqReports.map(r => ({ label: r.varietySkuName, value: r.varietySkuName }));
 
-  const skuKeyedMap = groupBy(priceReports, 'skuName');
+  const skuKeyedMap = groupBy(priceReports, 'varietySkuName');
   const bestSku = orderBy(
     skuOptions,
-    ({ value: skuName }) => skuKeyedMap[skuName].length,
+    ({ value: varietySkuName }) => skuKeyedMap[varietySkuName].length,
     'desc',
   )[0] || {};
 
@@ -94,7 +93,7 @@ PricingGraphView.propTypes = {
       resolvedAveragePrice: PropTypes.number,
       resolvedHighPriceMax: PropTypes.number,
       resolvedLowPriceMin: PropTypes.number,
-      skuName: PropTypes.string,
+      varietySkuName: PropTypes.string,
     }),
   ).isRequired,
 };

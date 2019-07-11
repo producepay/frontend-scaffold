@@ -116,8 +116,8 @@ const PricingTable = props => {
         >
           <Grid container spacing={32}>
             {_.map(cityGroupedLatestReports, (reports, cityName) => {
-              const conventionalReports = reports.filter(r => !r.skuName.includes('Organic'));
-              const organicReports = reports.filter(r => r.skuName.includes('Organic'));
+              const conventionalReports = reports.filter(r => !r.varietySkuName.includes('Organic'));
+              const organicReports = reports.filter(r => r.varietySkuName.includes('Organic'));
 
               return (
                 <Grid key={cityName} md="1/2" spacing={32}>

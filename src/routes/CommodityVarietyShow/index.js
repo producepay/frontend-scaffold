@@ -19,7 +19,7 @@ const MOVEMENT_GRAPH_WEEKS_BACK = 44;
 const FETCH_DATA = gql`
   fragment pricingDataFragment on ShippingPointPriceReport {
     reportDate
-    skuName
+    varietySkuName
     cityName
     resolvedLowPriceMin
     resolvedHighPriceMax
@@ -54,7 +54,7 @@ const FETCH_DATA = gql`
       filter: $summaryPricingFilters
     ) {
       reportDate
-      skuName
+      varietySkuName
       resolvedAveragePrice
     }
     summaryThisYearMovementData: movementReports(
@@ -120,7 +120,7 @@ function CommodityVarietyShow(props) {
   };
 
   const commonPricingGroups = {
-    skuName: true,
+    varietySkuName: true,
     cityName: true,
     reportDate: true,
   };
@@ -158,7 +158,7 @@ function CommodityVarietyShow(props) {
           endDate: gqlF(subISOYears(endOfLastWeek, 1)),
         }],
       },
-      summaryPricingGroups: { reportDate: true, skuName: true },
+      summaryPricingGroups: { reportDate: true, varietySkuName: true },
       summaryMovementGroups: { interval: 'week' },
       tableGroups: {
         ...commonPricingGroups,
