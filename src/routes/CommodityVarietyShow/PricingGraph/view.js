@@ -18,19 +18,12 @@ function filterPriceReportsBySku(priceReports, sku) {
 }
 
 function PricingGraphView(props) {
-  const { priceReports } = props;
+  const { priceReports, mostPopularSku } = props;
 
   const uniqReports = uniqBy(priceReports, 'varietySkuName');
   const skuOptions = uniqReports.map(r => ({ label: r.varietySkuName, value: r.varietySkuName }));
 
-  const skuKeyedMap = groupBy(priceReports, 'varietySkuName');
-  const bestSku = orderBy(
-    skuOptions,
-    ({ value: varietySkuName }) => skuKeyedMap[varietySkuName].length,
-    'desc',
-  )[0] || {};
-
-  const [activeSku, setActiveSku] = useState(bestSku);
+  const [activeSku, setActiveSku] = useState(find(skuOptions, { value: mostPopularSku }) || skuOptions[0]);
   const activePriceReports = filterPriceReportsBySku(priceReports, activeSku.value);
   const allShippingPoints = getUniqShippingPointsFromReports(activePriceReports);
   const [activeShippingPoints, setActiveShippingPoints] = useState(allShippingPoints);
