@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { find, get, groupBy, isEmpty, orderBy, map, filter, uniq, uniqBy } from 'lodash';
+import { find, get, isEmpty, map, filter, uniq, uniqBy } from 'lodash';
 
 import { trackEvent, KEYS } from '../../../helpers/tracking';
 

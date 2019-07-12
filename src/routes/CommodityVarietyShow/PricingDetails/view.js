@@ -12,10 +12,8 @@ import PricingTable from './pricing-table';
 function PricingDetailsView(props) {
   const {
     commodityVarietyName,
-    allReports,
     latestReportDate,
     latestReports,
-    pricingMapUrl,
   } = props;
 
   const dateStr = format(getUTCDate(latestReportDate), 'M/D/YYYY');
@@ -24,7 +22,7 @@ function PricingDetailsView(props) {
   return latestReports.length > 0 ? (
     <React.Fragment>
       <CardHeader
-        title="Aggregate Pricing by Shipping Point"
+        title="Pricing Breakdown"
         subtitle={(
           <React.Fragment>
             <span className='pr-2 font-medium'>{commodityVarietyName} as of {dateStr}</span>
@@ -36,23 +34,11 @@ function PricingDetailsView(props) {
         )}
         className={cx('sm:block', {
           'hidden': latestReports.length === 0,
-          'sm:hidden': !pricingMapUrl && latestReports.length === 0,
         })}
       />
 
-      {pricingMapUrl ? (
-        <div className="hidden sm:block py-8 px-5 border-b">
-          <img
-            className="block w-full max-w-3xl mx-auto"
-            src={pricingMapUrl}
-            alt="Pricing Map"
-          />
-        </div>
-      ) : null}
-
       {latestReports.length === 0 ? null : (
         <PricingTable
-          allReports={allReports}
           latestReports={latestReports}
           latestReportDate={latestReportDate}
         />
