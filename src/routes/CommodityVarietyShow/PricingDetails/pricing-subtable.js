@@ -21,7 +21,7 @@ function PricingSubtable({ label, reports }) {
       </tr>
 
       {orderedReports.map((report, idx) => {
-        const className = cx('py-3 px-3 text-sm', {
+        const className = cx('py-3 px-2 text-sm', {
           'bg-gray-200': idx % 2 !== 0,
         });
 
