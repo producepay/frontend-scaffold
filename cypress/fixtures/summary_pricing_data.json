@@ -6393,6 +6393,10 @@
            ],
            "__typename":"GrowingRegion"
         }
-     ]
+     ],
+     "mostPopularSkus": [{
+      "varietySkuName": "Cartons 2 Layer • 32s",
+      "__typename":"MostPopularSku"
+     }]
   }
 }

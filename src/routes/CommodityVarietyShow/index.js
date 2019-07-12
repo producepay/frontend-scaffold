@@ -36,6 +36,7 @@ const FETCH_DATA = gql`
 
   query loadCommodityVarietyData(
     $commodityUuids: [String!],
+    $varietyUuids: [String!],
     $summaryPricingGroups: ShippingPointPriceReportGroupInputs,
     $summaryMovementGroups: MovementReportGroupInputs,
     $summaryPricingFilters: ShippingPointPriceReportFilterInputs,
@@ -107,6 +108,10 @@ const FETCH_DATA = gql`
         }
       }
     }
+
+    mostPopularSkus(commodityUuids: $commodityUuids, varietyUuids: $varietyUuids) {
+      varietySkuName
+    }
   }
 `;
 
@@ -133,6 +138,7 @@ function CommodityVarietyShow(props) {
   const { loading, error, data } = useQuery(FETCH_DATA, {
     variables: {
       commodityUuids: [commodityUuid],
+      varietyUuids: [varietyUuid || '0'],
       summaryPricingFilters: {
         commodityUuid: [commodityUuid],
         varietyUuid: [varietyUuid || '0'],

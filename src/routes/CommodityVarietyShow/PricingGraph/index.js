@@ -6,7 +6,7 @@ import { commodityNameFromUuid } from '../../../helpers/commodities-and-varietie
 import PricingGraphView from './view';
 
 function PricingGraph(props) {
-  const { commodityId, varietyId, pricingData } = props;
+  const { commodityId, varietyId, pricingData, mostPopularSku } = props;
 
   const commodityName = commodityNameFromUuid(commodityId, varietyId);
 
@@ -15,6 +15,7 @@ function PricingGraph(props) {
       key={`${commodityId}-${varietyId}`}
       commodityName={commodityName}
       priceReports={filter(pricingData, 'resolvedAveragePrice')}
+      mostPopularSku={mostPopularSku}
     />
   );
 }
