@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { find, groupBy, isEmpty, orderBy, map, filter, uniq, uniqBy } from 'lodash';
+import { find, get, groupBy, isEmpty, orderBy, map, filter, uniq, uniqBy } from 'lodash';
 
 import { trackEvent, KEYS } from '../../../helpers/tracking';
 
@@ -24,7 +24,7 @@ function PricingGraphView(props) {
   const skuOptions = uniqReports.map(r => ({ label: r.varietySkuName, value: r.varietySkuName }));
 
   const [activeSku, setActiveSku] = useState(find(skuOptions, { value: mostPopularSku }) || skuOptions[0]);
-  const activePriceReports = filterPriceReportsBySku(priceReports, activeSku.value);
+  const activePriceReports = filterPriceReportsBySku(priceReports, get(activeSku, 'value'));
   const allShippingPoints = getUniqShippingPointsFromReports(activePriceReports);
   const [activeShippingPoints, setActiveShippingPoints] = useState(allShippingPoints);
 
