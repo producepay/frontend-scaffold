@@ -82,6 +82,7 @@ function CommodityVarietyShow(props) {
                 commodityId={commodityUuid}
                 varietyId={varietyUuid}
                 pricingData={get(data, 'graphPricingData', [])}
+                mostPopularSku={get(data, 'mostPopularSkus[0].varietySkuName')}
               />
             </Card>
 

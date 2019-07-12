@@ -19,15 +19,15 @@ describe('Routing', () => {
     cy.get('select > option').then(options => {
       const skus = [...options].map(o => o.value);
       expect(skus).to.deep.eq([
-        "Hass • Cartons 2 Layer • 32s",
-        "Hass • Cartons 2 Layer • 36s",
-        "Hass • Cartons 2 Layer • 40s",
-        "Hass • Cartons 2 Layer • 48s",
-        "Hass • Cartons 2 Layer • 48s • Organic",
-        "Hass • Cartons 2 Layer • 60s",
-        "Hass • Cartons 2 Layer • 60s • Organic",
-        "Hass • Cartons 2 Layer • 70s",
-        "Hass • Cartons 2 Layer • 84s",
+        "Cartons 2 Layer • 32s",
+        "Cartons 2 Layer • 36s",
+        "Cartons 2 Layer • 40s",
+        "Cartons 2 Layer • 48s",
+        "Cartons 2 Layer • 48s • Organic",
+        "Cartons 2 Layer • 60s",
+        "Cartons 2 Layer • 60s • Organic",
+        "Cartons 2 Layer • 70s",
+        "Cartons 2 Layer • 84s",
       ]);
     });
   });

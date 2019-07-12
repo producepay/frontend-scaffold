@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { find, groupBy, isEmpty, orderBy, map, filter, uniq, uniqBy } from 'lodash';
 
 import { trackEvent, KEYS } from '../../../helpers/tracking';
-import { skuNameWithoutVariety } from '../../../helpers/reports';
 
 import EmptyDataSection from '../../../components/elements/EmptyDataSection';
 import CardHeader from '../../../components/elements/CardHeader';
@@ -15,23 +14,16 @@ function getUniqShippingPointsFromReports(reports) {
 }
 
 function filterPriceReportsBySku(priceReports, sku) {
-  return filter(priceReports, { skuName: sku });
+  return filter(priceReports, { varietySkuName: sku });
 }
 
 function PricingGraphView(props) {
-  const { priceReports } = props;
+  const { priceReports, mostPopularSku } = props;
 
-  const uniqReports = uniqBy(priceReports, 'skuName');
-  const skuOptions = uniqReports.map(r => ({ label: skuNameWithoutVariety(r), value: r.skuName }));
+  const uniqReports = uniqBy(priceReports, 'varietySkuName');
+  const skuOptions = uniqReports.map(r => ({ label: r.varietySkuName, value: r.varietySkuName }));
 
-  const skuKeyedMap = groupBy(priceReports, 'skuName');
-  const bestSku = orderBy(
-    skuOptions,
-    ({ value: skuName }) => skuKeyedMap[skuName].length,
-    'desc',
-  )[0] || {};
-
-  const [activeSku, setActiveSku] = useState(bestSku);
+  const [activeSku, setActiveSku] = useState(find(skuOptions, { value: mostPopularSku }) || skuOptions[0]);
   const activePriceReports = filterPriceReportsBySku(priceReports, activeSku.value);
   const allShippingPoints = getUniqShippingPointsFromReports(activePriceReports);
   const [activeShippingPoints, setActiveShippingPoints] = useState(allShippingPoints);
@@ -94,7 +86,7 @@ PricingGraphView.propTypes = {
       resolvedAveragePrice: PropTypes.number,
       resolvedHighPriceMax: PropTypes.number,
       resolvedLowPriceMin: PropTypes.number,
-      skuName: PropTypes.string,
+      varietySkuName: PropTypes.string,
     }),
   ).isRequired,
 };

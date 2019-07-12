@@ -19,7 +19,7 @@ const MOVEMENT_GRAPH_WEEKS_BACK = 44;
 const FETCH_DATA = gql`
   fragment pricingDataFragment on ShippingPointPriceReport {
     reportDate
-    skuName
+    varietySkuName
     cityName
     resolvedLowPriceMin
     resolvedHighPriceMax
@@ -36,6 +36,7 @@ const FETCH_DATA = gql`
 
   query loadCommodityVarietyData(
     $commodityUuids: [String!],
+    $varietyUuids: [String!],
     $summaryPricingGroups: ShippingPointPriceReportGroupInputs,
     $summaryMovementGroups: MovementReportGroupInputs,
     $summaryPricingFilters: ShippingPointPriceReportFilterInputs,
@@ -54,7 +55,7 @@ const FETCH_DATA = gql`
       filter: $summaryPricingFilters
     ) {
       reportDate
-      skuName
+      varietySkuName
       resolvedAveragePrice
     }
     summaryThisYearMovementData: movementReports(
@@ -107,6 +108,10 @@ const FETCH_DATA = gql`
         }
       }
     }
+
+    mostPopularSkus(commodityUuids: $commodityUuids, varietyUuids: $varietyUuids) {
+      varietySkuName
+    }
   }
 `;
 
@@ -120,7 +125,7 @@ function CommodityVarietyShow(props) {
   };
 
   const commonPricingGroups = {
-    skuName: true,
+    varietySkuName: true,
     cityName: true,
     reportDate: true,
   };
@@ -133,6 +138,7 @@ function CommodityVarietyShow(props) {
   const { loading, error, data } = useQuery(FETCH_DATA, {
     variables: {
       commodityUuids: [commodityUuid],
+      varietyUuids: [varietyUuid || '0'],
       summaryPricingFilters: {
         commodityUuid: [commodityUuid],
         varietyUuid: [varietyUuid || '0'],
@@ -158,7 +164,7 @@ function CommodityVarietyShow(props) {
           endDate: gqlF(subISOYears(endOfLastWeek, 1)),
         }],
       },
-      summaryPricingGroups: { reportDate: true, skuName: true },
+      summaryPricingGroups: { reportDate: true, varietySkuName: true },
       summaryMovementGroups: { interval: 'week' },
       tableGroups: {
         ...commonPricingGroups,

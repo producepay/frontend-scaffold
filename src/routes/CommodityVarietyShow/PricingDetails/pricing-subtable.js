@@ -3,7 +3,7 @@ import _ from 'lodash';
 import cx from 'classnames';
 
 import { formatPrice } from '../../../helpers/format';
-import { skuNameWithoutVariety, orderReportsBySize } from '../../../helpers/reports';
+import { orderReportsBySize } from '../../../helpers/reports';
 
 function PricingSubtable({ label, reports }) {
   if (_.isEmpty(reports)) return null;
@@ -26,8 +26,8 @@ function PricingSubtable({ label, reports }) {
         });
 
         return (
-          <tr key={report.skuName}>
-            <td className={className}>{skuNameWithoutVariety(report)}</td>
+          <tr key={report.varietySkuName}>
+            <td className={className}>{report.varietySkuName}</td>
             <td align="center" className={className}>
               {formatPrice(report.resolvedLowPriceMin)}
             </td>
