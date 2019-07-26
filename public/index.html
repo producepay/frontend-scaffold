@@ -42,6 +42,8 @@
           accessToken: "%REACT_APP_ROLLBAR_TOKEN%",
           captureUncaught: true,
           captureUnhandledRejections: true,
+          codeVersion: "%REACT_APP_ROLLBAR_VERSION%",
+          sourceMapEnabled: true,
           payload: {
               environment: "%NODE_ENV%"
           }

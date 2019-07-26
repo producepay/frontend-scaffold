@@ -21,6 +21,7 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 const SitemapPlugin = require('sitemap-webpack-plugin').default;
+const RollbarSourceMapPlugin = require('rollbar-sourcemap-webpack-plugin')
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const modules = require('./modules');
@@ -37,6 +38,8 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
+
+const rollbarVersion = process.env.REACT_APP_ROLLBAR_VERSION = `${+new Date()}`;
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -163,8 +166,8 @@ module.exports = function(webpackEnv) {
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
         : isEnvDevelopment && 'static/js/bundle.js',
-      // TODO: remove this when upgrading to webpack 5
-      futureEmitAssets: true,
+      // TODO: Had to change this to false for rollbar, will on BREAK WEBPACK 5
+      futureEmitAssets: false,
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].chunk.js'
@@ -552,6 +555,12 @@ module.exports = function(webpackEnv) {
         new PurgecssPlugin({
           paths: glob.sync([paths.appHtml, `${paths.appSrc}/**/*`], { nodir: true }),
           defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+        }),
+      isEnvProduction &&
+        new RollbarSourceMapPlugin({
+          accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
+          version: rollbarVersion,
+          publicPath: publicPath,
         }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
