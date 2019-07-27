@@ -558,7 +558,7 @@ module.exports = function(webpackEnv) {
         }),
       isEnvProduction &&
         new RollbarSourceMapPlugin({
-          accessToken: process.env.REACT_APP_ROLLBAR_TOKEN,
+          accessToken: process.env.ROLLBAR_SERVER_ACCESS_TOKEN,
           version: rollbarVersion,
           publicPath: publicPath,
         }),
