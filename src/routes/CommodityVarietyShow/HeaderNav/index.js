@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 
 import { itemFromUuids } from '../../../helpers/commodities-and-varieties';

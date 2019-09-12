@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import routes from '../../routes';
 
 import CommodityVarietyShow from '../CommodityVarietyShow';
+import SignIn from '../SignIn';
 
 function RootView(props) {
   return props.isErrored ? (
@@ -17,6 +18,7 @@ function RootView(props) {
   ) : (
     <Switch>
       <Route path={routes.commodityVarietyShow()} component={CommodityVarietyShow} />
+      <Route path='/sign-in' component={SignIn} />
 
       <Redirect
         to={routes.commodityVarietyShow(

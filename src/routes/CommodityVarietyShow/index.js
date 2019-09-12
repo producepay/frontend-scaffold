@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import format from 'date-fns/format';
 import subDays from 'date-fns/sub_days';
 import startOfISOWeek from 'date-fns/start_of_iso_week';
