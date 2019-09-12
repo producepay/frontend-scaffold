@@ -12,13 +12,26 @@ function AuthProvider(props) {
   const { token, email } = qs.parse(search, { ignoreQueryPrefix: true });
   const [user, setUser] = useState({ token, email });
 
+  const storedAuthToken = window.localStorage.getItem('authToken');
+  const [authToken, setAuthToken] = useState(storedAuthToken);
+
   useEffect(() => {
     const userData = identifyUser({ token, email });
     setUser(userData);
   }, [token, email]);
 
+  useEffect(() => {
+      window.localStorage.setItem('authToken', authToken);
+  }, [authToken]);
+
+  const context = {
+    ...user,
+    authToken,
+    setAuthToken,
+  };
+
   return (
-    <AuthContext.Provider value={user}>
+    <AuthContext.Provider value={context}>
       {children}
     </AuthContext.Provider>
   );
