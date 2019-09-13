@@ -17,14 +17,13 @@ const SIGN_IN = gql`
 
 export default ({ history }) => {
   const [signIn, { data }] = useMutation(SIGN_IN);
-  const { setAuthToken } = useAuth();
+  const { setAuthToken, setAuthUser } = useAuth();
 
   if (data) {
     const { signInUser: { token, user } } = data;
     setAuthToken(token);
-    if (user.id) {
-      history.push('/insights');
-    }
+    setAuthUser(user);
+    history.push('/insights');
   }
 
   return (

@@ -15,6 +15,8 @@ function AuthProvider(props) {
   const storedAuthToken = window.localStorage.getItem('authToken');
   const [authToken, setAuthToken] = useState(storedAuthToken);
 
+  const [authUser, setAuthUser] = useState(null);
+
   useEffect(() => {
     const userData = identifyUser({ token, email });
     setUser(userData);
@@ -28,6 +30,8 @@ function AuthProvider(props) {
     ...user,
     authToken,
     setAuthToken,
+    authUser,
+    setAuthUser,
   };
 
   return (
