@@ -15,16 +15,19 @@ const SIGN_IN = gql`
   }
 `
 
-export default () => {
+export default ({ history }) => {
   const [signIn, { data }] = useMutation(SIGN_IN);
   const { setAuthToken } = useAuth();
 
   if (data) {
-    const { signInUser: { token } } = data;
+    const { signInUser: { token, user } } = data;
     setAuthToken(token);
+    if (user.id) {
+      history.push('/insights');
+    }
   }
 
   return (
-    <SignInView handleSubmit={(data) => signIn({ variables: { user: { ...data } }})} />
+    <SignInView handleSubmit={(data) => signIn({variables: { user: { ...data } }})} />
   );
 }
