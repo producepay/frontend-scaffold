@@ -10,7 +10,6 @@ import SignIn from '../SignIn';
 
 function RootView(props) {
   const { authUser } = useAuth();
-  console.log('RootView', authUser);
 
   return props.isErrored ? (
     <div className='w-full md:max-w-md mx-auto p-6 md:p-8'>
@@ -20,7 +19,7 @@ function RootView(props) {
         Looks like we've run into a problem! Our team has been alerted and we're working on getting a fix out. Thanks for your patience!
       </div>
     </div>
-  ) : authUser ? <SignedInRoutes /> : (
+  ) : authUser && authUser.id ? <SignedInRoutes /> : (
       <Switch>
         <Route path={routes.commodityVarietyShow()} component={CommodityVarietyShow} />
         <Route path='/sign-in' component={SignIn} />

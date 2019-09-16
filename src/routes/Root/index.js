@@ -1,24 +1,25 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
 import RootView from './view';
 import CurrentUser from './current-user';
 
-class Root extends PureComponent {
+class Root extends Component {
   state = {
     isErrored: false,
-  }
+  };
 
   static getDerivedStateFromError(error) {
     return { isErrored: true };
   }
 
   render() {
+    const { isErrored } = this.state;
     return (
-      <CurrentUser>
+      <CurrentUser render={() => (
         <RootView
-          isErrored={this.state.isErrored}
-        />
-      </CurrentUser>
+          isErrored={isErrored}
+        />)
+      }/>
     );
   }
 }
