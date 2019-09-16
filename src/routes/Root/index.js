@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import RootView from './view';
+import CurrentUser from './current-user';
 
 class Root extends PureComponent {
   state = {
@@ -13,9 +14,11 @@ class Root extends PureComponent {
 
   render() {
     return (
-      <RootView
-        isErrored={this.state.isErrored}
-      />
+      <CurrentUser>
+        <RootView
+          isErrored={this.state.isErrored}
+        />
+      </CurrentUser>
     );
   }
 }

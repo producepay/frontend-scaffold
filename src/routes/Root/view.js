@@ -10,6 +10,7 @@ import SignIn from '../SignIn';
 
 function RootView(props) {
   const { authUser } = useAuth();
+  console.log('RootView', authUser);
 
   return props.isErrored ? (
     <div className='w-full md:max-w-md mx-auto p-6 md:p-8'>

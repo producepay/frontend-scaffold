@@ -7,6 +7,8 @@ import CommodityVarietyShow from '../CommodityVarietyShow';
 import Insights from '../Insights';
 
 const SignedInRoutes = (props) => {
+  console.log('SignedInRoutes');
+  
   return (
     <Switch>
       <Route path={routes.commodityVarietyShow()} component={CommodityVarietyShow} />
