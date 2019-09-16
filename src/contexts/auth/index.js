@@ -3,7 +3,6 @@ import qs from 'qs';
 import { withRouter } from 'react-router-dom';
 
 import { identifyUser } from '../../helpers/tracking';
-import useAuthStates from '../../hooks/use-auth-states';
 
 const AuthContext = React.createContext();
 
@@ -13,16 +12,28 @@ function AuthProvider(props) {
   const { token, email } = qs.parse(search, { ignoreQueryPrefix: true });
   const [user, setUser] = useState({ token, email });
 
+  const storedAuthToken = window.localStorage.getItem('authToken');
+  const [authToken, setAuthToken] = useState(storedAuthToken);
+
+  const [authUser, setAuthUser] = useState(null);
+
   useEffect(() => {
     const userData = identifyUser({ token, email });
     setUser(userData);
   }, [token, email]);
 
-  // TODO: handle an expired token
+  useEffect(() => {
+      window.localStorage.setItem('authToken', authToken);
+  }, [authToken]);
+
+  // TODO: how to handle expired token?
 
   const context = {
     ...user,
-    ...useAuthStates(),
+    authToken,
+    setAuthToken,
+    authUser,
+    setAuthUser,
   };
 
   return (
