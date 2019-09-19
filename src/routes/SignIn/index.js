@@ -5,8 +5,8 @@ import SignInView from './view';
 import { useAuth } from '../../contexts/auth';
 
 const SIGN_IN = gql`
-  mutation signInUser($user: AuthProviderInput!) {
-    signInUser(user: $user) {
+  mutation signInUser($email: String!, $password: String!) {
+    signInUser(email: $email, password: $password) {
       token
       user {
         id
