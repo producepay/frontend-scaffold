@@ -6,10 +6,7 @@ import { useAuth } from '../../contexts/auth';
 const CURRENT_USER = gql`
   query currentUser {
     currentUser {
-      user {
-        id
-      }
-      errors
+      id
     }
   }
 `
@@ -23,8 +20,8 @@ export default ({ render }) => {
   }
   if (error) return;
   
-  if (!authUser && data && data.currentUser && data.currentUser.errors.length === 0) {
-    setAuthUser(data.currentUser.user);
+  if (!authUser && data && data.currentUser) {
+    setAuthUser(data.currentUser);
     return <div>Loading...</div>;
   }
 
