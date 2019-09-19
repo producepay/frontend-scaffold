@@ -27,6 +27,6 @@ export default ({ history }) => {
   }
 
   return (
-    <SignInView handleSubmit={(data) => signIn({variables: { user: { ...data } }})} />
+    <SignInView handleSubmit={(data) => signIn({ variables: { ...data } })} />
   );
 }
