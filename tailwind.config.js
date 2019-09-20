@@ -3,6 +3,7 @@ module.exports = {
     extend: {
       colors: {
         primary: '#5CB65B',
+        secondary: '#FF5A60',
       },
       spacing: {
         '100': '25rem',

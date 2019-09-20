@@ -9,11 +9,13 @@ import PricingGraph from './PricingGraph';
 import MovementGraph from './MovementGraph';
 import WeatherInfo from './WeatherInfo';
 
+import BiAd from './BiAd';
+
 import { Helmet } from 'react-helmet';
 import Card from '../../components/elements/Card';
 import PageSpinner from '../../components/elements/PageSpinner';
 
-const CARD_STYLE = 'mb-3 md:mb-4 border-b md:border-b-0';
+const CARD_STYLE = 'mb-3 md:mb-4';
 
 function CommodityVarietyShow(props) {
   const {
@@ -76,6 +78,8 @@ function CommodityVarietyShow(props) {
                 pricingData={data.tablePricingData}
               />
             </Card>
+
+            <BiAd className={CARD_STYLE} />
 
             <Card className={CARD_STYLE}>
               <PricingGraph
