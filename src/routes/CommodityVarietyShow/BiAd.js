@@ -28,7 +28,7 @@ function BiAd({ className }) {
     <div className={cName}>
       <div className='w-full md:w-1/2 pr-0 md:pr-6'>
         <div className='text-xl font-medium mb-4 leading-normal text-center md:text-left'>
-          Get a 3 Month Free Trial of ProducePay’s Business Intelligence Software!
+          Get a Free Trial of ProducePay’s Business Intelligence Software!
         </div>
 
         <Cta className='hidden md:inline-block px-10' email={email} />
