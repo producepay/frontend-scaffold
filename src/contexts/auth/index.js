@@ -10,7 +10,7 @@ function AuthProvider(props) {
   const { location: { search }, children } = props;
 
   const { token, email } = qs.parse(search, { ignoreQueryPrefix: true });
-  const [user, setUser] = useState({ token, email });
+  const [user, setUser] = useState({ token, email, isAuthenticated: true });
 
   const storedAuthToken = window.localStorage.getItem('authToken');
   const [authToken, setAuthToken] = useState(storedAuthToken);
@@ -19,7 +19,7 @@ function AuthProvider(props) {
 
   useEffect(() => {
     const userData = identifyUser({ token, email });
-    setUser(userData);
+    setUser({ ...user, ...userData });
   }, [token, email]);
 
   useEffect(() => {

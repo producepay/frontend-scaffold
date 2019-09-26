@@ -35,7 +35,7 @@ function BiAd({ className }) {
       </div>
 
       <div className='w-full md:w-1/2'>
-        <img src={dmrBiLaptop} />
+        <img src={dmrBiLaptop} alt='' />
       </div>
 
       <Cta className='md:hidden w-full mt-4' email={email} />
