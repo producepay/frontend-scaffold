@@ -4,11 +4,13 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import routes from '../routes';
 
 import CommodityVarietyShow from './CommodityVarietyShow';
+import AuthSignIn from './auth/SignIn';
 
 function Unauthenticated(props) {
   return (
     <Switch>
       <Route path={routes.commodityVarietyShow()} component={CommodityVarietyShow} />
+      <Route path={routes.authSignIn()} component={AuthSignIn} />
 
       <Redirect
         to={routes.commodityVarietyShow(

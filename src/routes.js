@@ -5,6 +5,7 @@ module.exports = {
   commodityVarietyShow: (commodityId = ':commodityUuid', varietyId = ':varietyUuid?') => (
     `/commodities-varieties/${_.compact([commodityId, varietyId]).join('/')}`
   ),
+  authSignIn: () => '/auth/sign-in',
   /* Authenticated routes */
   dashboard: () => '/',
   marketInsights: () => '/market-insights',

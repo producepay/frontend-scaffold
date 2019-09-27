@@ -211,7 +211,7 @@ function CommodityVarietyShow(props) {
         ],
       },
     },
-  })
+  });
 
   return (
     <CommodityVarietyShowView
