@@ -4,7 +4,7 @@ import { useAuth } from '../../../contexts/auth';
 
 import SignInView from './view';
 
-export default ({ history }) => {
+export default () => {
   const { login } = useAuth();
 
   return (
