@@ -2,6 +2,7 @@ import { stubFetch } from "../support/commands";
 
 describe('Index', () => {
   it('redirects to Roma Tomatoes', () => {
+    cy.wait(100);
     cy.visit('/');
     cy.contains('Tomatoes, Roma');
   });
@@ -9,7 +10,7 @@ describe('Index', () => {
 
 describe('Routing', () => {
   it('successfully displays pricing data', () => {
-    cy.wait(500);
+    cy.wait(100);
     cy.visit('commodities-varieties/eddd01d8-492e-477d-a7f8-6cdf5cbb42cf/6a4cfac6-0026-43ff-8f4b-a2cc0782b4e1', {
       onBeforeLoad: stubFetch,
     });
