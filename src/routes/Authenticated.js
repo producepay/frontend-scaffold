@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Switch, Route, Redirect } from 'react-router-dom';
 
 import routes from '../routes';
+import { useAuth } from '../contexts/auth';
 
 import Dashboard from './Dashboard';
 import MarketInsights from './market-insights/MarketInsights';
@@ -9,6 +10,8 @@ import ShowCustomer from './customers/ShowCustomer';
 import ShowCommodity from './commodities/ShowCommodity';
 
 function Authenticated(props) {
+  const { logout } = useAuth();
+
   return (
     <div className='flex'>
       <div>
@@ -18,6 +21,8 @@ function Authenticated(props) {
         <Link to={routes.marketInsights()} className='block p-4'>
           Market Insights
         </Link>
+
+        <div className='p-4 pointer' onClick={logout}>Log Out</div>
       </div>
 
       <div className='w-full'>

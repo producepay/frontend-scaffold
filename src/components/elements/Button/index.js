@@ -5,7 +5,7 @@ import cx from 'classnames';
 import './button.css';
 
 function Button(props) {
-  const { className, variant, color, label, children, ...rest } = props;
+  const { className, variant, color, label, children, disabled, ...rest } = props;
 
   const computedClassName = cx(className, 'button no-underline', {
     'py-2 px-4 rounded': ['solid', 'outlined'].includes(variant),
@@ -18,10 +18,11 @@ function Button(props) {
     'border-gray-800': color === 'secondary' && variant === 'outlined',
     'border-none': variant === 'text',
     'h-10 w-10 rounded-full inline-flex justify-center items-center': variant === 'icon',
+    'opacity-75': disabled,
   });
 
   return (
-    <button className={computedClassName} {...rest}>
+    <button className={computedClassName} disabled={disabled} {...rest}>
       {label || children}
     </button>
   );

@@ -5,7 +5,7 @@ import RootView from './view';
 class Root extends PureComponent {
   state = {
     isErrored: false,
-  }
+  };
 
   static getDerivedStateFromError(error) {
     return { isErrored: true };
