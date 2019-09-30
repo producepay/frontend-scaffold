@@ -3,7 +3,7 @@ import { stubFetch } from "../support/commands";
 describe('Index', () => {
   it('redirects to Roma Tomatoes', () => {
     cy.wait(100);
-    cy.visit('/');
+    cy.visit('/', { onBeforeLoad: stubFetch });
     cy.contains('Tomatoes, Roma');
   });
 });
