@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import RootView from './view';
 
-class Root extends Component {
+class Root extends PureComponent {
   state = {
     isErrored: false,
   };
@@ -12,11 +12,9 @@ class Root extends Component {
   }
 
   render() {
-    const { isErrored } = this.state;
-
     return (
       <RootView
-        isErrored={isErrored}
+        isErrored={this.state.isErrored}
       />
     );
   }
