@@ -4,6 +4,7 @@ import startOfYear from 'date-fns/start_of_year';
 import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
 import LineGraph from '../../../../components/nivo/LineGraph';
+import Legend from '../../../../components/elements/Nivo/Legend';
 import { monthNumToName } from '../../../../helpers/dates';
 import { useWidth } from '../../../../helpers/dom';
 
@@ -22,12 +23,10 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
 
   let graphData = [];
   graphData.push({ id: THIS_YEAR_ID, data: _.map(thisYearGroupByMonth, (items, month) => {
-    const monthlyTotal = _.sumBy(items, 'totalSaleAmount');
-    return { x: month, y: monthlyTotal };
+    return { x: month, y: _.sumBy(items, 'totalSaleAmount') };
   })});
   graphData.push({ id: LAST_YEAR_ID, data: _.map(lastYearGroupByMonth, (items, month) => {
-    const monthlyTotal = _.sumBy(items, 'totalSaleAmount');
-    return { x: month, y: monthlyTotal };
+    return { x: month, y: _.sumBy(items, 'totalSaleAmount') };
   })});
 
   let date = startOfYear(new Date());
@@ -45,11 +44,22 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
   };
   return (
     <div ref={ref} className='h-100'>
+      <Legend
+        items={[
+          {
+            label: THIS_YEAR_ID,
+            color: THIS_YEAR_COLOR,
+          },
+          {
+            label: LAST_YEAR_ID,
+            color: LAST_YEAR_COLOR,
+          },
+        ]}
+      />
       <LineGraph
         yUnit="dollars"
         {...commonLineGraphProps}
         axisBottom={{
-          legend: 'Month',
           format: monthNumToName,
         }}
       />
