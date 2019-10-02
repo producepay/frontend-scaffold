@@ -7,6 +7,7 @@ import LineGraph from '../../../../components/nivo/LineGraph';
 import Legend from '../../../../components/elements/Nivo/Legend';
 import { monthNumToName } from '../../../../helpers/dates';
 import { useWidth } from '../../../../helpers/dom';
+import { takeNth } from '../../../../helpers/lodash';
 
 const LAST_YEAR_ID = 'Last Year';
 const THIS_YEAR_ID = 'This Year';
@@ -32,7 +33,7 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
   const thisYearGroupByMonth = groupLineItemsByMonth(thisYearSalesOrderLineItems);
   const lastYearGroupByMonth = groupLineItemsByMonth(lastYearSalesOrderLineItems);
 
-  let graphData = [
+  const graphData = [
     formatToNivoData(THIS_YEAR_ID, thisYearGroupByMonth),
     formatToNivoData(LAST_YEAR_ID, lastYearGroupByMonth),
   ];
@@ -49,7 +50,13 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
     colors: [THIS_YEAR_COLOR, LAST_YEAR_COLOR],
     xScale: { min: tickValues[0], max: _.last(tickValues) },
     xFormat: monthNumToName,
+    yUnit: "dollars",
   };
+
+  const commonBottomAxisProps = {
+    format: monthNumToName,
+  };
+
   return (
     <div ref={ref} className='h-100'>
       <Legend
@@ -69,13 +76,36 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
           },
         ]}
       />
-      <LineGraph
-        yUnit="dollars"
-        {...commonLineGraphProps}
-        axisBottom={{
-          format: monthNumToName,
-        }}
-      />
+      {/* MOBILE */}
+      <div className='sm:hidden h-full'>
+        <LineGraph
+          {...commonLineGraphProps}
+          lineWidth={2}
+          axisBottom={{
+            ...commonBottomAxisProps,
+            tickValues: takeNth(tickValues, 6)
+          }}
+        />
+      </div>
+
+      {/* TABLET */}
+      <div className='hidden sm:block xl:hidden h-full'>
+        <LineGraph
+          {...commonLineGraphProps}
+          axisBottom={{
+            ...commonBottomAxisProps,
+            tickValues: takeNth(tickValues, 2),
+          }}
+        />
+      </div>
+
+      {/* DESKTOP */}
+      <div className='hidden xl:block h-full'>        
+        <LineGraph
+          {...commonLineGraphProps}
+          axisBottom={{...commonBottomAxisProps}}
+        />
+      </div>
     </div>
   );
 }
