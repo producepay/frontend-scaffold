@@ -14,21 +14,28 @@ const THIS_YEAR_COLOR = '#0092d4';
 const LAST_YEAR_COLOR = '#afe8fe';
 const LEGEND_LABEL_COLOR = '#000000';
 
+function groupLineItemsByMonth(lineItems) {
+  const filtered = lineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
+  return _.groupBy(filtered, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
+}
+
+function formatToNivoData(lineSeriesKey, groupedLineItems) {
+  return {
+    id: lineSeriesKey,
+    data: _.map(groupedLineItems, (items, month) => ({ x: month, y: _.sumBy(items, 'totalSaleAmount') })),
+  };
+}
+
 function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems }) {
   const { ref } = useWidth();
 
-  const thisYearLineItems = thisYearSalesOrderLineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
-  const lastYearLineItems = lastYearSalesOrderLineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
-  const thisYearGroupByMonth = _.groupBy(thisYearLineItems, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
-  const lastYearGroupByMonth = _.groupBy(lastYearLineItems, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
+  const thisYearGroupByMonth = groupLineItemsByMonth(thisYearSalesOrderLineItems);
+  const lastYearGroupByMonth = groupLineItemsByMonth(lastYearSalesOrderLineItems);
 
-  let graphData = [];
-  graphData.push({ id: THIS_YEAR_ID, data: _.map(thisYearGroupByMonth, (items, month) => {
-    return { x: month, y: _.sumBy(items, 'totalSaleAmount') };
-  })});
-  graphData.push({ id: LAST_YEAR_ID, data: _.map(lastYearGroupByMonth, (items, month) => {
-    return { x: month, y: _.sumBy(items, 'totalSaleAmount') };
-  })});
+  let graphData = [
+    formatToNivoData(THIS_YEAR_ID, thisYearGroupByMonth),
+    formatToNivoData(LAST_YEAR_ID, lastYearGroupByMonth),
+  ];
 
   let date = startOfYear(new Date());
   const tickValues = [...Array(12)].map(() => {
