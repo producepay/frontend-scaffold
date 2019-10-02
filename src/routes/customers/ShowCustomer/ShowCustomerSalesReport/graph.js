@@ -1,10 +1,9 @@
 import React from 'react';
-import { ResponsiveLine } from '@nivo/line';
 import _ from 'lodash';
 import startOfYear from 'date-fns/start_of_year';
 import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
-import format from 'date-fns/format';
+import LineGraph from '../../../../components/elements/Nivo/LineGraph';
 import { formatPrice } from '../../../../helpers/format';
 import { monthNumToName } from '../../../../helpers/dates';
 
@@ -42,29 +41,21 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
   const commonLineGraphProps = {
     data: graphData,
     colors: { scheme: 'category10' },
-    margin: { top: 4, right: 32, bottom: 40, left: 48 },
     xScale: { type: 'linear', min: tickValues[0], max: _.last(tickValues) },
-    xFormat: monthNumToName,
     yScale: { type: 'linear', stacked: false, min: 0, max: maxRevenue * 1.3 },
+    xFormat: monthNumToName,
     axisLeft: { format: value => formatPrice(value) },
-    enableGridX: false,
-    enableSlices: 'x',
-    lineWidth: 3,
-    animate: false
   };
   return (
-    <div className="h-100">
-      <ResponsiveLine
-        {...commonLineGraphProps}
-        axisBottom={{
-          legend: 'Month',
-          legendPosition: 'middle',
-          legendOffset: 32,
-          format: monthNumToName,
-          tickValues,
-        }}
-      />
-    </div>
+    <LineGraph
+      {...commonLineGraphProps}
+      axisBottom={{
+        legend: 'Month',
+        legendPosition: 'middle',
+        legendOffset: 32,
+        format: monthNumToName,
+      }}
+    />
   );
 }
 
