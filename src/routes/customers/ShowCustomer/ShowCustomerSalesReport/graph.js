@@ -3,8 +3,7 @@ import _ from 'lodash';
 import startOfYear from 'date-fns/start_of_year';
 import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
-import LineGraph from '../../../../components/elements/Nivo/LineGraph';
-import { formatPrice } from '../../../../helpers/format';
+import LineGraph from '../../../../components/nivo/LineGraph';
 import { monthNumToName } from '../../../../helpers/dates';
 
 const LAST_YEAR_ID = 'Last Year';
@@ -17,19 +16,14 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
   const lastYearGroupByMonth = _.groupBy(lastYearLineItems, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
 
   let graphData = [];
-  let values = [];
   graphData.push({ id: THIS_YEAR_ID, data: _.map(thisYearGroupByMonth, (items, month) => {
     const monthlyTotal = _.sumBy(items, 'totalSaleAmount');
-    values.push(monthlyTotal);
-    return { x: month, y: monthlyTotal};
+    return { x: month, y: monthlyTotal };
   })});
   graphData.push({ id: LAST_YEAR_ID, data: _.map(lastYearGroupByMonth, (items, month) => {
     const monthlyTotal = _.sumBy(items, 'totalSaleAmount');
-    values.push(monthlyTotal);
-    return { x: month, y: monthlyTotal};
+    return { x: month, y: monthlyTotal };
   })});
-
-  const maxRevenue = _.max(values);
 
   let date = startOfYear(new Date());
   const tickValues = [...Array(12)].map(() => {
@@ -41,18 +35,15 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
   const commonLineGraphProps = {
     data: graphData,
     colors: { scheme: 'category10' },
-    xScale: { type: 'linear', min: tickValues[0], max: _.last(tickValues) },
-    yScale: { type: 'linear', stacked: false, min: 0, max: maxRevenue * 1.3 },
+    xScale: { min: tickValues[0], max: _.last(tickValues) },
     xFormat: monthNumToName,
-    axisLeft: { format: value => formatPrice(value) },
   };
   return (
     <LineGraph
+      yUnit="dollars"
       {...commonLineGraphProps}
       axisBottom={{
         legend: 'Month',
-        legendPosition: 'middle',
-        legendOffset: 32,
         format: monthNumToName,
       }}
     />

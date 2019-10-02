@@ -1,19 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cx from 'classnames';
 import { ResponsiveLine } from '@nivo/line';
-import TooltipWrapper from '../TooltipWrapper';
-import { useWidth } from '../../../../helpers/dom';
+import TooltipWrapper from '../../elements/Nivo/TooltipWrapper';
+import { useWidth } from '../../../helpers/dom';
+import { formatPrice } from '../../../helpers/format';
 
-const LineGraph = (props) => {
+const LineGraph = ({ yUnit, tickValues, ...rest }) => {
   const { ref, width } = useWidth();
+  const { data } = rest;
+
+  const maxPoint = _.maxBy(_.flatten(_.map(data, 'data')), 'y');
 
   const defaultLineGraphProps = {
     colors: { scheme: 'category10' },
-    margin: { top: 4, right: 32, bottom: 40, left: 48 },
-    // xScale: { type: 'linear', min: tickValues[0], max: _.last(tickValues) },
-    // yScale: { type: 'linear', stacked: false, min: 0, max: maxRevenue * 1.3 },
-    // axisLeft: { format: value => formatPrice(value) },
+    margin: { top: 4, right: 48, bottom: 40, left: 48 },
+    xScale: { type: 'linear' },
+    yScale: { type: 'linear', stacked: false, min: 0, max: maxPoint.y * 1.3 },
+    axisLeft: yUnit === "dollars" ? { format: value => formatPrice(value) } : {},
     enableGridX: false,
     enableSlices: 'x',
     lineWidth: 3,
@@ -36,8 +41,7 @@ const LineGraph = (props) => {
                     {point.serieId}
                   </td>
                   <td className={tooltipDataCN}>
-                    {point.data.yFormatted}
-                    {/* {formatPrice(point.data.yFormatted)} */}
+                    {yUnit === "dollars" ? formatPrice(point.data.yFormatted) : point.data.yFormatted}
                   </td>
                 </tr>
               );
@@ -46,9 +50,13 @@ const LineGraph = (props) => {
         </table>
       </TooltipWrapper>
     ),
+    axisBottom: {
+      legendPosition: 'middle',
+      legendOffset: 32,
+    },
   };
 
-  const finalProps = { ...defaultLineGraphProps, ...props }
+  const finalProps = _.merge(defaultLineGraphProps, rest); // deep merge
 
   return (
     <div ref={ref} className='h-100'>
@@ -56,5 +64,13 @@ const LineGraph = (props) => {
     </div>
   )
 }
+
+LineGraph.propTypes = {
+  yUnit: PropTypes.oneOf(["dollars", "loads"]), // most graphs y-axis are either volume (loads), or dollars
+};
+
+LineGraph.defaultProps = {
+  yUnit: "loads",
+};
 
 export default LineGraph;
