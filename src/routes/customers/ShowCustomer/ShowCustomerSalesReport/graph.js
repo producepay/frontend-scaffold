@@ -59,23 +59,25 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
 
   return (
     <div ref={ref} className='h-100'>
-      <Legend
-        itemClassName="pr-8"
-        colorClassName="rounded-full mr-4"
-        labelClassName="font-normal"
-        items={[
-          {
-            label: THIS_YEAR_ID,
-            color: THIS_YEAR_COLOR,
-            labelColor: LEGEND_LABEL_COLOR,
-          },
-          {
-            label: LAST_YEAR_ID,
-            color: LAST_YEAR_COLOR,
-            labelColor: LEGEND_LABEL_COLOR,
-          },
-        ]}
-      />
+      <div className='px-4'>
+        <Legend
+          itemClassName="pr-8"
+          colorClassName="rounded-full mr-4"
+          labelClassName="font-normal"
+          items={[
+            {
+              label: THIS_YEAR_ID,
+              color: THIS_YEAR_COLOR,
+              labelColor: LEGEND_LABEL_COLOR,
+            },
+            {
+              label: LAST_YEAR_ID,
+              color: LAST_YEAR_COLOR,
+              labelColor: LEGEND_LABEL_COLOR,
+            },
+          ]}
+        />
+      </div>
       {/* MOBILE */}
       <div className='sm:hidden h-full'>
         <LineGraph
