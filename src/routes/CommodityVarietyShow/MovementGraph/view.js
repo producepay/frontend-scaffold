@@ -9,7 +9,7 @@ import { orderByDateStr, takeNth } from '../../../helpers/lodash';
 import { useWidth } from '../../../helpers/dom';
 import createTooltipRenderer from './tooltip';
 
-import { ResponsiveLine } from '@nivo/line';
+import LineGraph from '../../../components/nivo/LineGraph';
 import CardHeader from '../../../components/elements/CardHeader';
 import Legend from '../../../components/elements/Nivo/Legend';
 import EmptyDataSection from '../../../components/elements/EmptyDataSection';
@@ -110,9 +110,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
     data: truncatedData,
     colors: [CURRENT_SEASON_COLOR, LAST_SEASON_COLOR],
     margin: { top: 8, right: 8, bottom: 40, left: 60 },
-    yScale: { type: 'linear', stacked: false, min: 0, max: maxY * 1.05 },
-    animate: false,
-    enableGridX: false,
+    yScale: { max: maxY * 1.05 },
     enablePoints: false,
     lineWidth: 3,
     axisLeft: {
@@ -127,14 +125,11 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
         lineStyle: { stroke: WEEK_MARKER_COLOR, strokeWidth: 4 },
       },
     ],
-    enableSlices: 'x',
     sliceTooltip: createTooltipRenderer(width, rawData),
   };
 
   const commonAxisBottomProps = {
     legend: 'Week Number',
-    legendPosition: 'middle',
-    legendOffset: 32,
   };
 
   return truncatedData.length === 0 ? (
@@ -154,7 +149,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
       <div className="py-4 md:py-8 px-6 md:px-8">
         <div ref={ref} className="h-100">
           <div className="sm:hidden h-full">
-            <ResponsiveLine
+            <LineGraph
               {...commonGraphProps}
               axisBottom={{
                 ...commonAxisBottomProps,
@@ -165,7 +160,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
           </div>
 
           <div className="hidden sm:block xl:hidden h-full">
-            <ResponsiveLine
+            <LineGraph
               {...commonGraphProps}
               axisBottom={{
                 ...commonAxisBottomProps,
@@ -175,7 +170,7 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
           </div>
 
           <div className="hidden xl:block h-full">
-            <ResponsiveLine
+            <LineGraph
               {...commonGraphProps}
               axisBottom={{
                 ...commonAxisBottomProps,
