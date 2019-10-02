@@ -8,7 +8,7 @@ import { useWidth } from '../../../helpers/dom';
 import { formatPrice } from '../../../helpers/format';
 
 const LineGraph = ({ yUnit, tickValues, ...rest }) => {
-  const { ref, width } = useWidth();
+  const { width } = useWidth();
   const { data } = rest;
 
   const maxPoint = _.maxBy(_.flatten(_.map(data, 'data')), 'y');
@@ -17,7 +17,7 @@ const LineGraph = ({ yUnit, tickValues, ...rest }) => {
     colors: { scheme: 'category10' },
     margin: { top: 4, right: 48, bottom: 40, left: 48 },
     xScale: { type: 'linear' },
-    yScale: { type: 'linear', stacked: false, min: 0, max: maxPoint.y * 1.3 },
+    yScale: { type: 'linear', stacked: false, min: 0, max: _.get(maxPoint, 'y', 0) * 1.3 },
     axisLeft: yUnit === "dollars" ? { format: value => formatPrice(value) } : {},
     enableGridX: false,
     enableSlices: 'x',
@@ -58,11 +58,7 @@ const LineGraph = ({ yUnit, tickValues, ...rest }) => {
 
   const finalProps = _.merge(defaultLineGraphProps, rest); // deep merge
 
-  return (
-    <div ref={ref} className='h-100'>
-      <ResponsiveLine {...finalProps} />
-    </div>
-  )
+  return <ResponsiveLine {...finalProps} />;
 }
 
 LineGraph.propTypes = {

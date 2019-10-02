@@ -7,20 +7,19 @@ import eachDay from 'date-fns/each_day';
 import subDays from 'date-fns/sub_days';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import cx from 'classnames';
+import LineGraph from '../../../components/nivo/LineGraph';
 
 import { orderByDateStr, takeNth } from '../../../helpers/lodash';
 import { getUTCDate } from '../../../helpers/dates';
 import { useWidth } from '../../../helpers/dom';
 import { formatPrice } from '../../../helpers/format';
 
-import TooltipWrapper from '../../../components/elements/Nivo/TooltipWrapper';
-
 const formatDateNumber = (dateNumber) => format(new Date(dateNumber), 'MMM D');
 
 function PriceLineGraph(props) {
   const { priceReportsForSku, activeItems, activeSku } = props;
 
-  const { ref, width } = useWidth();
+  const { ref } = useWidth();
 
   const graphData = _.map(
     _.groupBy(priceReportsForSku, 'cityName'),
@@ -35,9 +34,6 @@ function PriceLineGraph(props) {
 
   const tickValues = eachDay(subDays(new Date(), 30), new Date()).map(date => +date);
 
-  const allPrices = _.map(priceReportsForSku, 'resolvedAveragePrice');
-  const maxPrice = _.max(allPrices);
-
   const latestPricesPerShippingPoint = _.orderBy(_.map(graphData, (d, index) => ({
     cityName: d.id,
     price: _.last(d.data).y,
@@ -49,43 +45,9 @@ function PriceLineGraph(props) {
 
   const commonLineGraphProps = {
     data: graphData,
-    colors: { scheme: 'category10' },
-    margin: { top: 4, right: 32, bottom: 40, left: 48 },
-    xScale: { type: 'linear', min: tickValues[0], max: _.last(tickValues) },
+    xScale: { min: tickValues[0], max: _.last(tickValues) },
     xFormat: formatDateNumber,
-    yScale: { type: 'linear', stacked: false, min: 0, max: maxPrice * 1.3 },
-    axisLeft: { format: value => formatPrice(value) },
-    enableGridX: false,
-    enableSlices: 'x',
-    lineWidth: 3,
-    animate: false,
-    sliceTooltip: ({ slice }) => (
-      <TooltipWrapper
-        title={_.get(slice, 'points[0].data.xFormatted')}
-        flipTooltipDisplay={slice.x > (width / 2)}
-      >
-        <table className='max-w-xs'>
-          <tbody>
-            {_.map(slice.points, (point, idx) => {
-              const tooltipDataCN = cx('py-3 px-4 text-sm font-medium', {
-                'border-t': idx !== 0,
-              });
-
-              return (
-                <tr key={point.id}>
-                  <td className={tooltipDataCN} style={{ color: point.serieColor }}>
-                    {point.serieId}
-                  </td>
-                  <td className={tooltipDataCN}>
-                    {formatPrice(point.data.yFormatted)}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </TooltipWrapper>
-    ),
+    yUnit: "dollars",
   };
 
   const commonAxisBottomProps = {
@@ -122,7 +84,7 @@ function PriceLineGraph(props) {
       <div ref={ref} className='h-100'>
         {/* MOBILE */}
         <div className='sm:hidden h-full'>
-          <ResponsiveLine
+          <LineGraph
             {...commonLineGraphProps}
             lineWidth={2}
             axisBottom={{
@@ -134,7 +96,7 @@ function PriceLineGraph(props) {
 
         {/* TABLET */}
         <div className='hidden sm:block xl:hidden h-full'>
-          <ResponsiveLine
+          <LineGraph
             {...commonLineGraphProps}
             axisBottom={{
               ...commonAxisBottomProps,
@@ -145,7 +107,7 @@ function PriceLineGraph(props) {
 
         {/* DESKTOP */}
         <div className='hidden xl:block h-full'>
-          <ResponsiveLine
+          <LineGraph
             {...commonLineGraphProps}
             axisBottom={{
               ...commonAxisBottomProps,

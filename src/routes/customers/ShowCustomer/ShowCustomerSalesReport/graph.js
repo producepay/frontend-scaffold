@@ -5,11 +5,16 @@ import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
 import LineGraph from '../../../../components/nivo/LineGraph';
 import { monthNumToName } from '../../../../helpers/dates';
+import { useWidth } from '../../../../helpers/dom';
 
 const LAST_YEAR_ID = 'Last Year';
 const THIS_YEAR_ID = 'This Year';
+const THIS_YEAR_COLOR = '#0092d4';
+const LAST_YEAR_COLOR = '#afe8fe';
 
 function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems }) {
+  const { ref } = useWidth();
+
   const thisYearLineItems = thisYearSalesOrderLineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
   const lastYearLineItems = lastYearSalesOrderLineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
   const thisYearGroupByMonth = _.groupBy(thisYearLineItems, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
@@ -34,19 +39,21 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
 
   const commonLineGraphProps = {
     data: graphData,
-    colors: { scheme: 'category10' },
+    colors: [THIS_YEAR_COLOR, LAST_YEAR_COLOR],
     xScale: { min: tickValues[0], max: _.last(tickValues) },
     xFormat: monthNumToName,
   };
   return (
-    <LineGraph
-      yUnit="dollars"
-      {...commonLineGraphProps}
-      axisBottom={{
-        legend: 'Month',
-        format: monthNumToName,
-      }}
-    />
+    <div ref={ref} className='h-100'>
+      <LineGraph
+        yUnit="dollars"
+        {...commonLineGraphProps}
+        axisBottom={{
+          legend: 'Month',
+          format: monthNumToName,
+        }}
+      />
+    </div>
   );
 }
 
