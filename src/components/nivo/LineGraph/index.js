@@ -15,7 +15,7 @@ const LineGraph = ({ yUnit, tickValues, ...rest }) => {
 
   const defaultLineGraphProps = {
     colors: { scheme: 'category10' },
-    margin: { top: 4, right: 48, bottom: 40, left: 48 },
+    margin: { top: 4, right: 32, bottom: 40, left: 48 },
     xScale: { type: 'linear' },
     yScale: { type: 'linear', stacked: false, min: 0, max: _.get(maxPoint, 'y', 0) * 1.3 },
     axisLeft: yUnit === "dollars" ? { format: value => formatPrice(value) } : {},

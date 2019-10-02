@@ -112,7 +112,6 @@ function MovementGraphView({ commodityName, startWeek, currentYearReports, lastY
     margin: { top: 8, right: 8, bottom: 40, left: 60 },
     yScale: { max: maxY * 1.05 },
     enablePoints: false,
-    lineWidth: 3,
     axisLeft: {
       legend: 'Loads (40K lbs)',
       legendOffset: -50,
