@@ -65,10 +65,12 @@ LineGraph.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      data: PropTypes.shape({
-        x: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
-        y: PropTypes.number,
-      }),
+      data: PropTypes.arrayOf(
+        PropTypes.shape({
+          x: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
+          y: PropTypes.number,
+        })
+      ),
     }),
   ).isRequired,
   yUnit: PropTypes.oneOf(["dollars", "loads"]), // most graphs y-axis are either volume (loads), or dollars

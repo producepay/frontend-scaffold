@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ResponsiveLine } from '@nivo/line';
 import _ from 'lodash';
 import format from 'date-fns/format';
 import eachDay from 'date-fns/each_day';

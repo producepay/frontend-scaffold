@@ -13,6 +13,8 @@ function Legend(props) {
     flexDirection,
     itemDirection,
     selectable,
+    colorClassName,
+    labelClassName,
   } = props;
 
   const parentClassName = cx(
@@ -34,10 +36,28 @@ function Legend(props) {
     itemClassName,
   );
 
-  const colorClassName = cx('w-4 h-4', {
+  const baseColorClassName = cx('w-4 h-4', {
     'mr-1': itemDirection === 'row',
     'mb-2 h-4': itemDirection === 'column',
-  });
+  }, colorClassName);
+
+  const fontWeightClasses = [
+    'font-hairline',
+    'font-thin',
+    'font-light',
+    'font-normal',
+    'font-medium',
+    'font-semibold',
+    'font-bold',
+    'font-extrabold',
+    'font-black',
+  ];
+
+  const baseLabelClassName = cx({
+      'font-medium': !labelClassName.split(' ').some(c => fontWeightClasses.indexOf(c) > -1),
+    },
+    labelClassName,
+  );
 
   return (
     <div className={parentClassName}>
@@ -64,12 +84,12 @@ function Legend(props) {
                     value={item.label}
                   />
                 ) : (
-                  <div className={colorClassName} style={{ backgroundColor: item.color }}></div>
+                  <div className={baseColorClassName} style={{ backgroundColor: item.color }}></div>
                 )}
 
                 <div
-                  className='font-medium'
-                  style={{ color: item.color }}
+                  className={baseLabelClassName}
+                  style={{ color: item.labelColor || item.color }}
                 >
                   {item.label}
                 </div>
@@ -85,10 +105,13 @@ function Legend(props) {
 Legend.propTypes = {
   className: PropTypes.string,
   itemClassName: PropTypes.string,
+  colorClassName: PropTypes.string,
+  labelClassName: PropTypes.string,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       color: PropTypes.string.isRequired,
+      labelColor: PropTypes.string,
     }),
   ).isRequired,
   selectable: PropTypes.bool,
@@ -115,6 +138,8 @@ Legend.propTypes = {
 Legend.defaultProps = {
   className: '',
   itemClassName: '',
+  colorClassName: '',
+  labelClassName: '',
   selectable: false,
   activeItems: null,
   onChange: null,
