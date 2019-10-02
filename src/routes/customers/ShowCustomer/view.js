@@ -7,8 +7,17 @@ import ShowCustomerPerformance from './ShowCustomerPerformance';
 import ShowCustomerTransactions from './ShowCustomerTransactions';
 import ShowCustomerSalesReport from './ShowCustomerSalesReport';
 
+const CustomerRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={routeProps => (
+      <Component {...routeProps} {...rest} />
+    )}
+  />
+)
+
 function ShowCustomerView(props) {
-  const { customerName } = props;
+  const { customerName, ...rest } = props;
 
   return (
     <React.Fragment>
@@ -19,9 +28,9 @@ function ShowCustomerView(props) {
       </div>
 
       <Switch>
-        <Route exact path={routes.showCustomerPerformance()} component={ShowCustomerPerformance} />
-        <Route exact path={routes.showCustomerTransactions()} component={ShowCustomerTransactions} />
-        <Route exact path={routes.showCustomerSalesReport()} component={ShowCustomerSalesReport} />
+        <CustomerRoute exact path={routes.showCustomerPerformance()} component={ShowCustomerPerformance} {...rest} />
+        <CustomerRoute exact path={routes.showCustomerTransactions()} component={ShowCustomerTransactions} {...rest} />
+        <CustomerRoute exact path={routes.showCustomerSalesReport()} component={ShowCustomerSalesReport} {...rest} />
 
         <Redirect to={routes.showCustomerPerformance()} />
       </Switch>

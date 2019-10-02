@@ -1,9 +1,14 @@
 import React from 'react';
 
-function ShowCustomerSalesReportView() {
+import Graph from './graph';
+
+function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems }) {
   return (
     <div>
-      ShowCustomerSalesReportView
+      <Graph
+        thisYearSalesOrderLineItems={thisYearSalesOrderLineItems}
+        lastYearSalesOrderLineItems={lastYearSalesOrderLineItems}
+      />
     </div>
   );
 }
