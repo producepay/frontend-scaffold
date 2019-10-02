@@ -60,6 +60,7 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
           legend: 'Month',
           legendPosition: 'middle',
           legendOffset: 32,
+          format: monthNumToName,
           tickValues,
         }}
       />

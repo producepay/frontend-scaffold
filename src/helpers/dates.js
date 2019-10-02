@@ -24,11 +24,11 @@ function gqlF(date) {
 }
 
 function monthNumToName(monthNum) {
-  return MONTHS[monthNum - 1] || '';
+  return MONTHS[monthNum] || '';
 }
 function monthNameToNum(name) {
   var month = MONTHS.indexOf(name);
-  return month ? month + 1 : 0;
+  return month ? month : 0;
 }
 
 module.exports = {
