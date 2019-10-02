@@ -6,6 +6,7 @@ import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
 import format from 'date-fns/format';
 import { formatPrice } from '../../../../helpers/format';
+import { monthNumToName } from '../../../../helpers/dates';
 
 const LAST_YEAR_ID = 'Last Year';
 const THIS_YEAR_ID = 'This Year';
@@ -35,7 +36,7 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
   const tickValues = [...Array(12)].map(() => {
     const currentDate = date;
     date = addMonths(currentDate, 1);
-    return currentDate;
+    return getMonth(currentDate);
   });
 
   const commonLineGraphProps = {
@@ -43,7 +44,7 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
     colors: { scheme: 'category10' },
     margin: { top: 4, right: 32, bottom: 40, left: 48 },
     xScale: { type: 'linear', min: tickValues[0], max: _.last(tickValues) },
-    xFormat: (d) => format(d, 'MMM'),
+    xFormat: monthNumToName,
     yScale: { type: 'linear', stacked: false, min: 0, max: maxRevenue * 1.3 },
     axisLeft: { format: value => formatPrice(value) },
     enableGridX: false,
@@ -52,7 +53,7 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
     animate: false
   };
   return (
-    <div>
+    <div className="h-100">
       <ResponsiveLine
         {...commonLineGraphProps}
         axisBottom={{
