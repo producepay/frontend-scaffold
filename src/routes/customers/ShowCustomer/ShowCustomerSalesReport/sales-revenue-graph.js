@@ -27,7 +27,7 @@ function formatToNivoData(lineSeriesKey, groupedLineItems) {
   };
 }
 
-function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems }) {
+function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems, setLegendItems }) {
   const { ref } = useWidth();
 
   const thisYearGroupByMonth = groupLineItemsByMonth(thisYearSalesOrderLineItems);
@@ -57,27 +57,21 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
     format: monthNumToName,
   };
 
+  setLegendItems([
+    {
+      label: THIS_YEAR_ID,
+      color: THIS_YEAR_COLOR,
+      labelColor: LEGEND_LABEL_COLOR,
+    },
+    {
+      label: LAST_YEAR_ID,
+      color: LAST_YEAR_COLOR,
+      labelColor: LEGEND_LABEL_COLOR,
+    },
+  ]);
+
   return (
-    <div ref={ref} className='h-100'>
-      <div className='px-4'>
-        <Legend
-          itemClassName="pr-8"
-          colorClassName="rounded-full mr-4"
-          labelClassName="font-normal"
-          items={[
-            {
-              label: THIS_YEAR_ID,
-              color: THIS_YEAR_COLOR,
-              labelColor: LEGEND_LABEL_COLOR,
-            },
-            {
-              label: LAST_YEAR_ID,
-              color: LAST_YEAR_COLOR,
-              labelColor: LEGEND_LABEL_COLOR,
-            },
-          ]}
-        />
-      </div>
+    <React.Fragment>
       {/* MOBILE */}
       <div className='sm:hidden h-full'>
         <LineGraph
@@ -108,8 +102,8 @@ function SalesReportGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineI
           axisBottom={{...commonBottomAxisProps}}
         />
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
-export default React.memo(SalesReportGraph);
+export default React.memo(SalesRevenueGraph);
