@@ -2,7 +2,6 @@ import React from 'react';
 import Card from '../../../../components/elements/Card';
 import CardHeader from '../../../../components/elements/CardHeader';
 import Legend from '../../../../components/elements/Nivo/Legend';
-import { useWidth } from '../../../../helpers/dom';
 import { formatLoads } from '../../../../helpers/format';
 import SalesReportGraph from './sales-graph';
 
@@ -13,10 +12,8 @@ const LAST_YEAR_COLOR = '#afe8fe';
 const LEGEND_LABEL_COLOR = '#000000';
 
 const GraphContainer = ({ children }) => {
-  const { ref } = useWidth();
-
   return (
-    <div ref={ref} className='h-100'>
+    <div className='h-100'>
       <div className='px-6 pb-4'>
         <Legend
           itemClassName="pr-8"

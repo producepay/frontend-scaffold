@@ -10,15 +10,12 @@ import LineGraph from '../../../components/nivo/LineGraph';
 
 import { orderByDateStr, takeNth } from '../../../helpers/lodash';
 import { getUTCDate } from '../../../helpers/dates';
-import { useWidth } from '../../../helpers/dom';
 import { formatPrice } from '../../../helpers/format';
 
 const formatDateNumber = (dateNumber) => format(new Date(dateNumber), 'MMM D');
 
 function PriceLineGraph(props) {
   const { priceReportsForSku, activeItems, activeSku } = props;
-
-  const { ref } = useWidth();
 
   const graphData = _.map(
     _.groupBy(priceReportsForSku, 'cityName'),
@@ -80,7 +77,7 @@ function PriceLineGraph(props) {
           </div>
         ))}
       </div>
-      <div ref={ref} className='h-100'>
+      <div className='h-100'>
         {/* MOBILE */}
         <div className='sm:hidden h-full'>
           <LineGraph
