@@ -22,6 +22,21 @@ export function formatPrice(value) {
   ).format(value);
 }
 
+export function formatLargeLoads(value) {
+  let num = Math.floor(value);
+  if (num >= 1000000000) {
+    return new Intl.NumberFormat('en-US').format(num / 1000000000) + 'B';
+  }
+  if (num >= 1000000) {
+    return new Intl.NumberFormat('en-US').format(num / 1000000) + 'M';
+  }
+  if (num >= 100000) {
+    return new Intl.NumberFormat('en-US').format(num / 1000) + 'K';
+  }
+
+  formatLoads(value);
+}
+
 export function formatLoads(value) {
   return new Intl.NumberFormat('en-US').format(value);
 }

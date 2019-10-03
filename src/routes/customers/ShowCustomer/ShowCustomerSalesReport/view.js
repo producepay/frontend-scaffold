@@ -17,7 +17,7 @@ const GraphContainer = ({ children }) => {
 
   return (
     <div ref={ref} className='h-100'>
-      <div className='px-6'>
+      <div className='px-6 pb-4'>
         <Legend
           itemClassName="pr-8"
           colorClassName="rounded-full mr-4"
@@ -48,7 +48,7 @@ function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSale
   ];
   return (
     <React.Fragment>
-      <Card className='pt-4 pb-20 md:pb-16 lg:pb-12 px-2'>
+      <Card className='pt-4 pb-20 lg:pb-16 px-2'>
         <CardHeader
           title="Sales Revenue"
           titleClassName="text-black text-lg lg:text-xl font-semibold"
@@ -62,7 +62,7 @@ function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSale
           />
         </GraphContainer>
       </Card>
-      <Card className='pt-4 pb-20 md:pb-12 lg:pb-8 px-2'>
+      <Card className='pt-4 pb-20 lg:pb-16 px-2'>
         <CardHeader
           title="Volume Sold"
           titleClassName="text-black text-lg lg:text-xl font-semibold"
