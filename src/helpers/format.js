@@ -16,6 +16,11 @@ export function formatPrice(value) {
       style: 'currency', currency: 'USD'
     }).format(num / 1e6) + 'M';
   }
+  if (num >= 1e5) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency', currency: 'USD', maximumSignificantDigits: 3
+    }).format(num / 1000) + 'K';
+  }
 
   return new Intl.NumberFormat('en-US', 
   { style: 'currency', currency: 'USD' }
@@ -30,11 +35,11 @@ export function formatLargeLoads(value) {
   if (num >= 1e6) {
     return new Intl.NumberFormat('en-US').format(num / 1e6) + 'M';
   }
-  if (num >= 1e5) {
+  if (num >= 1e4) {
     return new Intl.NumberFormat('en-US').format(num / 1000) + 'K';
   }
 
-  formatLoads(value);
+  return formatLoads(value);
 }
 
 export function formatWeek(value) {

@@ -6,10 +6,10 @@ import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
 import getIsoWeek from 'date-fns/get_iso_week';
 import getDay from 'date-fns/get_day';
-import LineGraph from '../../../../components/nivo/LineGraph';
-import { monthNumToName } from '../../../../helpers/dates';
-import { formatWeek } from '../../../../helpers/format';
-import { takeNth } from '../../../../helpers/lodash';
+import LineGraph from '../../components/nivo/LineGraph';
+import { monthNumToName } from '../../helpers/dates';
+import { formatWeek } from '../../helpers/format';
+import { takeNth } from '../../helpers/lodash';
 
 function filterInvalidLineItems(lineItems) {
   return lineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
@@ -50,7 +50,7 @@ function generateWeeklyTickValues() {
   return _.range(1, 53);
 }
 
-function SalesReportGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
@@ -114,7 +114,7 @@ function SalesReportGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) 
   );
 }
 
-SalesReportGraph.propTypes = {
+SummaryGraph.propTypes = {
   yAxisField: PropTypes.string.isRequired, // fieldName of sales order line item that we will sum on the y axis
   lineSeriesConfig: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -127,8 +127,8 @@ SalesReportGraph.propTypes = {
   ]),
 }
 
-SalesReportGraph.defaultProps = {
+SummaryGraph.defaultProps = {
   xInterval: 'month',
 }
 
-export default React.memo(SalesReportGraph);
+export default React.memo(SummaryGraph);
