@@ -24,7 +24,7 @@ function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) => formatToNivoData(id, groupLineItemsByMonth(data), yAxisField));
 
   let date = startOfYear(new Date());
-  const tickValues = [...Array(12)].map(() => {
+  const tickValues = _.range(11).map(() => {
     const currentDate = date;
     date = addMonths(currentDate, 1);
     return getMonth(currentDate);

@@ -15,6 +15,7 @@ function Legend(props) {
     selectable,
     colorClassName,
     labelClassName,
+    labelFontWeight,
   } = props;
 
   const parentClassName = cx(
@@ -41,23 +42,7 @@ function Legend(props) {
     'mb-2 h-4': itemDirection === 'column',
   }, colorClassName);
 
-  const fontWeightClasses = [
-    'font-hairline',
-    'font-thin',
-    'font-light',
-    'font-normal',
-    'font-medium',
-    'font-semibold',
-    'font-bold',
-    'font-extrabold',
-    'font-black',
-  ];
-
-  const baseLabelClassName = cx({
-      'font-medium': !labelClassName.split(' ').some(c => fontWeightClasses.indexOf(c) > -1),
-    },
-    labelClassName,
-  );
+  const baseLabelClassName = cx(`font-${labelFontWeight}`, labelClassName);
 
   return (
     <div className={parentClassName}>
@@ -107,6 +92,7 @@ Legend.propTypes = {
   itemClassName: PropTypes.string,
   colorClassName: PropTypes.string,
   labelClassName: PropTypes.string,
+  labelFontWeight: PropTypes.string,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
@@ -145,6 +131,7 @@ Legend.defaultProps = {
   onChange: null,
   flexDirection: 'row',
   itemDirection: 'row',
+  labelFontWeight: 'medium',
 };
 
 export default React.memo(Legend);

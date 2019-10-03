@@ -21,7 +21,7 @@ const GraphContainer = ({ children }) => {
         <Legend
           itemClassName="pr-8"
           colorClassName="rounded-full mr-4"
-          labelClassName="font-normal"
+          labelFontWeight="normal"
           items={[
             {
               label: THIS_YEAR_ID,
