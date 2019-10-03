@@ -20,11 +20,7 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function SalesReportGraph({
-  yAxisField,
-  lineSeriesConfig,
-  ...rest
-}) {
+function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) => formatToNivoData(id, groupLineItemsByMonth(data), yAxisField));
 
   let date = startOfYear(new Date());
