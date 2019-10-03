@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import startOfYear from 'date-fns/start_of_year';
 import getMonth from 'date-fns/get_month';
@@ -7,33 +8,24 @@ import LineGraph from '../../../../components/nivo/LineGraph';
 import { monthNumToName } from '../../../../helpers/dates';
 import { takeNth } from '../../../../helpers/lodash';
 
-const LAST_YEAR_ID = 'Last Year';
-const THIS_YEAR_ID = 'This Year';
-const THIS_YEAR_COLOR = '#0092d4';
-const LAST_YEAR_COLOR = '#afe8fe';
-const LEGEND_LABEL_COLOR = '#000000';
-
 function groupLineItemsByMonth(lineItems) {
   const filtered = lineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
   return _.groupBy(filtered, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
 }
 
-function formatToNivoData(lineSeriesKey, groupedLineItems) {
+function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   return {
     id: lineSeriesKey,
-    data: _.map(groupedLineItems, (items, month) => ({ x: month, y: _.sumBy(items, 'totalSaleAmount') })),
+    data: _.map(groupedLineItems, (items, month) => ({ x: month, y: _.sumBy(items, yAxisField) })),
   };
 }
 
-function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems, setLegendItems }) {
-
-  const thisYearGroupByMonth = groupLineItemsByMonth(thisYearSalesOrderLineItems);
-  const lastYearGroupByMonth = groupLineItemsByMonth(lastYearSalesOrderLineItems);
-
-  const graphData = [
-    formatToNivoData(THIS_YEAR_ID, thisYearGroupByMonth),
-    formatToNivoData(LAST_YEAR_ID, lastYearGroupByMonth),
-  ];
+function SalesReportGraph({
+  yAxisField,
+  lineSeriesConfig,
+  ...rest
+}) {
+  const graphData = _.map(lineSeriesConfig, ({ id, data }) => formatToNivoData(id, groupLineItemsByMonth(data), yAxisField));
 
   let date = startOfYear(new Date());
   const tickValues = [...Array(12)].map(() => {
@@ -42,30 +34,20 @@ function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLine
     return getMonth(currentDate);
   });
 
-  const commonLineGraphProps = {
+  let commonLineGraphProps = {
     data: graphData,
-    colors: [THIS_YEAR_COLOR, LAST_YEAR_COLOR],
     xScale: { min: tickValues[0], max: _.last(tickValues) },
-    xFormat: monthNumToName,
-    yUnit: "dollars",
+    xFormat: monthNumToName, // for tooltip
   };
+
+  const colors = _.map(lineSeriesConfig, 'color');
+  if (colors && colors.length) {
+    commonLineGraphProps.colors = colors; 
+  }
 
   const commonBottomAxisProps = {
-    format: monthNumToName,
+    format: monthNumToName, // for bottom axis names
   };
-
-  setLegendItems([
-    {
-      label: THIS_YEAR_ID,
-      color: THIS_YEAR_COLOR,
-      labelColor: LEGEND_LABEL_COLOR,
-    },
-    {
-      label: LAST_YEAR_ID,
-      color: LAST_YEAR_COLOR,
-      labelColor: LEGEND_LABEL_COLOR,
-    },
-  ]);
 
   return (
     <React.Fragment>
@@ -78,6 +60,7 @@ function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLine
             ...commonBottomAxisProps,
             tickValues: takeNth(tickValues, 6)
           }}
+          {...rest}
         />
       </div>
 
@@ -89,6 +72,7 @@ function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLine
             ...commonBottomAxisProps,
             tickValues: takeNth(tickValues, 2),
           }}
+          {...rest}
         />
       </div>
 
@@ -97,10 +81,20 @@ function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLine
         <LineGraph
           {...commonLineGraphProps}
           axisBottom={{...commonBottomAxisProps}}
+          {...rest}
         />
       </div>
     </React.Fragment>
   );
 }
 
-export default React.memo(SalesRevenueGraph);
+SalesReportGraph.propTypes = {
+  yAxisField: PropTypes.string.isRequired, // fieldName of sales order line item that we will sum on the y axis
+  lineSeriesConfig: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    color: PropTypes.string,
+  })).isRequired,
+}
+
+export default React.memo(SalesReportGraph);
