@@ -59,6 +59,7 @@ function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSale
             lineSeriesConfig={lineSeriesConfig}
             yAxisField="totalSaleAmount"
             yUnit="dollars"
+            xInterval="week"
           />
         </GraphContainer>
       </Card>
@@ -73,6 +74,7 @@ function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSale
             lineSeriesConfig={lineSeriesConfig}
             yAxisField="quantityOrdered"
             yFormat={value => (`${formatLoads(value)} packages`)}
+            xInterval="week"
           />
         </GraphContainer>
       </Card>

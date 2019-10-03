@@ -6,15 +6,15 @@ export function formatPrice(value) {
   if (value === null || value === undefined) return null;
 
   let num = Math.floor(value);
-  if (num >= 1000000000) {
+  if (num >= 1e9) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency', currency: 'USD'
-    }).format(num / 1000000000) + 'B';
+    }).format(num / 1e9) + 'B';
   }
-  if (num >= 1000000) {
+  if (num >= 1e6) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency', currency: 'USD'
-    }).format(num / 1000000) + 'M';
+    }).format(num / 1e6) + 'M';
   }
 
   return new Intl.NumberFormat('en-US', 
@@ -24,17 +24,21 @@ export function formatPrice(value) {
 
 export function formatLargeLoads(value) {
   let num = Math.floor(value);
-  if (num >= 1000000000) {
-    return new Intl.NumberFormat('en-US').format(num / 1000000000) + 'B';
+  if (num >= 1e9) {
+    return new Intl.NumberFormat('en-US').format(num / 1e9) + 'B';
   }
-  if (num >= 1000000) {
-    return new Intl.NumberFormat('en-US').format(num / 1000000) + 'M';
+  if (num >= 1e6) {
+    return new Intl.NumberFormat('en-US').format(num / 1e6) + 'M';
   }
-  if (num >= 100000) {
+  if (num >= 1e5) {
     return new Intl.NumberFormat('en-US').format(num / 1000) + 'K';
   }
 
   formatLoads(value);
+}
+
+export function formatWeek(value) {
+  return `Week ${value}`;
 }
 
 export function formatLoads(value) {

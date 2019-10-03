@@ -4,13 +4,30 @@ import _ from 'lodash';
 import startOfYear from 'date-fns/start_of_year';
 import getMonth from 'date-fns/get_month';
 import addMonths from 'date-fns/add_months';
+import getIsoWeek from 'date-fns/get_iso_week';
+import getDay from 'date-fns/get_day';
 import LineGraph from '../../../../components/nivo/LineGraph';
 import { monthNumToName } from '../../../../helpers/dates';
+import { formatWeek } from '../../../../helpers/format';
 import { takeNth } from '../../../../helpers/lodash';
 
+function filterInvalidLineItems(lineItems) {
+  return lineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
+}
+
 function groupLineItemsByMonth(lineItems) {
-  const filtered = lineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
-  return _.groupBy(filtered, item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
+  return _.groupBy(filterInvalidLineItems(lineItems), item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
+}
+
+function groupLineItemsByWeek(lineItems) {
+  return _.groupBy(filterInvalidLineItems(lineItems), item => {
+    const currentWeek = getIsoWeek(item.orderCreatedAt || item.invoiceCreatedAt);
+    if (currentWeek > 52) {
+      const day = getDay(item.orderCreatedAt || item.invoiceCreatedAt);
+      if (day === 0 || day > 4) return 1; // week number will be 52 or 53 if 1st day of the year falls on a friday to sunday 
+    }
+    return currentWeek;
+  })
 }
 
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
@@ -20,20 +37,30 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
-  const graphData = _.map(lineSeriesConfig, ({ id, data }) => formatToNivoData(id, groupLineItemsByMonth(data), yAxisField));
-
+function generateMonthlyTickValues() {
   let date = startOfYear(new Date());
-  const tickValues = _.range(11).map(() => {
+  return _.range(11).map(() => {
     const currentDate = date;
     date = addMonths(currentDate, 1);
     return getMonth(currentDate);
   });
+}
+
+function generateWeeklyTickValues() {
+  return _.range(1, 53);
+}
+
+function SalesReportGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+  const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
+    formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
+  );
+
+  const tickValues = xInterval === "month" ? generateMonthlyTickValues() : generateWeeklyTickValues();
 
   let commonLineGraphProps = {
     data: graphData,
     xScale: { min: tickValues[0], max: _.last(tickValues) },
-    xFormat: monthNumToName, // for tooltip
+    xFormat: xInterval === "month" ? monthNumToName : formatWeek, // for tooltip
   };
 
   const colors = _.map(lineSeriesConfig, 'color');
@@ -42,7 +69,7 @@ function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
   }
 
   const commonBottomAxisProps = {
-    format: monthNumToName, // for bottom axis names
+    format: xInterval === "month" ? monthNumToName : formatWeek, // for bottom axis names
   };
 
   return (
@@ -54,7 +81,7 @@ function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
           lineWidth={2}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, 6)
+            tickValues: takeNth(tickValues, xInterval === "month" ? 6 : 9)
           }}
           {...rest}
         />
@@ -66,7 +93,7 @@ function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, 2),
+            tickValues: takeNth(tickValues, xInterval === "month" ? 2 : 7),
           }}
           {...rest}
         />
@@ -76,7 +103,10 @@ function SalesReportGraph({ yAxisField, lineSeriesConfig, ...rest }) {
       <div className='hidden xl:block h-full'>        
         <LineGraph
           {...commonLineGraphProps}
-          axisBottom={{...commonBottomAxisProps}}
+          axisBottom={{
+            ...commonBottomAxisProps,
+            tickValues: takeNth(tickValues, xInterval === "month" ? 1 : 5),
+          }}
           {...rest}
         />
       </div>
@@ -91,6 +121,14 @@ SalesReportGraph.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     color: PropTypes.string,
   })).isRequired,
+  xInterval: PropTypes.oneOf([
+    'month',
+    'week', // NOTE: can add day if we need to in the future?
+  ]),
+}
+
+SalesReportGraph.defaultProps = {
+  xInterval: 'month',
 }
 
 export default React.memo(SalesReportGraph);
