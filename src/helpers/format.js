@@ -22,6 +22,10 @@ export function formatPrice(value) {
   ).format(value);
 }
 
+export function formatLoads(value) {
+  return new Intl.NumberFormat('en-US').format(value);
+}
+
 export function capitalizeEachWord(string) {
   return _.startCase(_.toLower(string));
 }

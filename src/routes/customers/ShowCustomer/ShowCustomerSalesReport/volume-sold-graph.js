@@ -6,6 +6,7 @@ import addMonths from 'date-fns/add_months';
 import LineGraph from '../../../../components/nivo/LineGraph';
 import { monthNumToName } from '../../../../helpers/dates';
 import { takeNth } from '../../../../helpers/lodash';
+import { formatLoads } from '../../../../helpers/format';
 
 const LAST_YEAR_ID = 'Last Year';
 const THIS_YEAR_ID = 'This Year';
@@ -21,11 +22,11 @@ function groupLineItemsByMonth(lineItems) {
 function formatToNivoData(lineSeriesKey, groupedLineItems) {
   return {
     id: lineSeriesKey,
-    data: _.map(groupedLineItems, (items, month) => ({ x: month, y: _.sumBy(items, 'totalSaleAmount') })),
+    data: _.map(groupedLineItems, (items, month) => ({ x: month, y: _.sumBy(items, 'quantityOrdered') })),
   };
 }
 
-function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems, setLegendItems }) {
+function VolumeSoldGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems, setLegendItems }) {
 
   const thisYearGroupByMonth = groupLineItemsByMonth(thisYearSalesOrderLineItems);
   const lastYearGroupByMonth = groupLineItemsByMonth(lastYearSalesOrderLineItems);
@@ -47,7 +48,7 @@ function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLine
     colors: [THIS_YEAR_COLOR, LAST_YEAR_COLOR],
     xScale: { min: tickValues[0], max: _.last(tickValues) },
     xFormat: monthNumToName,
-    yUnit: "dollars",
+    yFormat: (value) => (`${formatLoads(value)} packages`),
   };
 
   const commonBottomAxisProps = {
@@ -103,4 +104,4 @@ function SalesRevenueGraph({ thisYearSalesOrderLineItems, lastYearSalesOrderLine
   );
 }
 
-export default React.memo(SalesRevenueGraph);
+export default React.memo(VolumeSoldGraph);

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { ResponsiveLine } from '@nivo/line';
 import TooltipWrapper from '../../elements/Nivo/TooltipWrapper';
 import { useWidth } from '../../../helpers/dom';
-import { formatPrice } from '../../../helpers/format';
+import { formatPrice, formatLoads } from '../../../helpers/format';
 
 const LineGraph = ({ yUnit, tickValues, ...rest }) => {
   const { width } = useWidth();
@@ -18,7 +18,7 @@ const LineGraph = ({ yUnit, tickValues, ...rest }) => {
     margin: { top: 4, right: 32, bottom: 40, left: 48 },
     xScale: { type: 'linear' },
     yScale: { type: 'linear', stacked: false, min: 0, max: _.get(maxPoint, 'y', 0) * 1.3 },
-    axisLeft: yUnit === "dollars" ? { format: value => formatPrice(value) } : {},
+    axisLeft: yUnit === "dollars" ? { format: value => formatPrice(value) } : { format: formatLoads },
     enableGridX: false,
     enableSlices: 'x',
     lineWidth: 3,
