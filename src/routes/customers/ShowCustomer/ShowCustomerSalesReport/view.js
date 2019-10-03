@@ -48,7 +48,7 @@ function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSale
   ];
   return (
     <React.Fragment>
-      <Card className='pt-4 pb-20 lg:pb-16 px-2'>
+      <Card className='pt-4 pb-32 lg:pb-24 px-2'>
         <CardHeader
           title="Sales Revenue"
           titleClassName="text-black text-lg lg:text-xl font-semibold"
@@ -62,7 +62,7 @@ function ShowCustomerSalesReportView({ thisYearSalesOrderLineItems, lastYearSale
           />
         </GraphContainer>
       </Card>
-      <Card className='pt-4 pb-20 lg:pb-16 px-2'>
+      <Card className='pt-4 pb-32 lg:pb-24 px-2'>
         <CardHeader
           title="Volume Sold"
           titleClassName="text-black text-lg lg:text-xl font-semibold"
