@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import startOfYear from 'date-fns/start_of_year';
 import getMonth from 'date-fns/get_month';
-import addMonths from 'date-fns/add_months';
 import getIsoWeek from 'date-fns/get_iso_week';
-import getDay from 'date-fns/get_day';
 import LineGraph from '../../components/nivo/LineGraph';
 import { monthNumToName } from '../../helpers/dates';
 import { formatWeek } from '../../helpers/format';
