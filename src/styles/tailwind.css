@@ -26,7 +26,7 @@
   @apply w-full;
 }
 
-.primary-table th {
+.primary-table th { /* only define classes for th as a lot of the TDs seem to have custom behavior right now */
   @apply py-3 px-3 bg-primary text-white font-semibold tracking-wide
 }
 
