@@ -1,5 +1,6 @@
 import React from 'react';
 import TH from '../../../../components/elements/table/TH';
+import TR from '../../../../components/elements/table/TR';
 
 function CustomersTable() {
   const thProps = {
@@ -20,6 +21,16 @@ function CustomersTable() {
           <TH {...thProps}>Avg Sales Price Per Box</TH>
         </thead>
         <tbody>
+          <TR
+            data={[
+              "Del Monte Fresh Product",
+              "120",
+              "$145,500",
+              "$25,000",
+              "$13.67",
+              "$18.79"
+            ]}
+          />
           <tr>
             <td>Amazon Produce</td>
             <td>200</td>
