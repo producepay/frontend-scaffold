@@ -3,12 +3,6 @@ import TH from '../../../../components/elements/table/TH';
 import TD from '../../../../components/elements/table/TD';
 
 function CustomersTable() {
-  const thProps = {
-    bgColor: "white",
-    color: "gray-600",
-    size: "xs",
-    className: "uppercase",
-  };
   const sampleData = [{
     id: "2391",
     name: "Frontera Produce",
@@ -28,25 +22,27 @@ function CustomersTable() {
   }];
   return (
     <div>
-      <table>
+      <table className='secondary-table'>
         <thead>
-          <TH {...thProps}>Name</TH>
-          <TH {...thProps}>Quantity Sold</TH>
-          <TH {...thProps}>Sales Amount</TH>
-          <TH {...thProps}>Total Profit</TH>
-          <TH {...thProps}>Avg Cost Per Box</TH>
-          <TH {...thProps}>Avg Sales Price Per Box</TH>
+          <tr>
+            <th>Name</th>
+            <th>Quantity Sold</th>
+            <th>Sales Amount</th>
+            <th>Total Profit</th>
+            <th>Avg Cost Per Box</th>
+            <th>Avg Sales Price Per Box</th>
+          </tr>
         </thead>
         <tbody>
           {
             sampleData.map((d) => (
               <tr key={d.id}>
-                <TD>{d.name}</TD>
-                <TD>{d.quantityOrdered}</TD>
-                <TD>{d.totalSalesAmount}</TD>
-                <TD>{d.total}</TD>
-                <TD>{d.name}</TD>
-                <TD>{d.name}</TD>
+                <td>{d.name}</td>
+                <td>{d.quantityOrdered}</td>
+                <td>{d.totalSalesAmount}</td>
+                <td>{d.total}</td>
+                <td>{d.name}</td>
+                <td>{d.name}</td>
               </tr>
             ))
           }

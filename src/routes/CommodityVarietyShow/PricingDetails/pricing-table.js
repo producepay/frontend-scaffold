@@ -22,7 +22,7 @@ const PricingTable = props => {
 
             return (
               <Grid key={cityName} md="1/2" spacing={32}>
-                <table className="w-full">
+                <table className="primary-table">
                   <thead>
                     <tr>
                       <TH align="left">{capitalizeEachWord(cityName)}</TH>

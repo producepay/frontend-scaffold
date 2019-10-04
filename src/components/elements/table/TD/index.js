@@ -1,25 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import cx from 'classnames';
+import cx from 'classnames';
 
 function TD(props) {
-  const { data, className } = props;
+  const { className, color, children, ...rest } = props;
+
+  const cName = cx(className, {
+    'primary-table-cell': color === 'primary',
+    'secondary-table-cell': color === 'secondary',
+  });
 
   return (
-    <td className={className}>{data}</td>
+    <td
+      valign='center'
+      className={cName}
+      {...rest}
+    >
+      {children}
+    </td>
   );
 }
 
 TD.propTypes = {
-  data: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.node,
-  ]),
-  className: PropTypes.string,
+  color: PropTypes.oneOf(['primary', 'secondary']),
 };
 
 TD.defaultProps = {
-  className: '',
+  color: 'primary',
 };
 
 export default React.memo(TD);

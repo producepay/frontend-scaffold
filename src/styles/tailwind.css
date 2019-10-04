@@ -2,4 +2,33 @@
 
 @tailwind components;
 
+.secondary-table {
+  @apply w-full border-collapse;
+}
+
+.secondary-table th {
+  @apply py-3 px-2 bg-white text-gray-600 text-xs font-medium uppercase text-left tracking-wide
+}
+
+.secondary-table td {
+  @apply py-2 px-2
+}
+
+.secondary-table tr:nth-child(odd) {
+  @apply bg-white
+}
+
+.secondary-table tr:nth-child(even) {
+  @apply bg-light
+}
+
+.primary-table {
+  @apply w-full;
+}
+
+.primary-table th {
+  @apply py-3 px-3 bg-primary text-white font-semibold tracking-wide
+}
+
+
 @tailwind utilities;

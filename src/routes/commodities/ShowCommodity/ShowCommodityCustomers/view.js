@@ -1,8 +1,12 @@
 import React from 'react';
+import CustomersTable from './table';
 
 function ShowCommodityCustomersView() {
   return (
-    <div>ShowCommodityCustomersView</div>
+    <div>
+      <h2>ShowCommodityCustomersView</h2>
+      <CustomersTable />
+    </div>
   );
 }
 
