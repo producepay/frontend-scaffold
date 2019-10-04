@@ -20,14 +20,7 @@ function groupLineItemsByMonth(lineItems) {
 }
 
 function groupLineItemsByWeek(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => {
-    const currentWeek = getIsoWeek(item.orderCreatedAt || item.invoiceCreatedAt);
-    if (currentWeek > 52) {
-      const day = getDay(item.orderCreatedAt || item.invoiceCreatedAt);
-      if (day === 0 || day > 4) return 1; // week number will be 52 or 53 if 1st day of the year falls on a friday to sunday 
-    }
-    return currentWeek;
-  })
+  return _.groupBy(filterInvalidLineItems(lineItems), item => getIsoWeek(item.orderCreatedAt || item.invoiceCreatedAt));
 }
 
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
