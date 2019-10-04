@@ -1,24 +1,31 @@
 import React from 'react';
-import TH from '../../../../components/elements/table/TH';
-import TD from '../../../../components/elements/table/TD';
+import { formatPrice, formatLoads } from '../../../../helpers/format';
 
 function CustomersTable() {
   const sampleData = [{
     id: "2391",
     name: "Frontera Produce",
     quantityOrdered: 155,
-    totalSalesAmount: "$95,000",
-    totalProfit: "$40,000",
-    costPerBox: "$12.95",
-    avgSalesPerPox: "13.99",
+    totalSalesAmount: 95150.3,
+    totalProfit: 40000.0,
+    costPerBox: 12.95,
+    avgSalesPerPox: 13.99,
   }, {
     id: "2392",
     name: "Del Monte Fresh Produce",
     quantityOrdered: 2134,
-    totalSalesAmount: "$125,000",
-    totalProfit: "$20,000",
-    costPerBox: "$14.95",
-    avgSalesPerPox: "15.69",
+    totalSalesAmount: 125000,
+    totalProfit: 20000,
+    costPerBox: 14.95,
+    avgSalesPerPox: 15.69,
+  }, {
+    id: "2393",
+    name: "Fresh and Simple Produce",
+    quantityOrdered: 550,
+    totalSalesAmount: 105031,
+    totalProfit: 24930,
+    costPerBox: 13.40,
+    avgSalesPerPox: 14.01,
   }];
   return (
     <div>
@@ -38,11 +45,11 @@ function CustomersTable() {
             sampleData.map((d) => (
               <tr key={d.id}>
                 <td>{d.name}</td>
-                <td>{d.quantityOrdered}</td>
-                <td>{d.totalSalesAmount}</td>
-                <td>{d.total}</td>
-                <td>{d.name}</td>
-                <td>{d.name}</td>
+                <td>{formatLoads(d.quantityOrdered)}</td>
+                <td>{formatPrice(d.totalSalesAmount, false)}</td>
+                <td>{formatPrice(d.totalProfit, false)}</td>
+                <td>{formatPrice(d.costPerBox, false)}</td>
+                <td>{formatPrice(d.avgSalesPerPox, false)}</td>
               </tr>
             ))
           }
