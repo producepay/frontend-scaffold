@@ -38,12 +38,7 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
 }
 
 function generateMonthlyTickValues() {
-  let date = startOfYear(new Date());
-  return _.range(11).map(() => {
-    const currentDate = date;
-    date = addMonths(currentDate, 1);
-    return getMonth(currentDate);
-  });
+  return _.range(11);
 }
 
 function generateWeeklyTickValues() {
