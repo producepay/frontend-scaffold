@@ -1,12 +1,12 @@
 import React from 'react';
+import Card from '../../../../components/elements/Card';
 import CustomersTable from './table';
 
 function ShowCommodityCustomersView() {
   return (
-    <div>
-      <h2>ShowCommodityCustomersView</h2>
+    <Card className='p-4'>
       <CustomersTable />
-    </div>
+    </Card>
   );
 }
 
