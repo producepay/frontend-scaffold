@@ -2,7 +2,40 @@
 
 @tailwind components;
 
-.secondary-table {
+.table-primary th {
+  @apply bg-primary text-white
+}
+
+.table-secondary th {
+  @apply bg-white text-gray-600
+}
+
+.table-alternating-rows tr:nth-child(odd) {
+  @apply bg-white
+}
+
+.table-alternating-rows tr:nth-child(even) {
+  @apply bg-gray-200
+}
+
+.table-p-sm th {
+  @apply py-3 px-2 text-xxs-xs
+}
+
+.table-p-sm td {
+  @apply py-2 px-2 text-sm
+}
+
+.table-p-lg th {
+  @apply py-4 px-2 text-xxs-xs
+}
+
+.table-p-lg td {
+  @apply py-6 px-2 text-sm
+}
+
+
+/* .secondary-table {
   @apply w-full border-collapse;
 }
 
@@ -14,12 +47,12 @@
   @apply py-2 px-2 text-sm
 }
 
-.secondary-table tr:nth-child(odd) {
+.alternating-rows tr:nth-child(odd) {
   @apply bg-white
 }
 
-.secondary-table tr:nth-child(even) {
-  @apply bg-light
+.alternating-rows tr:nth-child(even) {
+  @apply bg-gray-200
 }
 
 .primary-table {
@@ -27,7 +60,7 @@
 }
 
 .primary-table th { /* only define classes for th as a lot of the TDs seem to have custom behavior right now */
-  @apply py-3 px-3 bg-primary text-white font-semibold tracking-wide
-}
+/*  @apply py-3 px-3 bg-primary text-white font-semibold tracking-wide
+} */
 
 @tailwind utilities;

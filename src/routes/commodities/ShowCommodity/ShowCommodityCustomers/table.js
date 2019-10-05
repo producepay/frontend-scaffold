@@ -1,7 +1,11 @@
 import React from 'react';
+import Table from '../../../../components/elements/table';
+import TH from '../../../../components/elements/table/TH';
 import { formatPrice, formatLoads } from '../../../../helpers/format';
 
 function CustomersTable() {
+  const thProps = { align: 'left', weight: 'medium' };
+
   const sampleData = [{
     id: "2391",
     name: "Frontera Produce",
@@ -29,15 +33,15 @@ function CustomersTable() {
   }];
   return (
     <div>
-      <table className='secondary-table'>
+      <Table color="secondary" padding="sm" alternatingRows>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Quantity Sold</th>
-            <th>Sales Amount</th>
-            <th>Total Profit</th>
-            <th>Avg Cost Per Box</th>
-            <th>Avg Sales Price Per Box</th>
+            <TH {...thProps}>Name</TH>
+            <TH {...thProps}>Quantity Sold</TH>
+            <TH {...thProps}>Sales Amount</TH>
+            <TH {...thProps}>Total Profit</TH>
+            <TH {...thProps}>Avg Cost Per Box</TH>
+            <TH {...thProps}>Avg Sales Price Per Box</TH>
           </tr>
         </thead>
         <tbody>
@@ -54,7 +58,7 @@ function CustomersTable() {
             ))
           }
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }
