@@ -27,7 +27,7 @@ function WeatherTable(props) {
   const { data } = props;
 
   return (
-    <Table>
+    <Table className="w-full">
       <thead>
         <tr>
           <TH align='left' colSpan='2'>Growing Regions</TH>
