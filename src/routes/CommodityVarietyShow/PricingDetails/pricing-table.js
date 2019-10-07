@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { capitalizeEachWord } from '../../../helpers/format';
 
 import Grid from '../../../components/elements/Grid';
+import Table from '../../../components/elements/table';
 import TH from '../../../components/elements/table/TH';
 import PricingSubtable from './pricing-subtable';
 
@@ -11,6 +12,7 @@ const PricingTable = props => {
   const { latestReports } = props;
 
   const cityGroupedLatestReports = _.groupBy(latestReports, 'cityName');
+  const thProps = { weight: "semibold" }
 
   return (
     <React.Fragment>
@@ -22,13 +24,13 @@ const PricingTable = props => {
 
             return (
               <Grid key={cityName} md="1/2" spacing={32}>
-                <table className="primary-table">
+                <Table className="w-full" alternatingRows={false}>
                   <thead>
                     <tr>
-                      <TH align="left">{capitalizeEachWord(cityName)}</TH>
-                      <TH size="xs">LOW</TH>
-                      <TH size="xs">HIGH</TH>
-                      <TH size="xs">AVG</TH>
+                      <TH align="left" uppercase={false} {...thProps}>{capitalizeEachWord(cityName)}</TH>
+                      <TH size="xs" {...thProps}>LOW</TH>
+                      <TH size="xs" {...thProps}>HIGH</TH>
+                      <TH size="xs" {...thProps}>AVG</TH>
                     </tr>
                   </thead>
 
@@ -37,7 +39,7 @@ const PricingTable = props => {
 
                     <PricingSubtable label='ORGANIC' reports={organicReports} />
                   </tbody>
-                </table>
+                </Table>
               </Grid>
             );
           })}

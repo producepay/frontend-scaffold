@@ -4,7 +4,7 @@ import TH from '../../../../components/elements/table/TH';
 import { formatPrice, formatLoads } from '../../../../helpers/format';
 
 function CustomersTable() {
-  const thProps = { align: 'left', weight: 'medium' };
+  const thProps = { align: 'left', weight: 'medium', size: 'xxs-xs' };
 
   const sampleData = [{
     id: "2391",
@@ -33,7 +33,7 @@ function CustomersTable() {
   }];
   return (
     <div>
-      <Table color="secondary" padding="sm" alternatingRows>
+      <Table color="secondary">
         <thead>
           <tr>
             <TH {...thProps}>Name</TH>

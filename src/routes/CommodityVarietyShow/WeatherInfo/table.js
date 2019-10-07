@@ -5,6 +5,7 @@ import { map, isEmpty, has } from 'lodash';
 
 import getAlertDescription from './helpers';
 
+import Table from '../../../components/elements/table';
 import TH from '../../../components/elements/table/TH';
 import AlertCircle from '../../../components/icons/AlertCircle';
 import CheckmarkCircle from '../../../components/icons/CheckmarkCircle';
@@ -26,7 +27,7 @@ function WeatherTable(props) {
   const { data } = props;
 
   return (
-    <table className='primary-table'>
+    <Table>
       <thead>
         <tr>
           <TH align='left' colSpan='2'>Growing Regions</TH>
@@ -97,7 +98,7 @@ function WeatherTable(props) {
           );
         })}
       </tbody>
-    </table>
+    </Table>
   );
 }
 
