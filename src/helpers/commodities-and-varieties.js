@@ -5,27 +5,36 @@ function createUuidKey(commodityUuid, varietyUuid) {
   return _.compact([commodityUuid, varietyUuid]).join(':');
 }
 
-export const commodityDropdownListOptions = _.orderBy(
+export const allCommoditiesAndVarieties = _.orderBy(
   _.flatten(
     commoditiesAndVarieties.map(commodityObject => {
       const { name, uuid, varietyUuid, varieties } = commodityObject;
 
       if (_.isEmpty(varieties)) {
-        return { label: name, value: createUuidKey(uuid, varietyUuid) };
+        return {
+          name,
+          alias: name,
+          commodityUuid: uuid,
+          varietyUuid: varietyUuid || null,
+        };
       } else {
         return varieties.map(varietyObject => ({
-          label: `${name}, ${varietyObject.name}`,
+          name: `${name}, ${varietyObject.name}`,
           alias: `${varietyObject.name} ${name}`,
-          value: createUuidKey(
-            varietyObject.commodityUuid || uuid,
-            varietyObject.uuid,
-          ),
+          commodityUuid: varietyObject.commodityUuid || uuid,
+          varietyUuid: varietyObject.uuid,
         }));
       }
     }),
   ),
-  'label',
+  'name',
 );
+
+export const commodityDropdownListOptions = allCommoditiesAndVarieties.map((cvObject) => ({
+  label: cvObject.name,
+  alias: cvObject.alias,
+  value: createUuidKey(cvObject.commodityUuid, cvObject.varietyUuid),
+}));
 
 export function itemFromUuids(commodityUuid, varietyUuid) {
   return _.find(commodityDropdownListOptions, {
