@@ -4,13 +4,17 @@ import { useMutation } from '@apollo/react-hooks';
 
 const UPDATE_USER_PREFERENCES = gql`
 
-  mutation UpdateUserPreferences(
-    $userId: Int!,
-    $commoditySubscriptions: [CommoditySubscription!]
+  mutation ToggleUserPreferences(
+    $commodityId: Int!,
+    $commodityUuid: String!,
+    $varietyId: Int!,
+    $varietyUuid: String!
   ) {
-    updateUserPreferences(
-      userId: $userId,
-      commoditySubscriptions: $commoditySubscriptions
+    toggleUserPreferences(
+      commodityId: $commodityId,
+      commodityUuid: $commodityUuid,
+      varietyId: $varietyId,
+      varietyUuid: $varietyUuid
     ) {
       id
     }
@@ -19,8 +23,10 @@ const UPDATE_USER_PREFERENCES = gql`
 
 function UpdatePreferences(props) {
   const {
-    userId,
-    commoditySubscriptions,
+    commodityId,
+    commodityUuid,
+    varietyId,
+    varietyUuid,
     cta
   } = props;
 
@@ -30,11 +36,16 @@ function UpdatePreferences(props) {
   const [updatePreferences, { data }] = useMutation(UPDATE_USER_PREFERENCES);
 
   return (
-    <td key={commoditySubscriptions}>
+    <td key={`${commodityUuid}-${varietyUuid}`}>
       <form
         onSubmit={e => {
           e.preventDefault();
-          updatePreferences({ variables: { userId: userId, commoditySubscriptions: commoditySubscriptions}})
+          updatePreferences({ variables: {
+            commodityId: commodityId,
+            commodityUuid: commodityUuid,
+            varietyId: varietyId,
+            varietyUuid: varietyUuid 
+          }})
           setSubscribed(!subscribed)
         }}
       >

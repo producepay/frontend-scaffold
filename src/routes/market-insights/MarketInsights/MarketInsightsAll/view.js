@@ -1,5 +1,4 @@
 import React from 'react';
-import { useAuth } from '../../../../contexts/auth';
 import { orderByDateStr } from '../../../../helpers/lodash';
 import { getPricingPercentagesAndDayBefore, getMovementPercentages, getPricingDayLabel } from '../../../../helpers/summary-percentages'
 import PageSpinner from '../../../../components/elements/PageSpinner'
@@ -9,8 +8,6 @@ import _ from 'lodash';
 import UpdatePreferences from './UpdatePreferences';
 
 function MarketInsightsAllView(props) {
-  let { user } = useAuth()
-
   const {
     loading,
     error,
@@ -21,7 +18,6 @@ function MarketInsightsAllView(props) {
   if (loading) return (
     <PageSpinner />
   );
-
 
   if (error) return `Error: ${error.message}`;
 
@@ -74,13 +70,16 @@ function MarketInsightsAllView(props) {
       commodity.pricingDayChange = pricingPercentages[0];
       commodity.pricingWeekChange = pricingPercentages[1];
       commodity.commodityUsdName = pricingData[0].commodityUsdaName;
-      commodity.commodityUuid = pricingData[0].commodityUuid;
       commodity.commodityId = pricingData[0].commodityId;
+      commodity.commodityUuid = pricingData[0].commodityUuid;
+      commodity.varietyId = pricingData[0].varietyId;
       commodity.varietyUuid = pricingData[0].varietyUuid;
       commodity.varietyUsdaName = pricingData[0].varietyUsdaName;
       commodity.movementDayChange = movementDayChange;
       commodity.movementWeekChange = movementWeekChange;
       commodity.alertsCount = totalWeatherAlerts;
+
+      console.log(commodity)
 
       commodities.push(commodity);
     })
@@ -115,24 +114,18 @@ function MarketInsightsAllView(props) {
                   _.find(data.userCommodityVarietyPreferences, {"commodityVarietyInfo": {"variety": {"uuid": commodity.varietyUuid}}}) ? (
                       <UpdatePreferences 
                         cta="Unsubscribe" 
-                        userId={Number(user.id)}
-                        commoditySubscriptions={
-                          {
-                            commodityId: commodity.commodityUuid,
-                            varietyId: commodity.varietyUuid
-                          }
-                        }
+                        commodityId={commodity.commodityId}
+                        commodityUuid={commodity.commodityUuid}
+                        varietyId={commodity.varietyId}
+                        varietyUuid={commodity.varietyUuid}
                         />
                 ) : (
                       <UpdatePreferences 
                         cta="Subscribe" 
-                        userId={Number(user.id)}
-                        commoditySubscriptions={
-                          {
-                            commodityId: commodity.commodityUuid,
-                            varietyId: commodity.varietyUuid
-                          }
-                        }
+                        commodityId={commodity.commodityId}
+                        commodityUuid={commodity.commodityUuid}
+                        varietyId={commodity.varietyId}
+                        varietyUuid={commodity.varietyUuid}
                         />
                 )}
               </tr>
