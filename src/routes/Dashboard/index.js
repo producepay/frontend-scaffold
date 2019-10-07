@@ -14,6 +14,7 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
     invoiceNumber
     purchasingCustomerName
     quantityOrdered
+    shipmentQuantity
     salePricePerUnit
     totalSaleAmount
     invoiceTotalProfit

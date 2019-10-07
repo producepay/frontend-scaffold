@@ -70,7 +70,7 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
         <GraphContainer>
           <SummaryGraph
             lineSeriesConfig={lineSeriesConfig}
-            yAxisField="quantityOrdered"
+            yAxisField="shipmentQuantity"
             yFormat={value => (`${formatLoads(value)} packages`)}
             xInterval="week"
           />
