@@ -46,7 +46,7 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
   // NOTE: Can switch to monthly interval using setDateInterval
   return (
     <div>
-      <Card className='pt-4 pb-32 lg:pb-24 px-2'>
+      <div className='border-b pt-4 pb-32 lg:pb-24 px-2'>
         <CardHeader
           title="Sales Revenue"
           titleClassName="text-black text-lg lg:text-xl font-semibold"
@@ -61,8 +61,8 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
             margin={{left: 62}}
           />
         </GraphContainer>
-      </Card>
-      <Card className='pt-4 pb-32 lg:pb-24 px-2'>
+      </div>
+      <div className='border-b pt-4 pb-32 lg:pb-24 px-2'>
         <CardHeader
           title="Volume Sold"
           titleClassName="text-black text-lg lg:text-xl font-semibold"
@@ -76,7 +76,7 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
             xInterval={dateInterval}
           />
         </GraphContainer>
-      </Card>
+      </div>
     </div>
   );
 }

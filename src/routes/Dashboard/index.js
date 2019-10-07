@@ -14,7 +14,7 @@ const FETCH_GRAPH_DATA = gql`
     groupedValue
   }
 
-  query groupedSalesOrderLineItems(
+  query FetchCustomerShowData(
     $groupByInterval: String,
     $thisYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
@@ -34,6 +34,14 @@ const FETCH_GRAPH_DATA = gql`
       filters: $lastYearSalesOrderLineItemFilters
     ) {
       ...groupedLineItemData
+    }
+    customerRankingData: groupedSalesOrderLineItems(
+      groupBy: "erpCustomers.name",
+      summedFields: ["shipmentQuantity", "totalSaleAmount"]
+    ) {
+      groupedValue
+      shipmentQuantity
+      totalSaleAmount
     }
   }
 `;

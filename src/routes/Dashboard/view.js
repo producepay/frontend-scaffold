@@ -9,24 +9,20 @@ function DashboardView({ loading, data, dateInterval, setDateInterval }) {
   const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
   const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
 
-  return (
-    <div>
-      <Link to={routes.showCommodity('1234')} className='block'>
-        Click on Specific Commodity
-      </Link>
-      <Link to={routes.showCustomer('ACME Produce')} className='block'>
-        Click on Specific Customer
-      </Link>
-      {
-        loading ?
-          <PageSpinner /> :
-          <GraphsSection
-            thisYearSalesOrderLineItems={thisYearSalesOrderLineItems}
-            lastYearSalesOrderLineItems={lastYearSalesOrderLineItems}
-            dateInterval={dateInterval}
-            setDateInterval={setDateInterval}
-          />
-      }
+  return loading ? (
+    <PageSpinner />
+  ) : (
+    <div className=''>
+      <GraphsSection
+        thisYearSalesOrderLineItems={thisYearSalesOrderLineItems}
+        lastYearSalesOrderLineItems={lastYearSalesOrderLineItems}
+        dateInterval={dateInterval}
+        setDateInterval={setDateInterval}
+      />
+
+      <div className='bg-white border-b'>
+
+      </div>
     </div>
   );
 }
