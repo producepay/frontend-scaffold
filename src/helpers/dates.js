@@ -1,5 +1,11 @@
 const format = require('date-fns/format');
 
+const MONTHS = [
+  'JAN', 'FEB', 'MAR', 'APR', 'MAY',
+  'JUN', 'JUL', 'AUG', 'SEP',
+  'OCT', 'NOV', 'DEC'
+];
+
 function getUTCDate(dateString = Date.now()) {
   const date = new Date(dateString);
 
@@ -17,7 +23,17 @@ function gqlF(date) {
   return format(date, 'YYYY-MM-DD');
 }
 
+function monthNumToName(monthNum) {
+  return MONTHS[monthNum] || '';
+}
+function monthNameToNum(name) {
+  var month = MONTHS.indexOf(name);
+  return month ? month : 0;
+}
+
 module.exports = {
   getUTCDate,
   gqlF,
+  monthNumToName,
+  monthNameToNum,
 }

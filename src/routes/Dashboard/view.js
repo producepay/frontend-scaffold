@@ -1,9 +1,14 @@
 import React from 'react';
-
+import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import routes from '../../routes';
+import PageSpinner from '../../components/elements/PageSpinner';
+import GraphsSection from './graphs-section';
 
-function DashboardView() {
+function DashboardView({ loading, data }) {
+  const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
+  const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
+
   return (
     <div>
       <Link to={routes.showCommodity('1234')} className='block'>
@@ -12,6 +17,7 @@ function DashboardView() {
       <Link to={routes.showCustomer('ACME Produce')} className='block'>
         Click on Specific Customer
       </Link>
+      { loading ? <PageSpinner /> : <GraphsSection thisYearSalesOrderLineItems={thisYearSalesOrderLineItems} lastYearSalesOrderLineItems={lastYearSalesOrderLineItems} />}
     </div>
   );
 }
