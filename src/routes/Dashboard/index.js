@@ -12,7 +12,6 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
     id
     identifier
     invoiceNumber
-    purchasingCustomerName
     quantityOrdered
     shipmentQuantity
     salePricePerUnit
