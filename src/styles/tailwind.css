@@ -7,8 +7,12 @@
   @apply bg-primary text-white
 }
 
-.table-secondary th {
+.table-secondary th:not(.active) {
   @apply bg-white text-gray-600
+}
+
+.table-secondary th.active {
+  @apply text-primary
 }
 
 .table-th-uppercase th {
@@ -34,11 +38,11 @@
 }
 
 .table-p-lg th {
-  @apply py-4 px-2
+  @apply py-3 px-2
 }
 
 .table-p-lg td {
-  @apply py-6 px-2
+  @apply py-5 px-2
 }
 
 /* table borders */
@@ -46,44 +50,32 @@
   @apply border-gray-400
 }
 
-.table-border-dotted td {
+.table-border-th-solid th:not(.active) {
+  @apply border-solid border-b
+}
+
+.table-border-th-solid th.active {
+  @apply border-primary border-b-2
+}
+
+.table-border-th-dotted th {
+  @apply border-solid border-b
+}
+
+.table-border-th-dashed th {
+  @apply border-solid border-b
+}
+
+.table-border-td-dotted td {
   @apply border-dotted border-b
 }
 
-.table-border-dashed td {
+.table-border-td-dashed td {
   @apply border-dashed
 }
 
-.table-border-solid td {
+.table-border-td-solid td {
   @apply border-solid
 }
-
-/* .secondary-table {
-  @apply w-full border-collapse;
-}
-
-.secondary-table th {
-  @apply py-3 px-2 bg-white text-gray-600 text-xxs-xs font-medium uppercase text-left tracking-wide
-}
-
-.secondary-table td {
-  @apply py-2 px-2 text-sm
-}
-
-.alternating-rows tr:nth-child(odd) {
-  @apply bg-white
-}
-
-.alternating-rows tr:nth-child(even) {
-  @apply bg-gray-200
-}
-
-.primary-table {
-  @apply w-full;
-}
-
-.primary-table th { /* only define classes for th as a lot of the TDs seem to have custom behavior right now */
-/*  @apply py-3 px-3 bg-primary text-white font-semibold tracking-wide
-} */
 
 @tailwind utilities;

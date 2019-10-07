@@ -44,6 +44,7 @@ storiesOf('Elements/Table', module)
     color="secondary"
     padding="lg"
     alternatingRows={false}
-    border="dotted"
+    tdBorder="dotted"
+    thBorder="solid"
   />
-));;
+));
