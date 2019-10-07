@@ -49,6 +49,7 @@ function MarketInsightsAllView(props) {
         dayBefore,
       } = getPricingPercentagesAndDayBefore(_.filter(pricingData, 'resolvedAveragePrice'));
 
+
       dayLabel = getPricingDayLabel(pricingPercentages[0], dayBefore)
 
       const lastYearMovementData = lastYearMovementGroupedByUuid[pricingData[0].commodityUuid]
