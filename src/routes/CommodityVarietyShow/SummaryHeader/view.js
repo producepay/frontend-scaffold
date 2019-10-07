@@ -22,6 +22,7 @@ function SummaryHeaderView(props) {
   const [pricingDayChange, pricingWeekChange] = pricingPercentages;
   const [movementDayChange, movementWeekChange] = movementPercentages;
 
+
   return (
     <header className="bg-white shadow relative flex flex-col sm:flex-row">
       <div className="w-full sm:w-4/5 block sm:flex">

@@ -78,6 +78,10 @@ function SummaryHeader(props) {
   const movementPercentages = getMovementPercentages(thisYearMovementData, lastYearMovementData);
 
   const weatherDataAvailable = _.some(growingRegionsData, region => _.size(region.weatherForecasts));
+
+      console.log("GROWING REGIONS")
+      console.log(growingRegionsData)
+
   const alertsCount = growingRegionsData.reduce((total, region) => (
     total + _.reduce(region.weatherForecasts, (forecastTotal, forecast) => (
       forecastTotal + _.get(forecast, 'weatherAlerts', []).length
