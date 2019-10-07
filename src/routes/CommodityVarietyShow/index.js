@@ -99,6 +99,7 @@ const FETCH_DATA = gql`
     }
 
     growingRegions(commodityUuids: $commodityUuids, inSeason: true) {
+      id
       name
       weatherForecasts {
         tempMin
@@ -106,6 +107,9 @@ const FETCH_DATA = gql`
         weatherAlerts(commodityUuids: $commodityUuids) {
           alertType
         }
+      }
+      commodities {
+        uuid
       }
     }
 
