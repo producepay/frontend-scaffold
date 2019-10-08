@@ -9,15 +9,15 @@ import { formatWeek } from '../../helpers/format';
 import { takeNth } from '../../helpers/lodash';
 
 function filterInvalidLineItems(lineItems) {
-  return lineItems.filter(item => item.orderCreatedAt || item.invoiceCreatedAt);
+  return lineItems.filter(item => item.groupedValue);
 }
 
 function groupLineItemsByMonth(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => getMonth(item.orderCreatedAt || item.invoiceCreatedAt));
+  return _.groupBy(filterInvalidLineItems(lineItems), item => getMonth(item.groupedValue));
 }
 
 function groupLineItemsByWeek(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => getIsoWeek(item.orderCreatedAt || item.invoiceCreatedAt));
+  return _.groupBy(filterInvalidLineItems(lineItems), item => getIsoWeek(item.groupedValue));
 }
 
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
