@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '../../components/elements/Card';
+
 import CardHeader from '../../components/elements/CardHeader';
 import Legend from '../../components/elements/Nivo/Legend';
 import { formatLoads } from '../../helpers/format';

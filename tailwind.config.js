@@ -2,7 +2,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#5CB65B',
+        primary: '#33CE9B',
         secondary: '#FF5A60',
       },
       spacing: {

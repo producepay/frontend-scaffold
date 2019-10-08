@@ -39,13 +39,14 @@
 
     <script>
       var _rollbarConfig = {
-          accessToken: "%REACT_APP_ROLLBAR_TOKEN%",
+          accessToken: '%REACT_APP_ROLLBAR_TOKEN%',
           captureUncaught: true,
           captureUnhandledRejections: true,
-          codeVersion: "%REACT_APP_ROLLBAR_VERSION%",
+          codeVersion: '%REACT_APP_ROLLBAR_VERSION%',
           sourceMapEnabled: true,
+          enabled: '%NODE_ENV%' === 'production',
           payload: {
-              environment: "%NODE_ENV%"
+              environment: '%NODE_ENV%'
           }
       };
 
