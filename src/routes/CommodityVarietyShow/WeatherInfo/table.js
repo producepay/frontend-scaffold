@@ -28,7 +28,7 @@ function WeatherTable(props) {
   const { data } = props;
 
   return (
-    <Table className="table-primary table-p-sm w-full">
+    <table className="table-primary table-p-sm w-full">
       <thead>
         <tr>
           <TH align='left' colSpan='2'>Growing Regions</TH>
@@ -99,7 +99,7 @@ function WeatherTable(props) {
           );
         })}
       </tbody>
-    </Table>
+    </table>
   );
 }
 
