@@ -38,8 +38,6 @@ function MarketInsightsAllView(props) {
 
     let commodities = []
 
-    console.log(pricingGroupedByUuid)
-
     pricingGroupedByUuid.forEach(function(pricingData) {
       let commodity = {}
 
