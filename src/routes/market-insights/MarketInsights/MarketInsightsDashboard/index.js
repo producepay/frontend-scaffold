@@ -6,10 +6,8 @@ import { useAuth } from '../../../../contexts/auth';
 import MarketInsightsDashboardView from './view';
 
 const FETCH_DATA = gql`
-query CommodityVarietyPreferenceQuery($id: Int!) {
-   userCommodityVarietyPreferences(userId: $id) {
-      id
-      userId
+query CommodityVarietyPreferenceQuery {
+   userCommodityVarietyPreferences {
       commodityVarietyInfo {
         id
         name
@@ -28,11 +26,7 @@ query CommodityVarietyPreferenceQuery($id: Int!) {
 
 function MarketInsightsDashboard(props) {
   const { user } = useAuth()
-  const { loading, error, data } = useQuery(FETCH_DATA, {
-    variables: {
-      id: Number(user.id)
-    }
-  })
+  const { loading, error, data } = useQuery(FETCH_DATA)
   return (
     <MarketInsightsDashboardView
       loading={loading}
