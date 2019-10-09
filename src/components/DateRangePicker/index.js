@@ -1,80 +1,55 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import 'react-dates/initialize';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import { DateUtils } from 'react-day-picker';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import TextField from '../elements/TextField';
+import { DateRangePicker } from 'react-dates';
 
-import 'react-day-picker/lib/style.css';
+import 'react-dates/lib/css/_datepicker.css';
+import './datepicker.css';
 
-// const DateInputButton = (props) => {
-//   const { from, to, ref, onClick, ...rest } = props;
-//   const [showCalendar, setShowCalendar] = useState(false);
-//   useEffect(() => {
-//     console.log('showCalender', showCalendar);
-//   }, [showCalendar]);
+const START_DATE_ID = "startDate";
+const END_DATE_ID = "endDate";
 
-
-//   return (
-//     <Button
-//       label={from && to ? `${format(from, 'YYYY/MM/DD')} - ${format(to, 'YYYY/MM/DD')}` : "Select a date range"}
-//       onClick={() => {console.log('onClick'); setShowCalendar(!showCalendar);}}
-//       {...rest}
-//     />
-//   )
-// }
-
-function formatDate(date, formatStr) {
-  return format(date, formatStr);
-}
-
-const DateRangePicker = ({
+const Picker = ({
   className,
-  defaultFrom,
-  defaultTo,
+  initialStartDate,
+  initialEndDate,
   ...rest
 }) => {
-  const [from, setFrom] = useState(defaultFrom);
-  const [to, setTo] = useState(defaultTo);
-  const handleDayClick = useCallback((day) => {
-    const range = DateUtils.addDayToRange(day, { from, to });
-    setFrom(range.from);
-    setTo(range.to);
-  }, [from, to]);
-
-  // const formatDate = useCallback((date, formatStr) => {
-  //   return `${format(from, formatStr)}-${format(to, formatStr)}`;
-  // }, [from, to]);
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
+  const [focusedInput, setFocusInput] = useState(null);
+  const onDatesChange = useCallback(({ startDate, endDate }) => {
+    setStartDate(startDate)
+    setEndDate(endDate);
+  }, []);
+  const onFocusChange = useCallback((focusedInput) => {
+    setFocusInput(focusedInput); // sets whether start or end input is in focus
+  }, []);
 
   return (
-    <div className={className}>
-      <DayPickerInput
-        formatDate={formatDate}
-        format="YYYY/MM/DD"
-        parseDate={parse}
-        component={(props) => <TextField {...props} />}
-        hideOnDayClick={false}
-        dayPickerProps={{
-          selectedDays: {from, to},
-          onDayClick: handleDayClick,
-          ...rest,
-        }}
-      />
-    </div>
+    <DateRangePicker
+      {...rest}
+      startDateId={START_DATE_ID}
+      endDateId={END_DATE_ID}
+      focusedInput={focusedInput}
+      onDatesChange={onDatesChange}
+      onFocusChange={onFocusChange}
+      startDate={startDate}
+      endDate={endDate}
+    />
   )
 }
 
-DateRangePicker.propTypes = {
+Picker.propTypes = {
   className: PropTypes.string,
-  defaultFrom: PropTypes.instanceOf(Date),
-  defaultTo: PropTypes.instanceOf(Date),
+  initialStartDate: PropTypes.instanceOf(Date),
+  initialEndDate: PropTypes.instanceOf(Date),
 }
 
-DateRangePicker.defaultProps = {
+Picker.defaultProps = {
   className: '',
-  defaultFrom: undefined,
-  defaultTo: undefined,
+  initialStartDate: null,
+  initialEndDate: null,
 }
 
-export default DateRangePicker;
+export default Picker;
