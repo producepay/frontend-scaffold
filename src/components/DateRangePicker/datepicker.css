@@ -1,0 +1,16 @@
+.CalendarDay__selected_span {
+  @apply bg-primary text-white border-primary-lighter
+}
+
+.CalendarDay__selected {
+  @apply text-white bg-primary-dark border-primary-lighter
+}
+
+.CalendarDay__selected:hover {
+  @apply text-white bg-primary-light border-primary-lighter
+}
+
+.CalendarDay__selected_span:active,
+.CalendarDay__selected_span:hover {
+  @apply bg-primary-light text-white border-primary-lighter
+}
