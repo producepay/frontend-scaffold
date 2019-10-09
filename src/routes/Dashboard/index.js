@@ -15,27 +15,22 @@ const FETCH_GRAPH_DATA = gql`
   }
 
   query groupedSalesOrderLineItems(
-    $groupBy: String!,
     $groupByInterval: String,
-    $summedFields: [String!],
-    $averagedFields: [String!],
     $thisYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
   ) {
     thisYearSalesOrderLineItems: groupedSalesOrderLineItems(
-      groupBy: $groupBy,
+      groupBy: "orderCreatedAt",
       groupByInterval: $groupByInterval,
-      summedFields: $summedFields,
-      averagedFields: $averagedFields,
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
       filters: $thisYearSalesOrderLineItemFilters,
     ) {
       ...groupedLineItemData
     }
     lastYearSalesOrderLineItems: groupedSalesOrderLineItems(
-      groupBy: $groupBy,
+      groupBy: "orderCreatedAt",
       groupByInterval: $groupByInterval,
-      summedFields: $summedFields,
-      averagedFields: $averagedFields,
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
       filters: $lastYearSalesOrderLineItemFilters
     ) {
       ...groupedLineItemData
