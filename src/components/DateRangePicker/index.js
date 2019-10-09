@@ -3,8 +3,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
-import subWeeks from 'date-fns/sub_weeks';
-import subDays from 'date-fns/sub_days';
+import momentPropTypes from 'react-moment-proptypes';
 import Button from '../elements/Button';
 
 import 'react-dates/lib/css/_datepicker.css';
@@ -88,8 +87,8 @@ const Picker = ({
 
 Picker.propTypes = {
   className: PropTypes.string,
-  initialStartDate: PropTypes.instanceOf(Date), // todo: change this to instance of moment
-  initialEndDate: PropTypes.instanceOf(Date),
+  initialStartDate: momentPropTypes.momentObj,
+  initialEndDate: momentPropTypes.momentObj,
 }
 
 Picker.defaultProps = {
