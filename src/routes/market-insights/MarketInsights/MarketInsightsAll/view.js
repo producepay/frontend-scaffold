@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAuth } from '../../../../contexts/auth';
-import { getRoundedPercentage } from '../../../../helpers/format';
 import { orderByDateStr } from '../../../../helpers/lodash';
-import { getPricingPercentagesAndDayBefore } from './index'
+import { getPricingPercentagesAndDayBefore, getMovementPercentages } from '../../../../helpers/summary-percentages'
+import PageSpinner from '../../../../components/elements/PageSpinner'
 import _ from 'lodash';
 import UpdatePreferences from './UpdatePreferences';
 
@@ -16,11 +16,13 @@ function MarketInsightsAllView(props) {
 
   } = props;
 
-  if (loading) return 'Loading...';
+  if (loading) return (
+    <PageSpinner />
+  );
+
   if (error) return `Error: ${error.message}`;
 
   if(data){
-    let commodities = []
 
     let pricingGroupedByUuid = _.values(_.groupBy(data.summaryPricingData, function(pricingData) {
       return pricingData.commodityUuid + "-" + pricingData.varietyUuid
@@ -34,18 +36,9 @@ function MarketInsightsAllView(props) {
       return data.commodityUuid
     })
 
-    let getMovementPercentages = (thisYearMovement, lastYearMovement) => {
-      const orderedThisYearReports = orderByDateStr(thisYearMovement, 'reportDate');
+    let commodities = []
 
-      const thisWeekWeight = _.get(orderedThisYearReports, '[0].packageWeight');
-      const lastWeekWeight = _.get(orderedThisYearReports, '[1].packageWeight');
-      const lastYearWeight = _.get(lastYearMovement, '[0].packageWeight');
-
-      return [
-        getRoundedPercentage(thisWeekWeight, lastWeekWeight),
-        getRoundedPercentage(thisWeekWeight, lastYearWeight),
-      ];
-    };
+    console.log(pricingGroupedByUuid)
 
     pricingGroupedByUuid.forEach(function(pricingData) {
       let commodity = {}
