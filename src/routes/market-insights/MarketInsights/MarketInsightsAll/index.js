@@ -1,6 +1,5 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useAuth } from '../../../../contexts/auth';
 import { useQuery } from '@apollo/react-hooks';
 import _ from 'lodash';
 import format from 'date-fns/format';
@@ -11,9 +10,6 @@ import endOfWeek from 'date-fns/end_of_week';
 import startOfISOWeek from 'date-fns/start_of_iso_week';
 import subISOYears from 'date-fns/sub_iso_years';
 
-import { getUTCDate } from '../../../../helpers/dates';
-import { orderByDateStr } from '../../../../helpers/lodash';
-import { getPercentage } from '../../../../helpers/math';
 import { gqlF } from '../../../../helpers/dates';
 
 import { allCommoditiesAndVarieties } from '../../../../helpers/commodities-and-varieties';
@@ -24,9 +20,7 @@ const MOVEMENT_GRAPH_WEEKS_BACK = 44;
 
 const FETCH_DATA = gql`
   query CommodityQuery(
-    $userId: Int!,
     $commodityUuids: [String!],
-    $hasSppr: Boolean,
     $summaryPricingFilters:ShippingPointPriceReportFilterInputs,
     $summaryPricingGroups:ShippingPointPriceReportGroupInputs
     $summaryMovementGroups: MovementReportGroupInputs,
@@ -37,11 +31,12 @@ const FETCH_DATA = gql`
     $lastYearMovementFilters: MovementReportFilterInputs,
   ) {
     commodities(
-    hasShippingPointPriceReports: $hasSppr
+    hasShippingPointPriceReports: true
     ) {
-      ...commodityFields
+        name
+        id
     }
-    userCommodityVarietyPreferences(userId:$userId) {
+    userCommodityVarietyPreferences {
       commodityVarietyInfo {
         id
         commodity {
@@ -55,7 +50,7 @@ const FETCH_DATA = gql`
         }
       }
     }
-      summaryPricingData: shippingPointPriceReports(
+    summaryPricingData: shippingPointPriceReports(
       group:$summaryPricingGroups
       filter:$summaryPricingFilters
     ) {
@@ -63,6 +58,7 @@ const FETCH_DATA = gql`
       commodityUuid
       commodityId
       varietyUuid
+      varietyUsdaName
       reportDate
       varietySkuName
       resolvedAveragePrice
@@ -114,12 +110,6 @@ const FETCH_DATA = gql`
     }
   }
 
-
-  fragment commodityFields on Commodity {
-    name
-    id
-  }
-
   fragment movementGraphFragment on MovementReport {
     reportDate
     year
@@ -129,17 +119,13 @@ const FETCH_DATA = gql`
   }
 `
 
-
-const uniqueCommodities = _.flatten(_.values(_.groupBy(allCommoditiesAndVarieties, 'commodityUuid'), function(commodityAndVariety) {
+const commodityUuids = _.flatten(_.map(_.uniqBy(allCommoditiesAndVarieties, 'commodityUuid'), (commodityAndVariety) => {
   return [
-    commodityAndVariety.commodityUuid + "-" + commodityAndVariety.commodityUuid
+    commodityAndVariety.commodityUuid
   ]
 }))
 
-const uniqueCommodityUuids = _.uniqBy(uniqueCommodities, 'commodityUuid')
-const commodityUuids = _.map(uniqueCommodityUuids, 'commodityUuid')
-
-const varietyUuids = _.flatten(_.map(_.uniqBy(allCommoditiesAndVarieties, 'varietyUuid'), function(commodityAndVariety) {
+const varietyUuids = _.flatten(_.map(_.uniqBy(allCommoditiesAndVarieties, 'varietyUuid'), (commodityAndVariety) => {
   return [
     commodityAndVariety.varietyUuid
   ]
@@ -150,65 +136,23 @@ const commonMovementFilters = {
   commodityUuid: commodityUuids
 };
 
-const formatDateToString = date => format(date, 'YYYY-MM-DDT00:00:00[Z]');
-
 const startOfWeek = startOfISOWeek(new Date());
 const endOfLastWeek = subDays(startOfWeek, 1);
 const lastYearStartDate = gqlF(subISOYears(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK), 1));
 const lastYearEndDate = gqlF(subISOYears(endOfWeek(addWeeks(startOfWeek, 8)), 1));
 
-const getPriceAveragesForSku = (reportsForSku, latestDate, dayBeforeDate, weekBeforeDate) => {
-  const { resolvedAveragePrice: mostRecentPrice } = _.find(reportsForSku, { reportDate: latestDate }) || {};
-  const { resolvedAveragePrice: dayBeforePrice } = _.find(reportsForSku, { reportDate: dayBeforeDate }) || {};
-  const { resolvedAveragePrice: weekBeforePrice } = _.find(reportsForSku, { reportDate: weekBeforeDate }) || {};
-
-  return {
-    dayOverDay: getPercentage(mostRecentPrice, dayBeforePrice),
-    weekOverWeek: getPercentage(mostRecentPrice, weekBeforePrice),
-  };
-};
-
-export function getPricingPercentagesAndDayBefore(priceReports) {
-  const orderedReportDates = _.uniq(_.map(orderByDateStr(priceReports, 'reportDate'), 'reportDate'));
-
-  const latestDate = orderedReportDates[0];
-  const dayBeforeDate = orderedReportDates[1];
-  const weekBefore = subWeeks(getUTCDate(latestDate), 1);
-  const weekBeforeDate = weekBefore ? formatDateToString(weekBefore) : null;
-
-  const skuKeyedReports = _.groupBy(priceReports, 'varietySkuName');
-  const skuKeyedAverages = _.map(
-    skuKeyedReports,
-    (skuReports) => getPriceAveragesForSku(skuReports, latestDate, dayBeforeDate, weekBeforeDate),
-  );
-
-  const dayOverDayVals = _.reject(_.map(skuKeyedAverages, 'dayOverDay'), _.isNull);
-  const weekOverWeekVals = _.reject(_.map(skuKeyedAverages, 'weekOverWeek'), _.isNull);
-
-  return {
-    pricingPercentages: [
-      _.isEmpty(dayOverDayVals) ? '--' : _.round(_.mean(dayOverDayVals)),
-      _.isEmpty(weekOverWeekVals) ? '--' : _.round(_.mean(weekOverWeekVals)),
-    ],
-    dayBefore: getUTCDate(dayBeforeDate),
-  };
-};
-
 function MarketInsightsAll(props) {
-  let { user } = useAuth()
   const { loading, error, data } = useQuery(FETCH_DATA, {
     variables: {
-      userId: Number(user.id),
       commodityUuids: commodityUuids,
-      hasSppr: true,
       summaryPricingFilters: {
-      commodityUuid: commodityUuids,
-      varietyUuid: varietyUuids || '0',
-      dateRanges: [{
-        startDate: gqlF(subDays(new Date(), 14)),
-        endDate: gqlF(subDays(new Date(), 1)),
-        }],
-      quality: [''],
+        commodityUuid: commodityUuids,
+        varietyUuid: varietyUuids || '0',
+        dateRanges: [{
+          startDate: gqlF(subDays(new Date(), 14)),
+          endDate: gqlF(subDays(new Date(), 1)),
+          }],
+        quality: [''],
       },
       summaryPricingGroups: { 
         reportDate: true, 
@@ -216,7 +160,8 @@ function MarketInsightsAll(props) {
         commodityUsdaName: true,
         commodityUuid: true,
         commodityId: true,
-        varietyUuid: true
+        varietyUuid: true,
+        varietyUsdaName: true
       },
       summaryThisYearMovementFilters: {
         ...commonMovementFilters,
