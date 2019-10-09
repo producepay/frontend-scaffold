@@ -5,7 +5,6 @@ import { map, isEmpty, has } from 'lodash';
 
 import getAlertDescription from './helpers';
 
-import Table from '../../../components/elements/table';
 import TH from '../../../components/elements/table/TH';
 import AlertCircle from '../../../components/icons/AlertCircle';
 import CheckmarkCircle from '../../../components/icons/CheckmarkCircle';
