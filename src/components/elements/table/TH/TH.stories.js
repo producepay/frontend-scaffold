@@ -2,11 +2,11 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-import Table from '../index';
 import TH from './index';
+import '../table.css';
 
 const MockTable = ({ thNodes, ...tableProps }) => (
-  <Table {...tableProps}>
+  <table {...tableProps}>
     <thead>
       {thNodes.map(th => (
         <TH {...th.props}>{th.label}</TH>
@@ -29,13 +29,13 @@ const MockTable = ({ thNodes, ...tableProps }) => (
         <td>$16.99</td>
       </tr>
     </tbody>
-  </Table>
+  </table>
 );
 
 storiesOf('Elements/TH', module)
 .add('default', () => (
   <MockTable
-    color="secondary"
+    className="table-secondary table-p-sm table-alternating-rows"
     thNodes={[
     { label: "Name", props: { align: "left" }},
     { label: "Quantity", props: {}},
@@ -43,8 +43,7 @@ storiesOf('Elements/TH', module)
   ]}/>
 )).add('with active', () => (
   <MockTable
-    color="secondary"
-    thBorder="solid"
+    className="table-secondary table-alternating-rows table-p-lg table-border-th-solid"
     thNodes={[
       { label: "Name", props: { align: "left", active: true }},
       { label: "Quantity", props: {} },

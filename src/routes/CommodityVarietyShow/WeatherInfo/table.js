@@ -10,6 +10,8 @@ import TH from '../../../components/elements/table/TH';
 import AlertCircle from '../../../components/icons/AlertCircle';
 import CheckmarkCircle from '../../../components/icons/CheckmarkCircle';
 
+import '../../../components/elements/table/table.css';
+
 const TABLE_CELL_CLASSES = 'px-3 text-sm';
 const ALERT_CELL_CLASS = 'text-red-600';
 
@@ -27,7 +29,7 @@ function WeatherTable(props) {
   const { data } = props;
 
   return (
-    <Table className="w-full">
+    <Table className="table-primary table-p-sm w-full">
       <thead>
         <tr>
           <TH align='left' colSpan='2'>Growing Regions</TH>

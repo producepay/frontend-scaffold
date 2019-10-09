@@ -1,14 +1,14 @@
 import React from 'react';
-import Table from '../../../../components/elements/table';
 import TH from '../../../../components/elements/table/TH';
 import { formatPrice, formatLoads } from '../../../../helpers/format';
+import '../../../../components/elements/table/table.css';
 
 const TH_PROPS = { align: 'left', weight: 'medium', size: 'xxs-xs' };
 
 function CustomersTable({ groupedSalesOrderLineItems }) {
   return (
     <div>
-      <Table color="secondary" className="w-full">
+      <table className="table-secondary table-alternating-rows table-p-sm w-full">
         <thead>
           <tr>
             <TH {...TH_PROPS}>Name</TH>
@@ -33,7 +33,7 @@ function CustomersTable({ groupedSalesOrderLineItems }) {
             ))
           }
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

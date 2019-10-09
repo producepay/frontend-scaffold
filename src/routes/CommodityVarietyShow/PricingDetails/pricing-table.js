@@ -4,9 +4,10 @@ import _ from 'lodash';
 import { capitalizeEachWord } from '../../../helpers/format';
 
 import Grid from '../../../components/elements/Grid';
-import Table from '../../../components/elements/table';
 import TH from '../../../components/elements/table/TH';
 import PricingSubtable from './pricing-subtable';
+
+import '../../../components/elements/table/table.css';
 
 const PricingTable = props => {
   const { latestReports } = props;
@@ -24,7 +25,7 @@ const PricingTable = props => {
 
             return (
               <Grid key={cityName} md="1/2" spacing={32}>
-                <Table className="w-full" alternatingRows={false}>
+                <table className="table-primary table-p-sm w-full">
                   <thead>
                     <tr>
                       <TH align="left" uppercase={false} {...thProps}>{capitalizeEachWord(cityName)}</TH>
@@ -39,7 +40,7 @@ const PricingTable = props => {
 
                     <PricingSubtable label='ORGANIC' reports={organicReports} />
                   </tbody>
-                </Table>
+                </table>
               </Grid>
             );
           })}
