@@ -26,9 +26,6 @@ const FETCH_DATA = gql`
     $summaryMovementGroups: MovementReportGroupInputs,
     $summaryThisYearMovementFilters: MovementReportFilterInputs,
     $summaryLastYearMovementFilters: MovementReportFilterInputs,
-    $movementGroups: MovementReportGroupInputs,
-    $currentYearMovementFilters: MovementReportFilterInputs,
-    $lastYearMovementFilters: MovementReportFilterInputs,
   ) {
     commodities(
     hasShippingPointPriceReports: true
@@ -79,18 +76,6 @@ const FETCH_DATA = gql`
       reportDate
       packageWeight
     }
-    currentYearMovementReports: movementReports(
-      filter: $currentYearMovementFilters
-      group: $movementGroups
-    ) {
-      ...movementGraphFragment
-    }
-    lastYearMovementReports: movementReports(
-      filter: $lastYearMovementFilters
-      group: $movementGroups
-    ) {
-      ...movementGraphFragment
-    }
 
     growingRegions(commodityUuids: $commodityUuids, inSeason: true) {
       id
@@ -108,14 +93,6 @@ const FETCH_DATA = gql`
         uuid
       }
     }
-  }
-
-  fragment movementGraphFragment on MovementReport {
-    reportDate
-    year
-    week
-    commodityUsdaName
-    packageWeight
   }
 `
 
@@ -179,29 +156,9 @@ function MarketInsightsAll(props) {
           endDate: gqlF(subISOYears(endOfLastWeek, 1)),
         }],
       },
-      movementGroups: {
-        commodityUsdaName: true,
-        interval: 'week',
-        yearOverYear: true,
-      },
-      summaryMovementGroups: { 
+      summaryMovementGroups: {
         interval: 'week',
         commodityUuid: true
-      },
-      currentYearMovementFilters: {
-        ...commonMovementFilters,
-        isCurrentSeason: true,
-        dateRanges: [{
-          startDate: gqlF(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK)),
-          endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), {weekStartsOn: 1})),
-        }],
-      },
-      lastYearMovementFilters: {
-        ...commonMovementFilters,
-        isLastSeason: true,
-        dateRanges: [
-          { startDate: lastYearStartDate, endDate: lastYearEndDate },
-        ],
       },
     }
   })
