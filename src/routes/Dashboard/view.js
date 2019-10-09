@@ -5,7 +5,7 @@ import routes from '../../routes';
 import PageSpinner from '../../components/elements/PageSpinner';
 import GraphsSection from './graphs-section';
 
-function DashboardView({ loading, data }) {
+function DashboardView({ loading, data, dateInterval, setDateInterval }) {
   const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
   const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
 
@@ -17,7 +17,16 @@ function DashboardView({ loading, data }) {
       <Link to={routes.showCustomer('ACME Produce')} className='block'>
         Click on Specific Customer
       </Link>
-      { loading ? <PageSpinner /> : <GraphsSection thisYearSalesOrderLineItems={thisYearSalesOrderLineItems} lastYearSalesOrderLineItems={lastYearSalesOrderLineItems} />}
+      {
+        loading ?
+          <PageSpinner /> :
+          <GraphsSection
+            thisYearSalesOrderLineItems={thisYearSalesOrderLineItems}
+            lastYearSalesOrderLineItems={lastYearSalesOrderLineItems}
+            dateInterval={dateInterval}
+            setDateInterval={setDateInterval}
+          />
+      }
     </div>
   );
 }

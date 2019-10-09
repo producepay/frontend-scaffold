@@ -38,11 +38,12 @@ const GraphContainer = ({ children }) => {
   )
 };
 
-function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems }) {
+function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems, dateInterval, setDateInterval }) {
   const lineSeriesConfig = [
     { id: THIS_YEAR_ID, data: thisYearSalesOrderLineItems, color: THIS_YEAR_COLOR },
     { id: LAST_YEAR_ID, data: lastYearSalesOrderLineItems, color: LAST_YEAR_COLOR },
   ];
+  // NOTE: Can switch to monthly interval using setDateInterval
   return (
     <div>
       <Card className='pt-4 pb-32 lg:pb-24 px-2'>
@@ -56,7 +57,7 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
             lineSeriesConfig={lineSeriesConfig}
             yAxisField="totalSaleAmount"
             yUnit="dollars"
-            xInterval="week"
+            xInterval={dateInterval}
             margin={{left: 62}}
           />
         </GraphContainer>
@@ -72,7 +73,7 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
             lineSeriesConfig={lineSeriesConfig}
             yAxisField="shipmentQuantity"
             yFormat={value => (`${formatLoads(value)} packages`)}
-            xInterval="week"
+            xInterval={dateInterval}
           />
         </GraphContainer>
       </Card>
