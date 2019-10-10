@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import './button.css';
 
-function Button(props) {
+const Button = React.forwardRef((props, ref) => {
   const { className, variant, color, label, children, disabled, ...rest } = props;
 
   const computedClassName = cx(className, 'button no-underline', {
@@ -22,11 +22,11 @@ function Button(props) {
   });
 
   return (
-    <button className={computedClassName} disabled={disabled} {...rest}>
+    <button ref={ref} className={computedClassName} disabled={disabled} {...rest}>
       {label || children}
     </button>
   );
-}
+});
 
 Button.propTypes = {
   variant: PropTypes.oneOf(['solid', 'outlined', 'icon', 'text']),

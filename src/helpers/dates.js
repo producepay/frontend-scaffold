@@ -1,4 +1,6 @@
 const format = require('date-fns/format');
+const isBefore = require('date-fns/is_before');
+const isAfter = require('date-fns/is_after');
 
 const MONTHS = [
   'JAN', 'FEB', 'MAR', 'APR', 'MAY',
@@ -31,9 +33,14 @@ function monthNameToNum(name) {
   return month ? month : 0;
 }
 
+function isBetween(d, dStart, dEnd) {
+  return isAfter(d, dStart) && isBefore(d, dEnd);
+}
+
 module.exports = {
   getUTCDate,
   gqlF,
   monthNumToName,
   monthNameToNum,
+  isBetween,
 }
