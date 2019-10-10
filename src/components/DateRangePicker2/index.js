@@ -135,6 +135,12 @@ const DateRangePicker = ({
     document.addEventListener('mousedown', handleClick, false);
   }, [handleClick]);
 
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousedown', handleClick, false);
+    }
+  }, [handleClick])
+
   return (
     <div>
       <div ref={datePickerNode} className="inline-block">
