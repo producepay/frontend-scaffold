@@ -2,28 +2,30 @@ import _ from 'lodash';
 
 import { getPercentage } from './math';
 
-export function formatPrice(value) {
+export function formatPrice(value, trunc = true) {
   if (value === null || value === undefined) return null;
 
-  let num = Math.floor(value);
-  if (num >= 1e9) {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency', currency: 'USD'
-    }).format(num / 1e9) + 'B';
-  }
-  if (num >= 1e6) {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency', currency: 'USD'
-    }).format(num / 1e6) + 'M';
-  }
-  if (num >= 1e5) {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency', currency: 'USD', maximumSignificantDigits: 3
-    }).format(num / 1000) + 'K';
+  if (trunc) {
+    let num = Math.floor(value);
+    if (num >= 1e9) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: 'USD'
+      }).format(num / 1e9) + 'B';
+    }
+    if (num >= 1e6) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: 'USD'
+      }).format(num / 1e6) + 'M';
+    }
+    if (num >= 1e5) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: 'USD', maximumSignificantDigits: 3
+      }).format(num / 1000) + 'K';
+    }
   }
 
   return new Intl.NumberFormat('en-US', 
-  { style: 'currency', currency: 'USD' }
+    { style: 'currency', currency: 'USD' }
   ).format(value);
 }
 

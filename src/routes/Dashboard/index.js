@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import subISOYears from 'date-fns/sub_iso_years';
 import startOfYear from 'date-fns/start_of_year';
@@ -7,49 +7,45 @@ import { useQuery } from '@apollo/react-hooks';
 import { gqlF } from '../../helpers/dates';
 import DashboardView from './view';
 
-const FETCH_CUSTOMER_SHOW_DATA = gql`
-  fragment lineItemData on SalesOrderLineItem {
-    id
-    identifier
-    invoiceNumber
-    purchasingCustomerName
-    quantityOrdered
-    salePricePerUnit
+const FETCH_GRAPH_DATA = gql`
+  fragment groupedLineItemData on GroupedSalesOrderLineItem {
     totalSaleAmount
-    invoiceTotalProfit
-    weight
-    shippedFromCity
-    shippedFromState
-    orderCreatedAt
-    invoiceCreatedAt
-    unitOfSale
-    company {
-      id
-    }
-    companyProductMapping {
-      erpProduct {
-        identifier
-        name
-      }
-    }
+    shipmentQuantity
+    groupedValue
   }
 
-  query fetchCustomerShowData(
+  query groupedSalesOrderLineItems(
+    $groupByInterval: String,
     $thisYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
   ) {
-    thisYearSalesOrderLineItems: salesOrderLineItems(filters: $thisYearSalesOrderLineItemFilters) {
-      ...lineItemData
+    thisYearSalesOrderLineItems: groupedSalesOrderLineItems(
+      groupBy: "orderCreatedAt",
+      groupByInterval: $groupByInterval,
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
+      filters: $thisYearSalesOrderLineItemFilters,
+    ) {
+      ...groupedLineItemData
     }
-    lastYearSalesOrderLineItems: salesOrderLineItems(filters: $lastYearSalesOrderLineItemFilters) {
-      ...lineItemData
+    lastYearSalesOrderLineItems: groupedSalesOrderLineItems(
+      groupBy: "orderCreatedAt",
+      groupByInterval: $groupByInterval,
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
+      filters: $lastYearSalesOrderLineItemFilters
+    ) {
+      ...groupedLineItemData
     }
   }
 `;
 
 function Dashboard() {
-  const { data, loading, error } = useQuery(FETCH_CUSTOMER_SHOW_DATA, {
+  const [dateInterval, setDateInterval] = useState("week");
+
+  const { data, loading, error } = useQuery(FETCH_GRAPH_DATA, {
     variables: {
+      groupBy: "orderCreatedAt",
+      groupByInterval: dateInterval,
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
       thisYearSalesOrderLineItemFilters: {
         startDate: gqlF(startOfYear(new Date())),
         endDate: gqlF(new Date()),
@@ -61,7 +57,15 @@ function Dashboard() {
     },
   });
 
-  return <DashboardView data={data} loading={loading} error={error} />;
+  return (
+    <DashboardView
+      data={data}
+      loading={loading}
+      error={error}
+      dateInterval={dateInterval}
+      setDateInterval={setDateInterval}
+    />
+  );
 }
 
 export default React.memo(Dashboard);

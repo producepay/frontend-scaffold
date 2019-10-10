@@ -2,9 +2,7 @@ import React from 'react';
 
 function ShowCustomerSalesReportView() {
   return (
-    <div>
-      ShowCustomerSalesReportView
-    </div>
+    <div>ShowCustomerSalesReportView</div>
   );
 }
 
