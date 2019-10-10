@@ -150,7 +150,6 @@ function CommodityVarietyShow(props) {
       },
       summaryThisYearMovementFilters: {
         ...commonMovementFilters,
-        isCurrentSeason: true,
         dateRanges: [{
           startDate: gqlF(subDays(startOfWeek, 14)),
           endDate: gqlF(endOfLastWeek),
@@ -158,7 +157,6 @@ function CommodityVarietyShow(props) {
       },
       summaryLastYearMovementFilters: {
         ...commonMovementFilters,
-        isLastSeason: true,
         dateRanges: [{
           startDate: gqlF(subISOYears(subDays(startOfWeek, 7), 1)),
           endDate: gqlF(subISOYears(endOfLastWeek, 1)),
@@ -197,7 +195,6 @@ function CommodityVarietyShow(props) {
       },
       currentYearMovementFilters: {
         ...commonMovementFilters,
-        isCurrentSeason: true,
         dateRanges: [{
           startDate: gqlF(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK)),
           endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), {weekStartsOn: 1})),
@@ -205,7 +202,6 @@ function CommodityVarietyShow(props) {
       },
       lastYearMovementFilters: {
         ...commonMovementFilters,
-        isLastSeason: true,
         dateRanges: [
           { startDate: lastYearStartDate, endDate: lastYearEndDate },
         ],
