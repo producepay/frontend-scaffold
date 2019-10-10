@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { DateUtils } from 'react-day-picker';
-import subMonths from 'date-fns/sub_months';
 import subDays from 'date-fns/sub_days';
 import subWeeks from 'date-fns/sub_weeks';
 import Button from '../elements/Button';
@@ -17,6 +16,7 @@ const CalendarMenu = ({
   setFrom,
   setTo,
   setEnteredTo,
+  onRangeSelected,
   children,
   classNames,
   selectedDay,
@@ -58,6 +58,7 @@ const CalendarMenu = ({
               setFrom(start);
               setTo(end);
               setEnteredTo(end);
+              onRangeSelected(start, end);
             }}
           />
         ))}
@@ -87,6 +88,7 @@ const DateRangePicker = ({
   className,
   defaultFrom,
   defaultTo,
+  onRangeSelected,
   ...rest
 }) => {
   const [from, setFrom] = useState(defaultFrom);
@@ -97,7 +99,7 @@ const DateRangePicker = ({
   const dayPickerInput = useRef(null);
 
   const handleDayClick = useCallback((day) => {
-    if (from && to && day >= from && day <= to) {
+    if (from && to && day >= from && day <= to) { // reset state if user selects a date inside existing range
       setFrom(null);
       setTo(null);
       setEnteredTo(null);
@@ -110,8 +112,9 @@ const DateRangePicker = ({
     } else {
       setTo(day);
       setEnteredTo(day);
+      onRangeSelected(from, day);
     }
-  }, [from, to]);
+  }, [from, onRangeSelected, to]);
 
   const handleMouseEnter = useCallback((day) => {
     if (!isSelectingFirstDay( from, to, day )) {
@@ -142,6 +145,7 @@ const DateRangePicker = ({
               setFrom={setFrom}
               setTo={setTo}
               setEnteredTo={setEnteredTo}
+              onRangeSelected={onRangeSelected}
               {...props}
             >
               {children}
@@ -153,8 +157,6 @@ const DateRangePicker = ({
           showOverlay={showPicker}
           dayPickerProps={{
             className: "InsightsDatePicker",
-            month: subMonths(new Date(), 1),
-            disabledDays: { after: new Date() },
             selectedDays: [from, { from, to: enteredTo }],
             modifiers: { start: from, end: enteredTo },
             onDayClick: handleDayClick,
@@ -171,12 +173,14 @@ DateRangePicker.propTypes = {
   className: PropTypes.string,
   defaultFrom: PropTypes.instanceOf(Date),
   defaultTo: PropTypes.instanceOf(Date),
+  onRangeSelected: PropTypes.func,
 }
 
 DateRangePicker.defaultProps = {
   className: '',
   defaultFrom: null,
   defaultTo: null,
+  onRangeSelected: () => {},
 }
 
 export default DateRangePicker;
