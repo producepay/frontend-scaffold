@@ -22,6 +22,7 @@ function MarketInsightsAllView(props) {
     <PageSpinner />
   );
 
+
   if (error) return `Error: ${error.message}`;
 
   let dayLabel = ''
