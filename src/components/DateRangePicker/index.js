@@ -78,6 +78,7 @@ const DateRangePicker = ({
   onRangeSelected,
   inputProps,
   numberOfMonths,
+  presets,
   ...rest
 }) => {
   const [from, setFrom] = useState(defaultFrom);
@@ -87,29 +88,6 @@ const DateRangePicker = ({
   const [activeBtn, setActiveBtn] = useState(null);
   const datePickerNode = useRef(null);
   const dayPickerInput = useRef(null);
-
-  const presets = [
-    {
-      label: "Today",
-      start: new Date(),
-      end: new Date(),
-    },
-    {
-      label: "Yesterday",
-      start: subDays(new Date(), 1),
-      end: subDays(new Date(), 1),
-    },
-    {
-      label: "Last Week",
-      start: subWeeks(new Date(), 1),
-      end: new Date(),
-    },
-    {
-      label: "Last 30 Days",
-      start: subDays(new Date(), 30),
-      end: new Date(),
-    },
-  ];
 
   const handleDayClick = useCallback((day, modifiers) => {
     if (modifiers.disabled) return;
@@ -198,6 +176,11 @@ DateRangePicker.propTypes = {
   onRangeSelected: PropTypes.func,
   inputProps: PropTypes.object,
   numberOfMonths: PropTypes.number,
+  presets: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    start: PropTypes.instanceOf(Date).isRequired,
+    end: PropTypes.instanceOf(Date).isRequired,
+  })),
 }
 
 DateRangePicker.defaultProps = {
@@ -207,6 +190,28 @@ DateRangePicker.defaultProps = {
   onRangeSelected: () => {},
   inputProps: {},
   numberOfMonths: 2,
+  presets: [
+    {
+      label: "Today",
+      start: new Date(),
+      end: new Date(),
+    },
+    {
+      label: "Yesterday",
+      start: subDays(new Date(), 1),
+      end: subDays(new Date(), 1),
+    },
+    {
+      label: "Last Week",
+      start: subWeeks(new Date(), 1),
+      end: new Date(),
+    },
+    {
+      label: "Last 30 Days",
+      start: subDays(new Date(), 30),
+      end: new Date(),
+    },
+  ],
 }
 
 export default DateRangePicker;

@@ -1,5 +1,8 @@
 import React from 'react';
 import subMonths from 'date-fns/sub_months';
+import addMonths from 'date-fns/add_months';
+import startOfMonth from 'date-fns/start_of_month';
+import endOfMonth from 'date-fns/end_of_month';
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
@@ -36,4 +39,20 @@ storiesOf('Components/DateRangePicker', module)
       color: "secondary",
     }}
   />
+).add('with different presets', () =>
+<DateRangePicker
+  numberOfMonths={2}
+  presets={[
+    {
+      label: "This Month",
+      start: startOfMonth(new Date()),
+      end: endOfMonth(new Date()),
+    },
+    {
+      label: "Next Month",
+      start: startOfMonth(addMonths(new Date(), 1)),
+      end: endOfMonth(addMonths(new Date(), 1)),
+    },
+  ]}
+/>
 );
