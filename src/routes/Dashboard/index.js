@@ -9,7 +9,7 @@ import { gqlF } from '../../helpers/dates';
 
 import DashboardView from './view';
 
-const FETCH_GRAPH_DATA = gql`
+const FETCH_CUSTOMER_SHOW_DATA = gql`
   fragment groupedLineItemData on GroupedSalesOrderLineItem {
     totalSaleAmount
     shipmentQuantity
