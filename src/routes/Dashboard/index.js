@@ -10,13 +10,19 @@ import { gqlF } from '../../helpers/dates';
 import DashboardView from './view';
 
 const FETCH_CUSTOMER_SHOW_DATA = gql`
-  fragment groupedLineItemData on GroupedSalesOrderLineItem {
+  fragment groupedGraphData on GroupedSalesOrderLineItem {
     totalSaleAmount
     shipmentQuantity
     groupedValue
   }
 
-  query FetchCustomerShowData(
+  fragment groupedRankingData on GroupedSalesOrderLineItem {
+    groupedValue
+    shipmentQuantity
+    totalSaleAmount
+  }
+
+  query FetchDashboardData(
     $groupByInterval: String,
     $thisYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
@@ -27,7 +33,7 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
       filters: $thisYearSalesOrderLineItemFilters,
     ) {
-      ...groupedLineItemData
+      ...groupedGraphData
     }
     lastYearSalesOrderLineItems: groupedSalesOrderLineItems(
       groupBy: "orderCreatedAt",
@@ -35,25 +41,21 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
       filters: $lastYearSalesOrderLineItemFilters
     ) {
-      ...groupedLineItemData
+      ...groupedGraphData
     }
     customerRankingData: groupedSalesOrderLineItems(
       groupBy: "erpCustomers.name",
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
       maxedFields: ["erpCustomers.id"]
     ) {
-      groupedValue
+      ...groupedRankingData
       erpCustomersId
-      shipmentQuantity
-      totalSaleAmount
     }
     commodityRankingData: groupedSalesOrderLineItems(
       groupBy: "erpProducts.commodityName",
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
     ) {
-      groupedValue
-      shipmentQuantity
-      totalSaleAmount
+      ...groupedRankingData
     }
   }
 `;
@@ -63,9 +65,7 @@ function Dashboard({ history }) {
 
   const { data, loading, error } = useQuery(FETCH_CUSTOMER_SHOW_DATA, {
     variables: {
-      groupBy: "orderCreatedAt",
       groupByInterval: dateInterval,
-      summedFields: ["shipmentQuantity", "totalSaleAmount"],
       thisYearSalesOrderLineItemFilters: {
         startDate: gqlF(startOfYear(new Date())),
         endDate: gqlF(new Date()),
