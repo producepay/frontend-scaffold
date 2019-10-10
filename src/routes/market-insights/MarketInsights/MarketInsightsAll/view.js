@@ -92,10 +92,10 @@ function MarketInsightsAllView(props) {
           <thead>
             <tr>
               <TH className="text-left">Commodity</TH>
-              <TH>Price vs {dayLabel}</TH>
-              <TH>Price vs 7 Days Ago</TH>
-              <TH>Movement vs Last Week</TH>
-              <TH>Movement Vs Last Year</TH>
+              <TH>Price VS {dayLabel}</TH>
+              <TH>Price VS 7 Days Ago</TH>
+              <TH>Movement VS Last Week</TH>
+              <TH>Movement VS Last Year</TH>
               <TH>Weather Alerts</TH>
               <TH>Watchlist</TH>
             </tr>
