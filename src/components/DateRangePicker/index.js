@@ -111,7 +111,8 @@ const DateRangePicker = ({
     },
   ];
 
-  const handleDayClick = useCallback((day) => {
+  const handleDayClick = useCallback((day, modifiers) => {
+    if (modifiers.disabled) return;
     if (from && to && isBetween(day, from, to)) { // reset state if user selects a date inside existing range
       setFrom(null);
       setTo(null);
