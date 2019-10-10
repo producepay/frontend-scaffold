@@ -39,15 +39,17 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
     }
     customerRankingData: groupedSalesOrderLineItems(
       groupBy: "erpCustomers.name",
-      summedFields: ["shipmentQuantity", "totalSaleAmount"]
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
+      maxedFields: ["erpCustomers.id"]
     ) {
       groupedValue
+      erpCustomersId
       shipmentQuantity
       totalSaleAmount
     }
     commodityRankingData: groupedSalesOrderLineItems(
       groupBy: "erpProducts.commodityName",
-      summedFields: ["shipmentQuantity", "totalSaleAmount"]
+      summedFields: ["shipmentQuantity", "totalSaleAmount"],
     ) {
       groupedValue
       shipmentQuantity
@@ -56,10 +58,10 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
   }
 `;
 
-function Dashboard() {
-  const [dateInterval, setDateInterval] = useState("week");
+function Dashboard({ history }) {
+  const [dateInterval, setDateInterval] = useState('week');
 
-  const { data, loading, error } = useQuery(FETCH_GRAPH_DATA, {
+  const { data, loading, error } = useQuery(FETCH_CUSTOMER_SHOW_DATA, {
     variables: {
       groupBy: "orderCreatedAt",
       groupByInterval: dateInterval,
@@ -82,6 +84,7 @@ function Dashboard() {
       error={error}
       dateInterval={dateInterval}
       setDateInterval={setDateInterval}
+      history={history}
     />
   );
 }

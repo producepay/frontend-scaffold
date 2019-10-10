@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 
 import { formatPrice, formatLargeLoads } from '../../helpers/format';
+import routes from '../../routes';
 
 import Grid from '../../components/elements/Grid';
 import PageSpinner from '../../components/elements/PageSpinner';
@@ -9,9 +10,12 @@ import GraphsSection from './graphs-section';
 import RankingHeader from '../../components/molecules/RankingHeader';
 import RankingBars from '../../components/molecules/RankingBars';
 
-function DashboardView({ loading, data, dateInterval, setDateInterval }) {
+function DashboardView({ loading, data, dateInterval, setDateInterval, history }) {
   const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
   const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
+
+  const onClickCustomer = (cData) => history.push(routes.showCustomer(cData.erpCustomersId));
+  const onClickCommodity = (cData) => history.push(routes.showCommodity(cData.groupedValue));
 
   return loading ? (
     <PageSpinner />
@@ -32,6 +36,7 @@ function DashboardView({ loading, data, dateInterval, setDateInterval }) {
             <RankingBars
               items={_.get(data, 'customerRankingData', [])}
               valueKey='totalSaleAmount'
+              onRowClick={onClickCustomer}
               formatter={formatPrice}
             />
           </Grid>
@@ -42,6 +47,7 @@ function DashboardView({ loading, data, dateInterval, setDateInterval }) {
             <RankingBars
               items={_.get(data, 'customerRankingData', [])}
               valueKey='shipmentQuantity'
+              onRowClick={onClickCustomer}
               formatter={formatLargeLoads}
             />
           </Grid>
@@ -56,6 +62,7 @@ function DashboardView({ loading, data, dateInterval, setDateInterval }) {
             <RankingBars
               items={_.get(data, 'commodityRankingData', [])}
               valueKey='totalSaleAmount'
+              onRowClick={onClickCommodity}
               formatter={formatPrice}
             />
           </Grid>
@@ -66,6 +73,7 @@ function DashboardView({ loading, data, dateInterval, setDateInterval }) {
             <RankingBars
               items={_.get(data, 'commodityRankingData', [])}
               valueKey='shipmentQuantity'
+              onRowClick={onClickCommodity}
               formatter={formatLargeLoads}
             />
           </Grid>

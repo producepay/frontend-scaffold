@@ -7,12 +7,12 @@ import { useWidth } from '../../../helpers/dom';
 const MAX_TO_DISPLAY = 15;
 
 function RankingBars(props) {
-  const { items, valueKey, groupedByKey, formatter } = props;
+  const { items, valueKey, groupedByKey, onRowClick, formatter } = props;
 
   const { ref: widthRef, width: barMaxWidth } = useWidth();
 
   const sortedItems = _.orderBy(items, [valueKey], ['desc']);
-  const maxValue = _.maxBy(items, valueKey)[valueKey];
+  const maxValue = (_.maxBy(items, valueKey) || {})[valueKey];
 
   return (
     <div>
@@ -23,7 +23,11 @@ function RankingBars(props) {
             const value = data[valueKey];
 
             return (
-              <tr key={label}>
+              <tr
+                key={label}
+                className='cursor-pointer hover:bg-gray-200'
+                onClick={() => onRowClick(data)}
+              >
                 <td className='whitespace-no-wrap py-1 pr-2'>{label}</td>
 
                 <td className='w-full py-1'>
