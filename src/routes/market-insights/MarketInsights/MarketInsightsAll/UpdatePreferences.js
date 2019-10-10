@@ -24,7 +24,7 @@ function UpdatePreferences(props) {
     cta
   } = props;
 
-  const initSubscribed = cta === "Subscribe" ? true : false
+  const initSubscribed = cta === "Subscribe"
   const [subscribed, setSubscribed] = useState(initSubscribed)
 
   const [updatePreferences, { data }] = useMutation(UPDATE_USER_PREFERENCES);
