@@ -1,122 +1,204 @@
-import 'react-dates/initialize';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { DayPickerRangeController } from 'react-dates';
-import moment from 'moment';
-import momentPropTypes from 'react-moment-proptypes';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { DateUtils } from 'react-day-picker';
+import subDays from 'date-fns/sub_days';
+import subWeeks from 'date-fns/sub_weeks';
 import Button from '../elements/Button';
 import { formatDateRange } from '../../helpers/format';
+import { isBetween } from '../../helpers/dates';
 
-import 'react-dates/lib/css/_datepicker.css';
+import 'react-day-picker/lib/style.css';
 import './datepicker.css';
 
-const START_DATE_ID = "startDate";
-const END_DATE_ID = "endDate";
+const FORMAT_DATE_STRING = "MM/DD/YYYY";
 
-const DatePresets = ({ presets, onDatesChange }) => {
+const CalendarMenu = ({
+  setFrom,
+  setTo,
+  setEnteredTo,
+  onRangeSelected,
+  activeBtn,
+  setActiveBtn,
+  presets,
+  children,
+  classNames,
+  selectedDay,
+  ...props
+}) => {
   return (
-    <div>
-      {presets.map(({ label, start, end }) => (
-        <Button
-          key={label}
-          variant="outlined"
-          className="ml-6 mb-2"
-          label={label}
-          onClick={() => { onDatesChange({ startDate: start, endDate: end }) }}
-        />
-      ))}
+    <div {...props}>
+      <div className={classNames.overlay}>
+        {children}
+        <div className="pb-4 w-full">
+          {presets.map(({ label, start, end }) => (
+            <Button
+              key={label}
+              variant={activeBtn === label ? "solid" : "outlined"}
+              className="ml-6 mb-2"
+              label={label}
+              onClick={() => {
+                setFrom(start);
+                setTo(end);
+                setEnteredTo(end);
+                setActiveBtn(label);
+                onRangeSelected(start, end);
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-const Picker = ({
+const InputButton = React.forwardRef((props, ref) => {
+  const { from, to, ...rest } = props;
+  return (
+    <Button
+      ref={ref}
+      label={from && to ? formatDateRange(from, to, FORMAT_DATE_STRING) : 'Please select a date range'}
+      {...rest}
+    />
+  )
+});
+
+function isSelectingFirstDay(from, to, day) {
+  const isBeforeFirstDay = from && DateUtils.isDayBefore(day, from);
+  const isRangeSelected = from && to;
+  return !from || isBeforeFirstDay || isRangeSelected;
+}
+
+const DateRangePicker = ({
   className,
-  initialStartDate,
-  initialEndDate,
+  defaultFrom,
+  defaultTo,
+  onRangeSelected,
+  inputProps,
   ...rest
 }) => {
-  const [startDate, setStartDate] = useState(initialStartDate);
-  const [endDate, setEndDate] = useState(initialEndDate);
-  const [focusedInput, setFocusInput] = useState(START_DATE_ID);
+  const [from, setFrom] = useState(defaultFrom);
+  const [to, setTo] = useState(defaultTo);
+  const [enteredTo, setEnteredTo] = useState(defaultTo); // Keep track of the last day for mouseEnter
   const [showPicker, setShowPicker] = useState(false);
-
-  const onDatesChange = useCallback(({ startDate, endDate }) => {
-    setStartDate(startDate)
-    setEndDate(endDate);
-  }, []);
-  const onFocusChange = useCallback((focusedInput) => {
-    setFocusInput(focusedInput); // sets whether start or end input is in focus
-  }, []);
+  const [activeBtn, setActiveBtn] = useState(null);
+  const datePickerNode = useRef(null);
+  const dayPickerInput = useRef(null);
 
   const presets = [
     {
       label: "Today",
-      start: moment(),
-      end: moment(),
+      start: new Date(),
+      end: new Date(),
     },
     {
       label: "Yesterday",
-      start: moment().subtract(1, 'days'),
-      end: moment().subtract(1, 'days'),
+      start: subDays(new Date(), 1),
+      end: subDays(new Date(), 1),
     },
     {
       label: "Last Week",
-      start: moment().subtract(1, 'weeks'),
-      end: moment(),
+      start: subWeeks(new Date(), 1),
+      end: new Date(),
     },
     {
       label: "Last 30 Days",
-      start: moment().subtract(30, 'days'),
-      end: moment(),
+      start: subDays(new Date(), 30),
+      end: new Date(),
     },
   ];
 
+  const handleDayClick = useCallback((day) => {
+    if (from && to && isBetween(day, from, to)) { // reset state if user selects a date inside existing range
+      setFrom(null);
+      setTo(null);
+      setEnteredTo(null);
+      return;
+    }
+    if (isSelectingFirstDay(from, to, day)) {
+      setFrom(day);
+      setTo(null);
+      setEnteredTo(null);
+    } else {
+      setTo(day);
+      setEnteredTo(day);
+      onRangeSelected(from, day);
+    }
+  }, [from, onRangeSelected, to]);
+
+  const handleMouseEnter = useCallback((day) => {
+    if (!isSelectingFirstDay( from, to, day )) {
+      setEnteredTo(day);
+    }
+  }, [from, to]);
+
+  const handleClick = useCallback((e) => {
+    if (datePickerNode.current && datePickerNode.current.contains(e.target)) {
+      setShowPicker(true);
+      return;
+    }
+
+    setShowPicker(false);
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClick, false);
+    return () => {
+      document.removeEventListener('mousedown', handleClick, false);
+    }
+  }, [handleClick]);
+
   return (
     <div>
-      <Button
-        label={startDate && endDate ? formatDateRange(startDate, endDate) : 'Please select a date range'}
-        onClick={() => {
-          if (!showPicker) { // if we are showing picker
-            setFocusInput(START_DATE_ID); // open the calendar
-          }
-          setShowPicker(!showPicker);
-        }}
-      />
-      {
-        showPicker ? (
-          <div>
-            <DayPickerRangeController
-              {...rest}
-              renderCalendarInfo={() => <DatePresets presets={presets} onDatesChange={onDatesChange} />}
-              isOutsideRange={day => moment().diff(day) < 0}
-              initialVisibleMonth={() => moment().subtract(1, 'months')}
-              startDateId={START_DATE_ID} // required
-              endDateId={END_DATE_ID} // required
-              focusedInput={focusedInput} // required
-              onDatesChange={onDatesChange} // required
-              onFocusChange={onFocusChange} // required
-              startDate={startDate} // required
-              endDate={endDate} // required
-              keepOpenOnDateSelect
-              onOutsideClick={() => setShowPicker(false)}
-            />
-          </div>
-        ) : null
-      }
+      <div ref={datePickerNode} className="inline-block">
+        <DayPickerInput
+          ref={dayPickerInput}
+          overlayComponent={({ children, ...props }) => (
+            <CalendarMenu
+              setFrom={setFrom}
+              setTo={setTo}
+              setEnteredTo={setEnteredTo}
+              activeBtn={activeBtn}
+              setActiveBtn={setActiveBtn}
+              presets={presets}
+              onRangeSelected={onRangeSelected}
+              {...props}
+            >
+              {children}
+            </CalendarMenu>
+          )}
+          inputProps={{ from, to, ...inputProps }}
+          component={InputButton}
+          hideOnDayClick={false}
+          showOverlay={true}
+          dayPickerProps={{
+            className: "InsightsDatePicker",
+            selectedDays: [from, { from, to: enteredTo }],
+            modifiers: { start: from, end: enteredTo },
+            onDayClick: handleDayClick,
+            onDayMouseEnter: handleMouseEnter,
+            ...rest,
+          }}
+        />
+      </div>
     </div>
   )
 }
 
-Picker.propTypes = {
+DateRangePicker.propTypes = {
   className: PropTypes.string,
-  initialStartDate: momentPropTypes.momentObj,
-  initialEndDate: momentPropTypes.momentObj,
+  defaultFrom: PropTypes.instanceOf(Date),
+  defaultTo: PropTypes.instanceOf(Date),
+  onRangeSelected: PropTypes.func,
+  inputProps: PropTypes.object,
 }
 
-Picker.defaultProps = {
+DateRangePicker.defaultProps = {
   className: '',
-  initialStartDate: null,
-  initialEndDate: null,
+  defaultFrom: null,
+  defaultTo: null,
+  onRangeSelected: () => {},
+  inputProps: {},
 }
 
-export default Picker;
+export default DateRangePicker;

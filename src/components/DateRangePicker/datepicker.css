@@ -1,16 +1,23 @@
-.CalendarDay__selected_span {
-  @apply bg-primary text-white border-primary-lighter
+.InsightsDatePicker .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  @apply bg-primary-light text-white
 }
 
-.CalendarDay__selected {
-  @apply text-white bg-primary-dark border-primary-lighter
+.InsightsDatePicker .DayPicker-Day {
+  border-radius: 0 !important;
 }
 
-.CalendarDay__selected:hover {
-  @apply text-white bg-primary-light border-primary-lighter
+.InsightsDatePicker .DayPicker-Day--start:not(.DayPicker-Day--outside) {
+  background-color: #3d883d !important;
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
 }
 
-.CalendarDay__selected_span:active,
-.CalendarDay__selected_span:hover {
-  @apply bg-primary-light text-white border-primary-lighter
+.InsightsDatePicker .DayPicker-Day--end:not(.DayPicker-Day--outside) {
+  background-color: #3d883d !important;
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+
+.InsightsDatePicker .DayPicker-Day--today {
+  @apply text-primary
 }
