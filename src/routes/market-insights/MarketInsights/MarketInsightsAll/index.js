@@ -27,12 +27,6 @@ const FETCH_DATA = gql`
     $summaryThisYearMovementFilters: MovementReportFilterInputs,
     $summaryLastYearMovementFilters: MovementReportFilterInputs,
   ) {
-    commodities(
-    hasShippingPointPriceReports: true
-    ) {
-        name
-        id
-    }
     userCommodityVarietyPreferences {
       commodityVarietyInfo {
         id
@@ -55,6 +49,7 @@ const FETCH_DATA = gql`
       commodityUuid
       commodityId
       varietyUuid
+      varietyId
       varietyUsdaName
       reportDate
       varietySkuName
@@ -131,13 +126,14 @@ function MarketInsightsAll(props) {
           }],
         quality: [''],
       },
-      summaryPricingGroups: { 
+      summaryPricingGroups: {
         reportDate: true, 
         varietySkuName: true,
         commodityUsdaName: true,
         commodityUuid: true,
         commodityId: true,
         varietyUuid: true,
+        varietyId: true,
         varietyUsdaName: true
       },
       summaryThisYearMovementFilters: {

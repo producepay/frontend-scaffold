@@ -23,9 +23,8 @@ function MarketInsightsAllView(props) {
   if (error) return `Error: ${error.message}`;
 
   if(data){
-
     let pricingGroupedByUuid = _.values(_.groupBy(data.summaryPricingData, function(pricingData) {
-      return pricingData.commodityUuid + "-" + pricingData.varietyUuid
+      return pricingData.commodityId + "-" + pricingData.varietyId
     }))
 
     let lastYearMovementGroupedByUuid = _.groupBy(data.summaryLastYearMovementData, function(data) {
@@ -50,7 +49,7 @@ function MarketInsightsAllView(props) {
       const thisYearMovementData = thisYearMovementGroupedByUuid[pricingData[0].commodityUuid]
 
       const [
-        movementDayChange, 
+        movementDayChange,
         movementWeekChange
       ] = getMovementPercentages(thisYearMovementData, lastYearMovementData);
 
@@ -64,12 +63,11 @@ function MarketInsightsAllView(props) {
         })
       });
 
-      commodity.id = pricingData[0].commodityId
       commodity.pricingDayChange = pricingPercentages[0];
       commodity.pricingWeekChange = pricingPercentages[1];
-      commodity.dayBefore = dayBefore;
       commodity.commodityUsdName = pricingData[0].commodityUsdaName;
       commodity.commodityUuid = pricingData[0].commodityUuid;
+      commodity.commodityId = pricingData[0].commodityId;
       commodity.varietyUuid = pricingData[0].varietyUuid;
       commodity.varietyUsdaName = pricingData[0].varietyUsdaName;
       commodity.movementDayChange = movementDayChange;
