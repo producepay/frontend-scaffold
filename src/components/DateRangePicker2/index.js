@@ -17,6 +17,8 @@ const CalendarMenu = ({
   setTo,
   setEnteredTo,
   onRangeSelected,
+  activeBtn,
+  setActiveBtn,
   children,
   classNames,
   selectedDay,
@@ -45,19 +47,20 @@ const CalendarMenu = ({
     },
   ];
   return (
-    <div {...props}>
+    <div className="InsightsDatePickerOverlayWrapper" {...props}>
       {children}
-      <div className="m-2">
+      <div className="pb-4">
         {presets.map(({ label, start, end }) => (
           <Button
             key={label}
-            variant="outlined"
+            variant={activeBtn === label ? "solid" : "outlined"}
             className="ml-6 mb-2"
             label={label}
             onClick={() => {
               setFrom(start);
               setTo(end);
               setEnteredTo(end);
+              setActiveBtn(label);
               onRangeSelected(start, end);
             }}
           />
@@ -95,6 +98,7 @@ const DateRangePicker = ({
   const [to, setTo] = useState(defaultTo);
   const [enteredTo, setEnteredTo] = useState(defaultTo); // Keep track of the last day for mouseEnter
   const [showPicker, setShowPicker] = useState(false);
+  const [activeBtn, setActiveBtn] = useState(null);
   const datePickerNode = useRef(null);
   const dayPickerInput = useRef(null);
 
@@ -151,6 +155,8 @@ const DateRangePicker = ({
               setFrom={setFrom}
               setTo={setTo}
               setEnteredTo={setEnteredTo}
+              activeBtn={activeBtn}
+              setActiveBtn={setActiveBtn}
               onRangeSelected={onRangeSelected}
               {...props}
             >
