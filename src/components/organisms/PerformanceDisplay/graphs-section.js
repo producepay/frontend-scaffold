@@ -1,8 +1,8 @@
 import React from 'react';
 
-import CardHeader from '../../components/elements/CardHeader';
-import Legend from '../../components/elements/Nivo/Legend';
-import { formatLoads } from '../../helpers/format';
+import CardHeader from '../../elements/CardHeader';
+import Legend from '../../elements/Nivo/Legend';
+import { formatLoads } from '../../../helpers/format';
 import SummaryGraph from './summary-graph';
 
 const LAST_YEAR_ID = 'Last Year';

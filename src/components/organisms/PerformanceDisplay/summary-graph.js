@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import getMonth from 'date-fns/get_month';
 import getIsoWeek from 'date-fns/get_iso_week';
-import LineGraph from '../../components/nivo/LineGraph';
-import { monthNumToName } from '../../helpers/dates';
-import { formatWeek } from '../../helpers/format';
-import { takeNth } from '../../helpers/lodash';
+
+import { monthNumToName } from '../../../helpers/dates';
+import { formatWeek } from '../../../helpers/format';
+import { takeNth } from '../../../helpers/lodash';
+
+import LineGraph from '../../nivo/LineGraph';
 
 function filterInvalidLineItems(lineItems) {
   return lineItems.filter(item => item.groupedValue);
