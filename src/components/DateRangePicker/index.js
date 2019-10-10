@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { DateUtils } from 'react-day-picker';
 import subDays from 'date-fns/sub_days';
@@ -21,13 +22,14 @@ const CalendarMenu = ({
   activeBtn,
   setActiveBtn,
   presets,
+  numberOfMonths,
   children,
   classNames,
   selectedDay,
   ...props
 }) => {
   return (
-    <div {...props}>
+    <div className={cx({[classNames.overlayWrapper]: numberOfMonths === 1})} {...props}>
       <div className={classNames.overlay}>
         {children}
         <div className="pb-4 w-full">
@@ -75,6 +77,7 @@ const DateRangePicker = ({
   defaultTo,
   onRangeSelected,
   inputProps,
+  numberOfMonths,
   ...rest
 }) => {
   const [from, setFrom] = useState(defaultFrom);
@@ -162,6 +165,7 @@ const DateRangePicker = ({
               setActiveBtn={setActiveBtn}
               presets={presets}
               onRangeSelected={onRangeSelected}
+              numberOfMonths={numberOfMonths}
               {...props}
             >
               {children}
@@ -170,13 +174,14 @@ const DateRangePicker = ({
           inputProps={{ from, to, ...inputProps }}
           component={InputButton}
           hideOnDayClick={false}
-          showOverlay={true}
+          showOverlay={showPicker}
           dayPickerProps={{
             className: "InsightsDatePicker",
             selectedDays: [from, { from, to: enteredTo }],
             modifiers: { start: from, end: enteredTo },
             onDayClick: handleDayClick,
             onDayMouseEnter: handleMouseEnter,
+            numberOfMonths,
             ...rest,
           }}
         />
@@ -191,6 +196,7 @@ DateRangePicker.propTypes = {
   defaultTo: PropTypes.instanceOf(Date),
   onRangeSelected: PropTypes.func,
   inputProps: PropTypes.object,
+  numberOfMonths: PropTypes.number,
 }
 
 DateRangePicker.defaultProps = {
@@ -199,6 +205,7 @@ DateRangePicker.defaultProps = {
   defaultTo: null,
   onRangeSelected: () => {},
   inputProps: {},
+  numberOfMonths: 2,
 }
 
 export default DateRangePicker;

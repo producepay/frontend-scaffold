@@ -17,7 +17,7 @@ storiesOf('Components/DateRangePicker', module)
 )
 .add('with different start month', () =>
   <DateRangePicker
-    numberOfMonths={2}
+    numberOfMonths={1}
     month={subMonths(new Date(), 2)}
   />
 )
