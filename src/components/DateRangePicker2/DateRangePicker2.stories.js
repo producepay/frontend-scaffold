@@ -6,6 +6,7 @@ import { action } from '@storybook/addon-actions';
 
 import DateRangePicker from './index';
 
+//// uses react-day-picker
 storiesOf('Components/DateRangePicker2', module)
 .add('picker with future dates disabled', () =>
   <DateRangePicker
