@@ -13,7 +13,6 @@ import DateRangePicker from './index';
 storiesOf('Components/DateRangePicker', module)
 .add('with default dates', () =>
   <DateRangePicker
-    numberOfMonths={2}
     defaultFrom={subMonths(new Date(), 1)}
     defaultTo={new Date()}
   />
@@ -26,33 +25,32 @@ storiesOf('Components/DateRangePicker', module)
 )
 .add('with future dates disabled', () =>
   <DateRangePicker
-    numberOfMonths={2}
     month={subMonths(new Date(), 1)}
     disabledDays={{after: new Date()}}
     onRangeSelected={action('onRangeSelected')}
   />
 ).add('customize input component', () =>
   <DateRangePicker
-    numberOfMonths={2}
     inputProps={{
       className: "w-64",
       color: "secondary",
     }}
   />
 ).add('with different presets', () =>
-<DateRangePicker
-  numberOfMonths={2}
-  presets={[
-    {
-      label: "This Month",
-      start: startOfMonth(new Date()),
-      end: endOfMonth(new Date()),
-    },
-    {
-      label: "Next Month",
-      start: startOfMonth(addMonths(new Date(), 1)),
-      end: endOfMonth(addMonths(new Date(), 1)),
-    },
-  ]}
-/>
+  <DateRangePicker
+    presets={[
+      {
+        label: "This Month",
+        start: startOfMonth(new Date()),
+        end: endOfMonth(new Date()),
+      },
+      {
+        label: "Next Month",
+        start: startOfMonth(addMonths(new Date(), 1)),
+        end: endOfMonth(addMonths(new Date(), 1)),
+      },
+    ]}
+  />
+).add('align right', () =>
+  <DateRangePicker alignRight />
 );

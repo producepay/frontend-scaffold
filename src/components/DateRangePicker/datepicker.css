@@ -21,3 +21,9 @@
 .InsightsDatePicker .DayPicker-Day--today {
   @apply text-primary
 }
+
+.InsightsDatePickerOverlayAlignRight {
+  left: auto !important;
+  right: 0 !important;
+  margin-right: 15px;
+}

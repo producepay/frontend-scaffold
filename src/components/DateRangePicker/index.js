@@ -23,6 +23,7 @@ const CalendarMenu = ({
   setActiveBtn,
   presets,
   numberOfMonths,
+  alignRight,
   children,
   classNames,
   selectedDay,
@@ -30,9 +31,9 @@ const CalendarMenu = ({
 }) => {
   return (
     <div className={cx({[classNames.overlayWrapper]: numberOfMonths === 1})} {...props}>
-      <div className={classNames.overlay}>
+      <div className={cx(classNames.overlay, { "InsightsDatePickerOverlayAlignRight": alignRight })}>
         {children}
-        <div className="pb-4 w-full">
+        <div className="text-left pb-4 w-full">
           {presets.map(({ label, start, end }) => (
             <Button
               key={label}
@@ -79,6 +80,7 @@ const DateRangePicker = ({
   inputProps,
   numberOfMonths,
   presets,
+  alignRight,
   ...rest
 }) => {
   const [from, setFrom] = useState(defaultFrom);
@@ -131,7 +133,7 @@ const DateRangePicker = ({
   }, [handleClick]);
 
   return (
-    <div>
+    <div className={cx({'text-right': alignRight})}>
       <div ref={datePickerNode} className="inline-block">
         <DayPickerInput
           ref={dayPickerInput}
@@ -145,6 +147,7 @@ const DateRangePicker = ({
               presets={presets}
               onRangeSelected={onRangeSelected}
               numberOfMonths={numberOfMonths}
+              alignRight={alignRight}
               {...props}
             >
               {children}
@@ -181,6 +184,7 @@ DateRangePicker.propTypes = {
     start: PropTypes.instanceOf(Date).isRequired,
     end: PropTypes.instanceOf(Date).isRequired,
   })),
+  alignRight: PropTypes.bool,
 }
 
 DateRangePicker.defaultProps = {
@@ -212,6 +216,7 @@ DateRangePicker.defaultProps = {
       end: new Date(),
     },
   ],
+  alignRight: false,
 }
 
 export default DateRangePicker;
