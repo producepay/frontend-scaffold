@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import format from 'date-fns/format';
+import isSameDay from 'date-fns/is_same_day';
 
 import { getPercentage } from './math';
 
@@ -61,4 +63,10 @@ export function getRoundedPercentage (newVal, oldVal, precision = 0) {
   const percentage = getPercentage(newVal, oldVal);
 
   return percentage ? _.round(percentage, precision) : '--';
+}
+
+export function formatDateRange(startDate, endDate, formatStr = 'MM/DD/YYYY') {
+  return isSameDay(startDate, endDate) ?
+          format(startDate, formatStr) :
+          `${format(startDate, formatStr)} - ${format(endDate, formatStr)}`;
 }
