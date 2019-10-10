@@ -27,20 +27,12 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function generateMonthlyTickValues() {
-  return _.range(11);
-}
-
-function generateWeeklyTickValues() {
-  return _.range(1, 53);
-}
-
 function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
 
-  const tickValues = xInterval === "month" ? generateMonthlyTickValues() : generateWeeklyTickValues();
+  const tickValues = xInterval === "month" ? _.range(11) : _.range(1, 53);
 
   let commonLineGraphProps = {
     data: graphData,
