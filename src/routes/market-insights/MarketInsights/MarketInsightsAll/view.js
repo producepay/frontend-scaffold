@@ -1,10 +1,15 @@
 import React from 'react';
 import { useAuth } from '../../../../contexts/auth';
 import { orderByDateStr } from '../../../../helpers/lodash';
+<<<<<<< HEAD
 import { getPricingPercentagesAndDayBefore, getMovementPercentages, getPricingDayLabel } from '../../../../helpers/summary-percentages'
 import PageSpinner from '../../../../components/elements/PageSpinner'
 import TH from '../../../../components/elements/table/TH'
 import '../../../../components/elements/table/table.css'
+=======
+import { getPricingPercentagesAndDayBefore, getMovementPercentages } from '../../../../helpers/summary-percentages'
+import PageSpinner from '../../../../components/elements/PageSpinner'
+>>>>>>> fd2c727670cb05a2c134785b08679d711ef143ac
 import _ from 'lodash';
 import UpdatePreferences from './UpdatePreferences';
 
@@ -24,8 +29,11 @@ function MarketInsightsAllView(props) {
 
   if (error) return `Error: ${error.message}`;
 
+<<<<<<< HEAD
   let dayLabel = ''
 
+=======
+>>>>>>> fd2c727670cb05a2c134785b08679d711ef143ac
   if(data){
     let pricingGroupedByUuid = _.values(_.groupBy(data.summaryPricingData, function(pricingData) {
       return pricingData.commodityId + "-" + pricingData.varietyId
@@ -49,8 +57,11 @@ function MarketInsightsAllView(props) {
         dayBefore,
       } = getPricingPercentagesAndDayBefore(_.filter(pricingData, 'resolvedAveragePrice'));
 
+<<<<<<< HEAD
       dayLabel = getPricingDayLabel(pricingPercentages[0], dayBefore)
 
+=======
+>>>>>>> fd2c727670cb05a2c134785b08679d711ef143ac
       const lastYearMovementData = lastYearMovementGroupedByUuid[pricingData[0].commodityUuid]
       const thisYearMovementData = thisYearMovementGroupedByUuid[pricingData[0].commodityUuid]
 
