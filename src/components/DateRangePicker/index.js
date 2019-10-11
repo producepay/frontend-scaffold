@@ -12,6 +12,29 @@ import { isBetween } from '../../helpers/dates';
 import 'react-day-picker/lib/style.css';
 import './datepicker.css';
 
+export const DEFAULT_PRESETS = [
+  {
+    label: "Today",
+    start: new Date(),
+    end: new Date(),
+  },
+  {
+    label: "Yesterday",
+    start: subDays(new Date(), 1),
+    end: subDays(new Date(), 1),
+  },
+  {
+    label: "Last Week",
+    start: subWeeks(new Date(), 1),
+    end: new Date(),
+  },
+  {
+    label: "Last 30 Days",
+    start: subDays(new Date(), 30),
+    end: new Date(),
+  },
+];
+
 const CalendarMenu = ({
   setFrom,
   setTo,
@@ -31,7 +54,7 @@ const CalendarMenu = ({
     <div className={cx({[classNames.overlayWrapper]: numberOfMonths === 1})} {...props}>
       <div className={cx(classNames.overlay, { "InsightsDatePickerOverlayAlignRight": alignRight })}>
         {children}
-        <div className="text-left pb-4 w-full">
+        <div className="text-left pb-4 pr-4 w-full">
           {presets.map(({ label, start, end }) => (
             <Button
               key={label}
@@ -196,28 +219,7 @@ DateRangePicker.defaultProps = {
   inputProps: {},
   numberOfMonths: 2,
   format: "MM/DD/YYYY",
-  presets: [
-    {
-      label: "Today",
-      start: new Date(),
-      end: new Date(),
-    },
-    {
-      label: "Yesterday",
-      start: subDays(new Date(), 1),
-      end: subDays(new Date(), 1),
-    },
-    {
-      label: "Last Week",
-      start: subWeeks(new Date(), 1),
-      end: new Date(),
-    },
-    {
-      label: "Last 30 Days",
-      start: subDays(new Date(), 30),
-      end: new Date(),
-    },
-  ],
+  presets: DEFAULT_PRESETS,
   alignRight: false,
 }
 

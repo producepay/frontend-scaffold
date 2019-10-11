@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import subMonths from 'date-fns/sub_months';
+import startOfYear from 'date-fns/start_of_year';
+import endOfYear from 'date-fns/end_of_year';
 
 import { formatPrice, formatLargeLoads } from '../../helpers/format';
 import routes from '../../routes';
@@ -11,7 +13,7 @@ import PageSpinner from '../../components/elements/PageSpinner';
 import GraphsSection from './graphs-section';
 import RankingHeader from '../../components/molecules/RankingHeader';
 import RankingBars from '../../components/molecules/RankingBars';
-import DateRangePicker from '../../components/DateRangePicker';
+import DateRangePicker, { DEFAULT_PRESETS } from '../../components/DateRangePicker';
 
 function DashboardView({
   loading,
@@ -45,9 +47,15 @@ function DashboardView({
               format="MMM DD"
               inputProps={{
                 className: "w-48",
+                borderRadius: 'full',
               }}
               alignRight
               showWeekNumbers
+              presets={[...DEFAULT_PRESETS, {
+                label: "This Year",
+                start: startOfYear(new Date()),
+                end: endOfYear(new Date()),
+              }]}
             />
           </div>
         </div>
