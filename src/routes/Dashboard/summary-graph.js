@@ -31,16 +31,31 @@ function generateMonthlyTickValues() {
   return _.range(11);
 }
 
-function generateWeeklyTickValues() {
-  return _.range(1, 53);
+function generateWeeklyTickValues(thisYearStartDate, thisYearEndDate) {
+  const startWeek = _.clamp(getIsoWeek(thisYearStartDate) - 1, 1, 53);
+  const endWeek = _.clamp(getIsoWeek(thisYearEndDate) + 1, 1, 53);
+  console.log(startWeek);
+  console.log(thisYearStartDate);
+  console.log(thisYearEndDate);
+  if (startWeek === endWeek) {
+    return _.range(1, 53);
+  }
+  return _.range(startWeek, endWeek);
 }
 
-function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+function SummaryGraph({
+  yAxisField,
+  lineSeriesConfig,
+  xInterval,
+  thisYearStartDate,
+  thisYearEndDate,
+  ...rest
+}) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
 
-  const tickValues = xInterval === "month" ? generateMonthlyTickValues() : generateWeeklyTickValues();
+  const tickValues = xInterval === "month" ? generateMonthlyTickValues() : generateWeeklyTickValues(thisYearStartDate, thisYearEndDate);
 
   let commonLineGraphProps = {
     data: graphData,
@@ -110,10 +125,14 @@ SummaryGraph.propTypes = {
     'month',
     'week', // NOTE: can add day if we need to in the future?
   ]),
+  thisYearStartDate: PropTypes.instanceOf(Date),
+  thisYearEndDate: PropTypes.instanceOf(Date),
 }
 
 SummaryGraph.defaultProps = {
   xInterval: 'month',
+  thisYearStartDate: null,
+  thisYearEndDate: null,
 }
 
 export default React.memo(SummaryGraph);

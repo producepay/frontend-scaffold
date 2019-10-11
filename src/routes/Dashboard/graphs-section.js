@@ -38,7 +38,14 @@ const GraphContainer = ({ children }) => {
   )
 };
 
-function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItems, dateInterval, setDateInterval }) {
+function GraphsSection({
+  thisYearSalesOrderLineItems,
+  lastYearSalesOrderLineItems,
+  dateInterval,
+  setDateInterval,
+  thisYearStartDate,
+  thisYearEndDate,
+}) {
   const lineSeriesConfig = [
     { id: THIS_YEAR_ID, data: thisYearSalesOrderLineItems, color: THIS_YEAR_COLOR },
     { id: LAST_YEAR_ID, data: lastYearSalesOrderLineItems, color: LAST_YEAR_COLOR },
@@ -59,6 +66,8 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
             yUnit="dollars"
             xInterval={dateInterval}
             margin={{left: 62}}
+            thisYearStartDate={thisYearStartDate}
+            thisYearEndDate={thisYearEndDate}
           />
         </GraphContainer>
       </div>
@@ -74,6 +83,8 @@ function GraphsSection({ thisYearSalesOrderLineItems, lastYearSalesOrderLineItem
             yAxisField="shipmentQuantity"
             yFormat={value => (`${formatLoads(value)} packages`)}
             xInterval={dateInterval}
+            thisYearStartDate={thisYearStartDate}
+            thisYearEndDate={thisYearEndDate}
           />
         </GraphContainer>
       </div>

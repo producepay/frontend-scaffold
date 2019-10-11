@@ -65,6 +65,8 @@ function DashboardView({
         lastYearSalesOrderLineItems={lastYearSalesOrderLineItems}
         dateInterval={dateInterval}
         setDateInterval={setDateInterval}
+        thisYearStartDate={thisYearStartDate}
+        thisYearEndDate={thisYearEndDate}
       />
 
       <div className='p-4 md:p-6 lg:p-8 border-b'>
