@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import gql from 'graphql-tag';
 import subISOYears from 'date-fns/sub_iso_years';
 import startOfYear from 'date-fns/start_of_year';
 import endOfYear from 'date-fns/end_of_year';

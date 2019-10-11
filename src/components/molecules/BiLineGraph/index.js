@@ -10,16 +10,12 @@ import { takeNth } from '../../../helpers/lodash';
 
 import LineGraph from '../../nivo/LineGraph';
 
-function filterInvalidLineItems(lineItems) {
-  return lineItems.filter(item => item.groupedValue);
-}
-
 function groupLineItemsByMonth(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => getMonth(item.groupedValue));
+  return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getMonth(item.groupedValue));
 }
 
 function groupLineItemsByWeek(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => getIsoWeek(item.groupedValue));
+  return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getIsoWeek(item.groupedValue));
 }
 
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
@@ -29,7 +25,8 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+  console.log(yAxisField, lineSeriesConfig, xInterval, rest);
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
@@ -93,7 +90,7 @@ function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
   );
 }
 
-SummaryGraph.propTypes = {
+BiLineGraph.propTypes = {
   yAxisField: PropTypes.string.isRequired, // fieldName of sales order line item that we will sum on the y axis
   lineSeriesConfig: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -106,8 +103,8 @@ SummaryGraph.propTypes = {
   ]),
 }
 
-SummaryGraph.defaultProps = {
+BiLineGraph.defaultProps = {
   xInterval: 'month',
 }
 
-export default React.memo(SummaryGraph);
+export default React.memo(BiLineGraph);

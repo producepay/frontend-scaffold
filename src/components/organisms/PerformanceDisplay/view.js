@@ -6,9 +6,9 @@ import routes from '../../../routes';
 
 import Grid from '../../elements/Grid';
 import PageSpinner from '../../elements/PageSpinner';
-import GraphsSection from './graphs-section';
 import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
+import PerformanceGraph from '../../molecules/PerformanceGraph';
 
 function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, history }) {
   const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
@@ -23,12 +23,21 @@ function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, 
     <PageSpinner />
   ) : (
     <div className=''>
-      <GraphsSection
-        thisYearSalesOrderLineItems={thisYearSalesOrderLineItems}
-        lastYearSalesOrderLineItems={lastYearSalesOrderLineItems}
-        dateInterval={dateInterval}
-        setDateInterval={setDateInterval}
-      />
+      <div className='p-4 md:p-6 lg:p-8 border-b'>
+        <PerformanceGraph
+          thisYearLineItems={thisYearSalesOrderLineItems}
+          lastYearLineItems={lastYearSalesOrderLineItems}
+          type='totalSales'
+        />
+      </div>
+
+      <div className='p-4 md:p-6 lg:p-8 border-b'>
+        <PerformanceGraph
+          thisYearLineItems={thisYearSalesOrderLineItems}
+          lastYearLineItems={lastYearSalesOrderLineItems}
+          type='volumeSold'
+        />
+      </div>
 
       {!_.isEmpty(customerRankingData) ? (
         <div className='p-4 md:p-6 lg:p-8 border-b'>
