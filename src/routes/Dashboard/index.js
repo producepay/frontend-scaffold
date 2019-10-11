@@ -40,7 +40,8 @@ const FETCH_DASHBOARD_DATA = gql`
     customerRankingData: groupedSalesOrderLineItems(
       groupBy: "erpCustomers.name",
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
-      maxedFields: ["erpCustomers.id"]
+      maxedFields: ["erpCustomers.id"],
+      filters: $thisYearSalesOrderLineItemFilters,
     ) {
       ...groupedRankingData
       erpCustomersId
@@ -48,6 +49,7 @@ const FETCH_DASHBOARD_DATA = gql`
     commodityRankingData: groupedSalesOrderLineItems(
       groupBy: "erpProducts.commodityName",
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
+      filters: $thisYearSalesOrderLineItemFilters,
     ) {
       ...groupedRankingData
     }
