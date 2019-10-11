@@ -16,7 +16,7 @@ module.exports = {
   showCustomerTransactions: (customerId = ':customerId') => `/customers/${customerId}/transactions`,
   showCustomerSalesReport: (customerId = ':customerId') => `/customers/${customerId}/sales-report`,
   showCommodity: (commodityName = ':commodityName') => `/commodities/${commodityName}`,
-  showCommoditySales: (commodityName = ':commodityName') => `/commodities/${commodityName}/sales`,
+  showCommoditySales: (commodityName = ':commodityName') => `/commodities/${commodityName}/performance`,
   showCommodityCustomers: (commodityName = ':commodityName') => `/commodities/${commodityName}/customers`,
   showCommodityTransactions: (commodityName = ':commodityName') => `/commodities/${commodityName}/transactions`,
   showCommodityInsights: (commodityVarietyId = ':commodityVarietyId') => `/commodities/${commodityVarietyId}/insights`,
