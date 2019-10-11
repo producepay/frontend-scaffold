@@ -4,6 +4,7 @@ import { getUTCDate } from './dates';
 import { orderByDateStr } from './lodash';
 import subWeeks from 'date-fns/sub_weeks';
 import format from 'date-fns/format';
+import isYesterday from 'date-fns/is_yesterday';
 import { getRoundedPercentage } from './format';
 
 const formatDateToString = date => format(date, 'YYYY-MM-DDT00:00:00[Z]');
@@ -56,4 +57,9 @@ export function getMovementPercentages (thisYearMovement, lastYearMovement) {
     getRoundedPercentage(thisWeekWeight, lastWeekWeight),
     getRoundedPercentage(thisWeekWeight, lastYearWeight),
   ];
+};
+
+export function getPricingDayLabel(pricingDayChange, dayBefore) {
+  if (pricingDayChange === '--' || isYesterday(dayBefore)) return 'YESTERDAY';
+  return format(dayBefore, 'dddd').toUpperCase();
 };

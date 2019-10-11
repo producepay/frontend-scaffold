@@ -1,8 +1,10 @@
 import React from 'react';
 import { useAuth } from '../../../../contexts/auth';
 import { orderByDateStr } from '../../../../helpers/lodash';
-import { getPricingPercentagesAndDayBefore, getMovementPercentages } from '../../../../helpers/summary-percentages'
+import { getPricingPercentagesAndDayBefore, getMovementPercentages, getPricingDayLabel } from '../../../../helpers/summary-percentages'
 import PageSpinner from '../../../../components/elements/PageSpinner'
+import TH from '../../../../components/elements/table/TH'
+import '../../../../components/elements/table/table.css'
 import _ from 'lodash';
 import UpdatePreferences from './UpdatePreferences';
 
@@ -21,6 +23,8 @@ function MarketInsightsAllView(props) {
   );
 
   if (error) return `Error: ${error.message}`;
+
+  let dayLabel = ''
 
   if(data){
     let pricingGroupedByUuid = _.values(_.groupBy(data.summaryPricingData, function(pricingData) {
@@ -44,6 +48,8 @@ function MarketInsightsAllView(props) {
         pricingPercentages,
         dayBefore,
       } = getPricingPercentagesAndDayBefore(_.filter(pricingData, 'resolvedAveragePrice'));
+
+      dayLabel = getPricingDayLabel(pricingPercentages[0], dayBefore)
 
       const lastYearMovementData = lastYearMovementGroupedByUuid[pricingData[0].commodityUuid]
       const thisYearMovementData = thisYearMovementGroupedByUuid[pricingData[0].commodityUuid]
@@ -81,16 +87,16 @@ function MarketInsightsAllView(props) {
 
       <div className='p-4'>
         MarketInsightsAllView
-        <table>
+        <table className="table-auto table-secondary table-p-sm bg-white">
           <thead>
             <tr>
-              <th className='p-4'>Commodity - Variety</th>
-              <th className='p-4'>Price vs. Yesterday</th>
-              <th className='p-4'>Price vs. 7 Days Ago</th>
-              <th className='p-4'>Movement vs. Last Week</th>
-              <th className='p-4'>Movement vs. Last Year</th>
-              <th className='p-4'>Weather Alerts</th>
-              <th className='p-4'>Watchlist</th>
+              <TH className="text-left">Commodity</TH>
+              <TH>Price vs {dayLabel}</TH>
+              <TH>Price vs 7 Days Ago</TH>
+              <TH>Movement vs Last Week</TH>
+              <TH>Movement Vs Last Year</TH>
+              <TH>Weather Alerts</TH>
+              <TH>Watchlist</TH>
             </tr>
           </thead>
           <tbody>
@@ -98,11 +104,11 @@ function MarketInsightsAllView(props) {
             commodities.map((commodity, index) =>
               <tr key={index} >
                 <td>{commodity.commodityUsdName} - {commodity.varietyUsdaName}</td>
-                <td>{commodity.pricingDayChange}%</td>
-                <td>{commodity.pricingWeekChange}%</td>
-                <td>{commodity.movementDayChange}%</td>
-                <td>{commodity.movementWeekChange}%</td>
-                <td>{commodity.alertsCount || '--'}</td>
+                <td className="text-center">{commodity.pricingDayChange ? `${commodity.pricingDayChange}%` : ''}</td>
+                <td className="text-center">{commodity.pricingWeekChange ? `${commodity.pricingWeekChange}%` : ''}</td>
+                <td className="text-center">{commodity.movementDayChange ? `${commodity.movementDayChange}%` : ''}</td>
+                <td className="text-center">{commodity.movementWeekChange ? `${commodity.movementWeekChange}%` : ''}</td>
+                <td className="text-center text-red-500">{commodity.alertsCount ? `${commodity.alertsCount} alerts` : ''}</td>
                 { _.find(data.userCommodityVarietyPreferences, {"commodityVarietyInfo": {"commodity": {"uuid": commodity.commodityUuid}}}) && 
                   _.find(data.userCommodityVarietyPreferences, {"commodityVarietyInfo": {"variety": {"uuid": commodity.varietyUuid}}}) ? (
                       <UpdatePreferences 
