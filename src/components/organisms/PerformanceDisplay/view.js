@@ -47,9 +47,9 @@ function PerformanceDisplayView({
               defaultFrom={thisYearStartDate}
               defaultTo={thisYearEndDate}
               month={subMonths(new Date(), 1)}
-              format="MMM DD"
+              format="MMM DD YYYY"
               inputProps={{
-                className: "w-48",
+                className: "w-56",
                 borderRadius: 'full',
               }}
               alignRight
