@@ -14,7 +14,7 @@ import PerformanceDisplayView from './view';
 function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
   const [thisYearStartDate, setThisYearStartDate] = useState(startOfYear(new Date()));
-  const [thisYearEndDate, setThisYearEndDate] = useState(new Date());
+  const [thisYearEndDate, setThisYearEndDate] = useState(endOfYear(new Date()));
   const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
   const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
 
@@ -35,14 +35,6 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
     },
   });
 
-  const handleDateRangeSelected = useCallback((from, to) => {
-    setThisYearStartDate(setYear(from, getYear(new Date())));
-    setThisYearEndDate(setYear(to, getYear(new Date())));
-    setLastYearStartDate(setYear(from, getYear(subISOYears(new Date(), 1))));
-    setLastYearEndDate(setYear(to, getYear(subISOYears(new Date(), 1))));
-    refetch();
-  }, [setThisYearStartDate, setThisYearEndDate, setLastYearStartDate, setLastYearEndDate, refetch]);
-
   return (
     <PerformanceDisplayView
       data={data}
@@ -50,9 +42,6 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
       error={error}
       dateInterval={dateInterval}
       setDateInterval={setDateInterval}
-      handleDateRangeSelected={handleDateRangeSelected}
-      thisYearStartDate={thisYearStartDate}
-      thisYearEndDate={thisYearEndDate}
       history={history}
     />
   );

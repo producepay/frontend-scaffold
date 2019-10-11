@@ -143,14 +143,14 @@ BiLineGraph.propTypes = {
     'month',
     'week', // NOTE: can add day if we need to in the future?
   ]),
-  thisYearStartDate: PropTypes.instanceOf(Date),
-  thisYearEndDate: PropTypes.instanceOf(Date),
+  minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date),
 }
 
 BiLineGraph.defaultProps = {
   xInterval: 'month',
-  thisYearStartDate: null,
-  thisYearEndDate: null,
+  minDate: null,
+  maxDate: null,
 }
 
 export default React.memo(BiLineGraph);
