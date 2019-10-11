@@ -67,6 +67,8 @@ function PerformanceDisplayView({
         <PerformanceGraph
           thisYearLineItems={thisYearSalesOrderLineItems}
           lastYearLineItems={lastYearSalesOrderLineItems}
+          minDate={thisYearStartDate}
+          maxDate={thisYearEndDate}
           type='totalSales'
         />
       </div>
@@ -75,6 +77,8 @@ function PerformanceDisplayView({
         <PerformanceGraph
           thisYearLineItems={thisYearSalesOrderLineItems}
           lastYearLineItems={lastYearSalesOrderLineItems}
+          minDate={thisYearStartDate}
+          maxDate={thisYearEndDate}
           type='volumeSold'
         />
       </div>

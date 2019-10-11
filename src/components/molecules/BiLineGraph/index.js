@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import getMonth from 'date-fns/get_month';
 import getIsoWeek from 'date-fns/get_iso_week';
+import differenceInMonths from 'date-fns/difference_in_months';
+import differenceInWeeks from 'date-fns/difference_in_weeks';
 
 import { monthNumToName } from '../../../helpers/dates';
 import { formatWeek } from '../../../helpers/format';
@@ -25,13 +27,53 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
-  console.log(yAxisField, lineSeriesConfig, xInterval, rest);
+function generateWeeklyTickValues(minDate, maxDate) {
+  if (minDate && maxDate) {
+    const diffInMonths = differenceInMonths(maxDate, minDate);
+    if (diffInMonths >= 6) {
+      return _.range(1, 53);
+    } else {
+      const startWeek = getIsoWeek(minDate);
+      const endWeek = getIsoWeek(maxDate);
+      if (differenceInWeeks(maxDate, minDate) >= 52) {
+        return _.range(1, 53);
+      }
+      return _.range(_.clamp(startWeek - 1, 1, 53), _.clamp(endWeek + 1, 1, 53));
+    }
+  }
+  return _.range(1, 53);
+}
+
+function numTickValuesToTake(tickValues, device) {
+  const numTicks = tickValues.length;
+  if (device === 'mobile') {
+    if (numTicks <= 12) {
+      return 6;
+    } else {
+      return 9;
+    }
+  }
+  if (device === 'tablet') {
+    if (numTicks <= 12) {
+      return 2;
+    } else {
+      return 7;
+    }
+  }
+  // desktop
+  if (numTicks <= 12) {
+    return 1;
+  } else {
+    return 5;
+  }
+}
+
+function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
 
-  const tickValues = xInterval === "month" ? _.range(11) : _.range(1, 53);
+  const tickValues = xInterval === "month" ? _.range(11) : generateWeeklyTickValues(minDate, maxDate);
 
   let commonLineGraphProps = {
     data: graphData,
@@ -57,7 +99,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
           lineWidth={2}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, xInterval === "month" ? 6 : 9)
+            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "mobile"))
           }}
           {...rest}
         />
@@ -69,7 +111,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, xInterval === "month" ? 2 : 7),
+            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "tablet")),
           }}
           {...rest}
         />
@@ -81,7 +123,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, xInterval === "month" ? 1 : 5),
+            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "desktop")),
           }}
           {...rest}
         />

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CardHeader from '../../elements/CardHeader';
 import Legend from '../../elements/Nivo/Legend';
 import { formatLoads } from '../../../helpers/format';
 import BiLineGraph from '../../molecules/BiLineGraph';
@@ -22,11 +21,19 @@ const LEGEND_ITEMS = [{
   labelColor: LEGEND_LABEL_COLOR,
 }];
 
-function PerformanceGraph({ thisYearLineItems, lastYearLineItems, type, dateInterval }) {
+function PerformanceGraph({
+  thisYearLineItems,
+  lastYearLineItems,
+  type,
+  dateInterval,
+  minDate,
+  maxDate,
+}) {
   const lineSeriesConfig = [
     { id: THIS_YEAR_ID, data: thisYearLineItems, color: THIS_YEAR_COLOR },
     { id: LAST_YEAR_ID, data: lastYearLineItems, color: LAST_YEAR_COLOR },
   ];
+  const commonGraphProps = { minDate, maxDate };
 
   let title, specificGraphProps;
   if (type === 'totalSales') {
@@ -43,7 +50,7 @@ function PerformanceGraph({ thisYearLineItems, lastYearLineItems, type, dateInte
       yFormat: (value) => `${formatLoads(value)} packages`,
     };
   }
-  console.log(specificGraphProps);
+
   return (
     <React.Fragment>
       <h3 className='mb-6 text-lg lg:text-xl font-semibold'>{title}</h3>
@@ -63,6 +70,7 @@ function PerformanceGraph({ thisYearLineItems, lastYearLineItems, type, dateInte
             lineSeriesConfig={lineSeriesConfig}
             xInterval={dateInterval}
             {...specificGraphProps}
+            {...commonGraphProps}
           />
         </div>
       </div>
@@ -75,10 +83,14 @@ PerformanceGraph.propTypes = {
   lastYearLineItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   type: PropTypes.oneOf(['totalSales', 'volumeSold']).isRequired,
   dateInterval: PropTypes.oneOf(['month', 'week']),
+  minDate: PropTypes.instanceOf(Date), // used to clamp tick values
+  maxDate: PropTypes.instanceOf(Date), // used to clamp tick values
 };
 
 PerformanceGraph.defaultProps = {
   dateInterval: 'week',
+  minDate: null,
+  maxDate: null,
 };
 
 export default React.memo(PerformanceGraph);
