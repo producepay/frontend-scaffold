@@ -10,6 +10,8 @@ import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
 import PerformanceGraph from '../../molecules/PerformanceGraph';
 
+const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
+
 function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, history }) {
   const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
   const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
@@ -23,7 +25,7 @@ function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, 
     <PageSpinner />
   ) : (
     <div className=''>
-      <div className='p-4 md:p-6 lg:p-8 border-b'>
+      <div className={`${SECTION_SPACING} border-b`}>
         <PerformanceGraph
           thisYearLineItems={thisYearSalesOrderLineItems}
           lastYearLineItems={lastYearSalesOrderLineItems}
@@ -31,7 +33,7 @@ function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, 
         />
       </div>
 
-      <div className='p-4 md:p-6 lg:p-8 border-b'>
+      <div className={`${SECTION_SPACING} border-b`}>
         <PerformanceGraph
           thisYearLineItems={thisYearSalesOrderLineItems}
           lastYearLineItems={lastYearSalesOrderLineItems}
@@ -40,7 +42,7 @@ function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, 
       </div>
 
       {!_.isEmpty(customerRankingData) ? (
-        <div className='p-4 md:p-6 lg:p-8 border-b'>
+        <div className={`${SECTION_SPACING} border-b`}>
           <Grid container>
             <Grid md='1/2'>
               <RankingHeader className='mb-4' type='customers' ranking = 'totalSales' />
@@ -68,7 +70,7 @@ function PerformanceDisplayView({ loading, data, dateInterval, setDateInterval, 
       ) : null}
 
       {!_.isEmpty(commodityRankingData) ? (
-        <div className='p-4 md:p-6 lg:p-8'>
+        <div className={SECTION_SPACING}>
           <Grid container>
             <Grid md='1/2'>
               <RankingHeader className='mb-4' type='commodities' ranking = 'totalSales' />
