@@ -4,10 +4,10 @@ module.exports = {
       colors: {
         primary: '#33CE9B',
         secondary: '#FF5A60',
-        'primary-light': '#91ce90',
-        'primary-lighter': '#c5e5c5',
-        'primary-dark': '#3d883d',
-        'primary-darker': '#255325',
+        'primary-light': '#71ddb9',
+        'primary-lighter': '#aeecd7',
+        'primary-dark': '#23926d',
+        'primary-darker': '#14543f',
       },
       spacing: {
         '100': '25rem',

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import subMonths from 'date-fns/sub_months';
 
 import { formatPrice, formatLargeLoads } from '../../helpers/format';
 import routes from '../../routes';
@@ -37,10 +38,16 @@ function DashboardView({
           <div><h3 className='font-semibold text-xl'>Performance</h3></div>
           <div>
             <DateRangePicker
+              onRangeSelected={handleDateRangeSelected}
               defaultFrom={thisYearStartDate}
               defaultTo={thisYearEndDate}
+              month={subMonths(new Date(), 1)}
+              format="MMM DD"
+              inputProps={{
+                className: "w-48",
+              }}
               alignRight
-              onRangeSelected={handleDateRangeSelected}
+              showWeekNumbers
             />
           </div>
         </div>

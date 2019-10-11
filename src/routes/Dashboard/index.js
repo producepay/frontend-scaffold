@@ -64,7 +64,7 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
 function Dashboard({ history }) {
   const [dateInterval, setDateInterval] = useState('week');
   const [thisYearStartDate, setThisYearStartDate] = useState(startOfYear(new Date()));
-  const [thisYearEndDate, setThisYearEndDate] = useState(new Date());
+  const [thisYearEndDate, setThisYearEndDate] = useState(endOfYear(new Date()));
   const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
   const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
 

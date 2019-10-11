@@ -7,13 +7,13 @@
 }
 
 .InsightsDatePicker .DayPicker-Day--start:not(.DayPicker-Day--outside) {
-  background-color: #3d883d !important;
+  background-color: #23926d !important;
   border-top-left-radius: 50% !important;
   border-bottom-left-radius: 50% !important;
 }
 
 .InsightsDatePicker .DayPicker-Day--end:not(.DayPicker-Day--outside) {
-  background-color: #3d883d !important;
+  background-color: #23926d !important;
   border-top-right-radius: 50% !important;
   border-bottom-right-radius: 50% !important;
 }
