@@ -35,6 +35,14 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
     },
   });
 
+  const handleDateRangeSelected = useCallback((from, to) => {
+    setThisYearStartDate(setYear(from, getYear(new Date())));
+    setThisYearEndDate(setYear(to, getYear(new Date())));
+    setLastYearStartDate(setYear(from, getYear(subISOYears(new Date(), 1))));
+    setLastYearEndDate(setYear(to, getYear(subISOYears(new Date(), 1))));
+    refetch();
+  }, [setThisYearStartDate, setThisYearEndDate, setLastYearStartDate, setLastYearEndDate, refetch]);
+
   return (
     <PerformanceDisplayView
       data={data}
@@ -42,6 +50,9 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
       error={error}
       dateInterval={dateInterval}
       setDateInterval={setDateInterval}
+      handleDateRangeSelected={handleDateRangeSelected}
+      thisYearStartDate={thisYearStartDate}
+      thisYearEndDate={thisYearEndDate}
       history={history}
     />
   );
