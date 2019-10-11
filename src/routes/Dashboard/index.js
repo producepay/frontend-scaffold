@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import gql from 'graphql-tag';
 import subISOYears from 'date-fns/sub_iso_years';
 import startOfYear from 'date-fns/start_of_year';
 import endOfYear from 'date-fns/end_of_year';
+import setYear from 'date-fns/set_year';
+import getYear from 'date-fns/get_year';
+
 import { useQuery } from '@apollo/react-hooks';
 
 import { gqlF } from '../../helpers/dates';
@@ -60,22 +63,34 @@ const FETCH_CUSTOMER_SHOW_DATA = gql`
 
 function Dashboard({ history }) {
   const [dateInterval, setDateInterval] = useState('week');
+  const [thisYearStartDate, setThisYearStartDate] = useState(startOfYear(new Date()));
+  const [thisYearEndDate, setThisYearEndDate] = useState(new Date());
+  const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
+  const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
 
-  const { data, loading, error } = useQuery(FETCH_CUSTOMER_SHOW_DATA, {
+  const { data, loading, error, refetch } = useQuery(FETCH_CUSTOMER_SHOW_DATA, {
     variables: {
       groupBy: "orderCreatedAt",
       groupByInterval: dateInterval,
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
       thisYearSalesOrderLineItemFilters: {
-        startDate: gqlF(startOfYear(new Date())),
-        endDate: gqlF(new Date()),
+        startDate: gqlF(thisYearStartDate),
+        endDate: gqlF(thisYearEndDate),
       },
       lastYearSalesOrderLineItemFilters: {
-        startDate: gqlF(startOfYear(subISOYears(new Date(), 1))),
-        endDate: gqlF(endOfYear(subISOYears(new Date(), 1))),
+        startDate: gqlF(lastYearStartDate),
+        endDate: gqlF(lastYearEndDate),
       },
     },
   });
+
+  const handleDateRangeSelected = useCallback((from, to) => {
+    setThisYearStartDate(setYear(from, getYear(new Date())));
+    setThisYearEndDate(setYear(to, getYear(new Date())));
+    setLastYearStartDate(setYear(from, getYear(subISOYears(new Date(), 1))));
+    setLastYearEndDate(setYear(to, getYear(subISOYears(new Date(), 1))));
+    refetch();
+  }, [setThisYearStartDate, setThisYearEndDate, setLastYearStartDate, setLastYearEndDate, refetch])
 
   return (
     <DashboardView
@@ -84,6 +99,9 @@ function Dashboard({ history }) {
       error={error}
       dateInterval={dateInterval}
       setDateInterval={setDateInterval}
+      thisYearStartDate={thisYearStartDate}
+      thisYearEndDate={thisYearEndDate}
+      handleDateRangeSelected={handleDateRangeSelected}
       history={history}
     />
   );
