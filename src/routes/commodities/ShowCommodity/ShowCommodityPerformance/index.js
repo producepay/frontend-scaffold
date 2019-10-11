@@ -1,25 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 
-import DashboardView from './view';
+import ShowCommodityPerformanceView from './view';
 
-const FETCH_DASHBOARD_DATA = gql`
+const FETCH_SHOW_COMMODITY_DATA = gql`
   fragment groupedGraphData on GroupedSalesOrderLineItem {
     totalSaleAmount
     shipmentQuantity
     groupedValue
   }
 
-  fragment groupedRankingData on GroupedSalesOrderLineItem {
-    groupedValue
-    shipmentQuantity
-    totalSaleAmount
-  }
-
   query FetchDashboardData(
     $groupByInterval: String,
     $thisYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
+    $filters: SalesOrderLineItemFilterInput
   ) {
     thisYearSalesOrderLineItems: groupedSalesOrderLineItems(
       groupBy: "orderCreatedAt",
@@ -40,26 +35,26 @@ const FETCH_DASHBOARD_DATA = gql`
     customerRankingData: groupedSalesOrderLineItems(
       groupBy: "erpCustomers.name",
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
-      maxedFields: ["erpCustomers.id"]
+      maxedFields: ["erpCustomers.id"],
+      filters: $filters
     ) {
-      ...groupedRankingData
+      groupedValue
       erpCustomersId
-    }
-    commodityRankingData: groupedSalesOrderLineItems(
-      groupBy: "erpProducts.commodityName",
-      summedFields: ["shipmentQuantity", "totalSaleAmount"],
-    ) {
-      ...groupedRankingData
+      shipmentQuantity
+      totalSaleAmount
     }
   }
 `;
 
-function Dashboard() {
+function ShowCommodityPerformance(props) {
+  const { commodityName } = props.match.params;
+
   return (
-    <DashboardView
-      graphqlQuery={FETCH_DASHBOARD_DATA}
+    <ShowCommodityPerformanceView
+      graphqlQuery={FETCH_SHOW_COMMODITY_DATA}
+      graphqlFilters={{ commodityName }}
     />
   );
 }
 
-export default React.memo(Dashboard);
+export default React.memo(ShowCommodityPerformance);

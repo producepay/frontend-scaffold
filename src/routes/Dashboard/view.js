@@ -3,9 +3,9 @@ import _ from 'lodash';
 
 import PerformanceDisplay from '../../components/organisms/PerformanceDisplay';
 
-function DashboardView({ history, graphqlQuery }) {
+function DashboardView({ graphqlQuery }) {
   return (
-    <PerformanceDisplay history={history} graphqlQuery={graphqlQuery} />
+    <PerformanceDisplay graphqlQuery={graphqlQuery} />
   );
 }
 

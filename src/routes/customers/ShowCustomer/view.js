@@ -8,14 +8,14 @@ import ShowCustomerTransactions from './ShowCustomerTransactions';
 import ShowCustomerSalesReport from './ShowCustomerSalesReport';
 
 function ShowCustomerView(props) {
-  const { customerName } = props;
+  const { customerId } = props;
 
   return (
     <React.Fragment>
       <div>
-        <Link to={routes.showCustomerPerformance(customerName)}>Sales Performance</Link>
-        <Link to={routes.showCustomerTransactions(customerName)}>Customers</Link>
-        <Link to={routes.showCustomerSalesReport(customerName)}>Sales Report</Link>
+        <Link to={routes.showCustomerPerformance(customerId)}>Sales Performance</Link>
+        <Link to={routes.showCustomerTransactions(customerId)}>Customers</Link>
+        <Link to={routes.showCustomerSalesReport(customerId)}>Sales Report</Link>
       </div>
 
       <Switch>

@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, Link } from 'react-router-dom';
 
 import routes from '../../../routes';
 
-import ShowCommoditySales from './ShowCommoditySales';
+import ShowCommodityPerformance from './ShowCommodityPerformance';
 import ShowCommodityCustomers from './ShowCommodityCustomers';
 import ShowCommodityTransactions from './ShowCommodityTransactions';
 import ShowCommodityInsights from './ShowCommodityInsights';
@@ -21,7 +21,7 @@ function ShowCommodityView(props) {
       </div>
 
       <Switch>
-        <Route exact path={routes.showCommoditySales()} component={ShowCommoditySales} />
+        <Route exact path={routes.showCommoditySales()} component={ShowCommodityPerformance} />
         <Route exact path={routes.showCommodityCustomers()} component={ShowCommodityCustomers} />
         <Route exact path={routes.showCommodityTransactions()} component={ShowCommodityTransactions} />
         <Route exact path={routes.showCommodityInsights()} component={ShowCommodityInsights} />
