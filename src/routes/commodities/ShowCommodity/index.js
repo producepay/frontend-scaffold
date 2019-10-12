@@ -3,9 +3,9 @@ import React from 'react';
 import ShowCommodityView from './view';
 
 function ShowCommodity(props) {
-  const { commodityId } = props.match.params;
+  const { commodityName } = props.match.params;
 
-  return <ShowCommodityView commodityId={commodityId} />
+  return <ShowCommodityView commodityName={commodityName} />
 }
 
 export default React.memo(ShowCommodity);

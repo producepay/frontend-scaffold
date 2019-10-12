@@ -9,15 +9,15 @@ import ShowCommodityTransactions from './ShowCommodityTransactions';
 import ShowCommodityInsights from './ShowCommodityInsights';
 
 function ShowCommodityView(props) {
-  const { commodityId } = props;
+  const { commodityName } = props;
 
   return (
     <React.Fragment>
       <div>
-        <Link to={routes.showCommoditySales(commodityId)}>Sales Performance</Link>
-        <Link to={routes.showCommodityCustomers(commodityId)}>Customers</Link>
-        <Link to={routes.showCommodityTransactions(commodityId)}>Transactions</Link>
-        <Link to={routes.showCommodityInsights(commodityId)}>Market Insights</Link>
+        <Link to={routes.showCommoditySales(commodityName)}>Sales Performance</Link>
+        <Link to={routes.showCommodityCustomers(commodityName)}>Customers</Link>
+        <Link to={routes.showCommodityTransactions(commodityName)}>Transactions</Link>
+        <Link to={routes.showCommodityInsights(commodityName)}>Market Insights</Link>
       </div>
 
       <Switch>

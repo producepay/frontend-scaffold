@@ -7,7 +7,7 @@ export function useWidth() {
   useEffect(() => {
     const newWidth = ref.current ? ref.current.getBoundingClientRect().width : 0;
     setWidth(newWidth);
-  }, [width]);
+  }, [ref, setWidth]);
 
   return { ref, width };
 }
