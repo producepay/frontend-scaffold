@@ -7,8 +7,8 @@ import { optionType } from '../../../helpers/types';
 import { textSearchCompare } from '../../../helpers/common';
 import TextField from '../../elements/TextField';
 import Checkbox from '../../elements/Checkbox';
-import ChevronUp from '../../icons/ChevronUp';
-import ChevronDown from '../../icons/ChevronDown';
+import PlusIcon from '../../icons/Plus';
+import MinusIcon from '../../icons/Minus';
 
 const CHEVRON_COLOR = "#a0aec0";
 
@@ -29,10 +29,10 @@ function BiFilter(props) {
 
   return (
     <div className={wrapperClassName}>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <div className="font-medium">{title}</div>
         <div className="cursor-pointer" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? <ChevronDown color={CHEVRON_COLOR} /> : <ChevronUp color={CHEVRON_COLOR} />}
+          {isCollapsed ? <MinusIcon size={14} color={CHEVRON_COLOR} /> : <PlusIcon size={14} color={CHEVRON_COLOR} />}
         </div>
       </div>
       {
