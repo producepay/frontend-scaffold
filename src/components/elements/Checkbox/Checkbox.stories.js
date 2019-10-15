@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { storiesOf } from '@storybook/react';
-// import { action } from '@storybook/addon-actions';
 
 import Checkbox from './index';
 
+const Wrapper = (checkboxProps) => {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <Checkbox onClick={() => setChecked(!checked)} checked={checked} {...checkboxProps} />
+  );
+}
+
 storiesOf('elements/Checkbox', module)
 .add('small', () => (
-  <Checkbox value="1" />
+  <Wrapper value="1" />
 )).add('large', () => (
-  <Checkbox value="1" size="large" />
+  <Wrapper value="1" size="large" />
 ));

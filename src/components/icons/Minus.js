@@ -6,13 +6,13 @@ const SvgMinus = props => {
   return (
     <svg
       width={size}
-      height="2"
+      height={size}
       viewBox={`0 0 ${size} 2`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...otherProps}
     >
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M14 2H0V0H14V2Z" fill={color} />
+      <path fillRule="evenodd" clipRule="evenodd" d="M14 2H0V0H14V2Z" fill={color} />
     </svg>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-// import { action } from '@storybook/addon-actions';
+import { action } from '@storybook/addon-actions';
 
 import BiFilter from './index';
 
@@ -27,6 +27,7 @@ storiesOf('Components/molecules/BiFilter', module)
   <Wrapper
     title="Commodity"
     items={items}
+    onChange={action('onChange')}
   />
 )).add('limit 5 items', () => (
   <Wrapper
@@ -54,5 +55,13 @@ storiesOf('Components/molecules/BiFilter', module)
         value: "Oranges",
       }
     ]}
+    onChange={action('onChange')}
+  />
+)).add('default select all', () => (
+  <Wrapper
+    title="Commodity"
+    items={items}
+    onChange={action('onChange')}
+    selectAll
   />
 ));

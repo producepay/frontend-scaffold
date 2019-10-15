@@ -12,7 +12,7 @@ const SvgPlus = props => {
       xmlns="http://www.w3.org/2000/svg"
       {...otherProps}
     >
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill={color} />
+      <path fillRule="evenodd" clipRule="evenodd" d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill={color} />
     </svg>
   );
 };
