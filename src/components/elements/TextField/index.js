@@ -5,11 +5,14 @@ import cx from 'classnames';
 import './text-field.css';
 
 function TextField(props) {
-  const { className, innerRef, type, ...rest } = props;
+  const { className, innerRef, type, size, rounded, ...rest } = props;
 
   const computedClassName = cx(
     className,
-    'textfield w-full border rounded outline-none focus:border-blue-400',
+    `textfield w-full border outline-none focus:border-blue-400 textfield-${size} text-${size}`,
+    {
+      'rounded': rounded,
+    }
   );
 
   const inputProps = { className: computedClassName, ...rest };
@@ -25,11 +28,15 @@ TextField.propTypes = {
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
   innerRef: PropTypes.object,
+  size: PropTypes.oneOf(['sm', 'base']),
+  rounded: PropTypes.bool,
 };
 
 TextField.defaultProps = {
   type: 'text',
   innerRef: null,
+  size: 'base',
+  rounded: true,
 };
 
 export default React.memo(TextField);

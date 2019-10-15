@@ -1,6 +1,12 @@
 .textfield {
-  padding: 6px 10px;
-  font-size: 15px;
   letter-spacing: 0.2px;
+}
+
+.textfield-base {
+  padding: 6px 10px;
   height: 40px;
+}
+
+.textfield-sm {
+  padding: 4px;
 }
