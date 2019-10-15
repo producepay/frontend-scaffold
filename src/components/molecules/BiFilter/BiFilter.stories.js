@@ -14,8 +14,7 @@ const items = [{
 }, {
   label: "Tomatoes",
   value: "Tomatoes",
-}
-];
+}];
 
 const Wrapper = (filterProps) => (
   <div className="w-56">
@@ -28,5 +27,32 @@ storiesOf('Components/molecules/BiFilter', module)
   <Wrapper
     title="Commodity"
     items={items}
+  />
+)).add('limit 5 items', () => (
+  <Wrapper
+    title="Commodity"
+    items={[
+      ...items,
+      {
+        label: "Bell Peppers",
+        value: "Bell Peppers",
+      }, {
+        label: "Squash",
+        value: "Squash",
+      }, {
+        label: "Strawberries",
+        value: "Strawberries",
+      },
+      {
+        label: "Potatoes",
+        value: "Potatoes",
+      }, {
+        label: "Celery",
+        value: "Celery",
+      }, {
+        label: "Oranges",
+        value: "Oranges",
+      }
+    ]}
   />
 ));
