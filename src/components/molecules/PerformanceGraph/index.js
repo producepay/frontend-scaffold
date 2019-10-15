@@ -43,7 +43,7 @@ function PerformanceGraph({ thisYearLineItems, lastYearLineItems, type, dateInte
       yFormat: (value) => `${formatLoads(value)} packages`,
     };
   }
-  console.log(specificGraphProps);
+
   return (
     <React.Fragment>
       <h3 className='mb-6 text-lg lg:text-xl font-semibold'>{title}</h3>

@@ -18,6 +18,9 @@ function groupLineItemsByWeek(lineItems) {
   return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getIsoWeek(item.groupedValue));
 }
 
+const generateMonthlyTickValues = () => _.range(11);
+const generateWeeklyTickValues = () => _.range(1, 53);
+
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   return {
     id: lineSeriesKey,
@@ -26,12 +29,11 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
 }
 
 function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
-  console.log(yAxisField, lineSeriesConfig, xInterval, rest);
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
 
-  const tickValues = xInterval === "month" ? _.range(11) : _.range(1, 53);
+  const tickValues = xInterval === "month" ? generateMonthlyTickValues() : generateWeeklyTickValues();
 
   let commonLineGraphProps = {
     data: graphData,
