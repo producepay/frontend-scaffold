@@ -64,4 +64,27 @@ storiesOf('Components/molecules/BiFilter', module)
     onChange={action('onChange')}
     selectAll
   />
+)).add('with subitems', () => (
+  <Wrapper
+    title="Commodity"
+    items={[
+      ...items,
+      {
+        label: "Apples",
+        value: "Apples",
+        subItems: [
+          {
+            label: "Fuji",
+            value: "Fuji",
+          },
+          {
+            label: "Golden",
+            value: "Golden",
+          },
+        ],
+      },
+    ]}
+    onChange={action('onChange')}
+    selectAll
+  />
 ));

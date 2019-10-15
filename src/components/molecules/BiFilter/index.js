@@ -11,6 +11,8 @@ import Checkbox from '../../elements/Checkbox';
 import PlusIcon from '../../icons/Plus';
 import MinusIcon from '../../icons/Minus';
 
+import BiFilterItem from './item';
+
 const CHEVRON_COLOR = "#a0aec0";
 
 function BiFilter(props) {
@@ -57,26 +59,21 @@ function BiFilter(props) {
             />
             <ul>
               {finalItems.map(item => (
-                <li key={item.value} className="my-1">
-                  <div className="flex items-center">
-                    <Checkbox
-                      className="mr-2"
-                      value={item.value}
-                      onClick={(e) => {
-                        let values = [];
-                        if (_.includes(selected, e.target.value)) {
-                          values = _.without(selected, e.target.value);
-                        } else {
-                          values = _.concat(selected, e.target.value);
-                        }
-                        setSelected(values);
-                        onChange(values);
-                      }}
-                      checked={_.includes(selected, item.value)}
-                    />
-                    <label htmlFor={item.value} className="text-sm cursor-pointer">{item.label}</label>
-                  </div>
-                </li>
+                <BiFilterItem
+                  key={item.value}
+                  item={item}
+                  onClick={(e) => {
+                    let values = [];
+                    if (_.includes(selected, e.target.value)) {
+                      values = _.without(selected, e.target.value);
+                    } else {
+                      values = _.concat(selected, e.target.value);
+                    }
+                    setSelected(values);
+                    onChange(values);
+                  }}
+                  checked={_.includes(selected, item.value)}
+                />
               ))}
             </ul>
             {
