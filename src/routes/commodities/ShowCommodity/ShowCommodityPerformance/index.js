@@ -1,9 +1,9 @@
 import React from 'react';
 import gql from 'graphql-tag';
 
-import ShowCustomerPerformanceView from './view';
+import ShowCommodityPerformanceView from './view';
 
-const FETCH_SHOW_CUSTOMER_DATA = gql`
+const FETCH_SHOW_COMMODITY_DATA = gql`
   fragment groupedGraphData on GroupedSalesOrderLineItem {
     totalSaleAmount
     shipmentQuantity
@@ -32,27 +32,29 @@ const FETCH_SHOW_CUSTOMER_DATA = gql`
     ) {
       ...groupedGraphData
     }
-    commodityRankingData: groupedSalesOrderLineItems(
-      groupBy: "erpProducts.commodityName",
+    customerRankingData: groupedSalesOrderLineItems(
+      groupBy: "erpCustomers.name",
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
+      maxedFields: ["erpCustomers.id"],
       filters: $filters
     ) {
       groupedValue
+      erpCustomersId
       shipmentQuantity
       totalSaleAmount
     }
   }
 `;
 
-function ShowCustomerPerformance(props) {
-  const { customerId } = props.match.params;
+function ShowCommodityPerformance(props) {
+  const { commodityName } = props.match.params;
 
   return (
-    <ShowCustomerPerformanceView
-      graphqlQuery={FETCH_SHOW_CUSTOMER_DATA}
-      graphqlFilters={{ customerId }}
+    <ShowCommodityPerformanceView
+      graphqlQuery={FETCH_SHOW_COMMODITY_DATA}
+      graphqlFilters={{ commodityName }}
     />
   );
 }
 
-export default React.memo(ShowCustomerPerformance);
+export default React.memo(ShowCommodityPerformance);

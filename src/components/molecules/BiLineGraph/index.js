@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import getMonth from 'date-fns/get_month';
 import getIsoWeek from 'date-fns/get_iso_week';
-import LineGraph from '../../components/nivo/LineGraph';
-import { monthNumToName } from '../../helpers/dates';
-import { formatWeek } from '../../helpers/format';
-import { takeNth } from '../../helpers/lodash';
 
-function filterInvalidLineItems(lineItems) {
-  return lineItems.filter(item => item.groupedValue);
-}
+import { monthNumToName } from '../../../helpers/dates';
+import { formatWeek } from '../../../helpers/format';
+import { takeNth } from '../../../helpers/lodash';
+
+import LineGraph from '../../nivo/LineGraph';
 
 function groupLineItemsByMonth(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => getMonth(item.groupedValue));
+  return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getMonth(item.groupedValue));
 }
 
 function groupLineItemsByWeek(lineItems) {
-  return _.groupBy(filterInvalidLineItems(lineItems), item => getIsoWeek(item.groupedValue));
+  return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getIsoWeek(item.groupedValue));
 }
+
+const generateMonthlyTickValues = () => _.range(11);
+const generateWeeklyTickValues = () => _.range(1, 53);
 
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   return {
@@ -27,15 +28,7 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function generateMonthlyTickValues() {
-  return _.range(11);
-}
-
-function generateWeeklyTickValues() {
-  return _.range(1, 53);
-}
-
-function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
@@ -99,7 +92,7 @@ function SummaryGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
   );
 }
 
-SummaryGraph.propTypes = {
+BiLineGraph.propTypes = {
   yAxisField: PropTypes.string.isRequired, // fieldName of sales order line item that we will sum on the y axis
   lineSeriesConfig: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -112,8 +105,8 @@ SummaryGraph.propTypes = {
   ]),
 }
 
-SummaryGraph.defaultProps = {
+BiLineGraph.defaultProps = {
   xInterval: 'month',
 }
 
-export default React.memo(SummaryGraph);
+export default React.memo(BiLineGraph);

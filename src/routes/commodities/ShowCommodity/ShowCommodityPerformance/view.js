@@ -2,7 +2,7 @@ import React from 'react';
 
 import PerformanceDisplay from '../../../../components/organisms/PerformanceDisplay';
 
-function ShowCustomerPerformanceView(props) {
+function ShowCommodityPerformanceView(props) {
   const { graphqlQuery, graphqlFilters } = props;
 
   return (
@@ -15,4 +15,4 @@ function ShowCustomerPerformanceView(props) {
   );
 }
 
-export default React.memo(ShowCustomerPerformanceView);
+export default React.memo(ShowCommodityPerformanceView);

@@ -3,9 +3,9 @@ import React from 'react';
 import ShowCustomerView from './view';
 
 function ShowCustomer(props) {
-  const { customerName } = props.match.params;
+  const { customerId } = props.match.params;
 
-  return <ShowCustomerView customerName={customerName} />
+  return <ShowCustomerView customerId={customerId} />
 }
 
 export default React.memo(ShowCustomer);
