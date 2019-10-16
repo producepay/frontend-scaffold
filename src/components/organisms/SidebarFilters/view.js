@@ -18,6 +18,7 @@ function SidebarView(props) {
               <BiFilter
                 title={filter.title}
                 items={filter.items}
+                onChange={filter.onChange}
                 selectAll
               />
             </div>

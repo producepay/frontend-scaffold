@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
 import { gqlF } from '../../../helpers/dates';
+import { useFilters } from '../../../contexts/filters';
 
 import PerformanceDisplayView from './view';
 
@@ -17,6 +18,7 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const [thisYearEndDate, setThisYearEndDate] = useState(endOfYear(new Date()));
   const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
   const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
+  const { queryFilters } = useFilters();
 
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
@@ -25,11 +27,13 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
         startDate: gqlF(thisYearStartDate),
         endDate: gqlF(thisYearEndDate),
         ...graphqlFilters,
+        ...queryFilters,
       },
       lastYearSalesOrderLineItemFilters: {
         startDate: gqlF(lastYearStartDate),
         endDate: gqlF(lastYearEndDate),
         ...graphqlFilters,
+        ...queryFilters,
       },
       filters: graphqlFilters,
     },

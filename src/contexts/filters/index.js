@@ -27,9 +27,9 @@ const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
     case 'COMMODITIES':
       return { ...state, commodityIdentifier: action.values };
-    case 'SIZES':
+    case 'SIZE':
       return { ...state, sizeIdentifier: action.values };
-    case 'PACKAGINGS':
+    case 'PACKAGING':
       return { ...state, packagingIdentifier: action.values };
     case 'INIT': {
       return action.filter;
@@ -39,11 +39,12 @@ const graphqlFiltersReducer = (state, action) => {
   }
 };
 
-function generateFilter(collection, title, key, label) {
+function generateFilter(collection, title, key, label, dispatch) {
   return {
     title,
     items: _.uniqBy(collectionAsOptions(collection, { key, label }), 'value'),
     key,
+    onChange: (values) => dispatch({ type: _.toUpper(title), values }),
   };
 }
 
@@ -66,16 +67,21 @@ function FiltersProvider(props) {
             result.push({
               value: commodityIdentifier,
               label: _.get(erpProducts, '[0].commodityName'),
-              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName').items,
+              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName', () => {}).items,
             });
             return result;
           }, []);
-        currentFilters.push({ title: "Commodities", items: commoditiesWithSubVarieties, key: 'commodityIdentifier' });
+        currentFilters.push({
+          title: "Commodities",
+          items: commoditiesWithSubVarieties,
+          key: 'commodityIdentifier',
+          onChange: (values) => dispatch({ type: "COMMODITIES", values }),
+        });
       }
     
       // Size
-      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName"));
-      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName"));
+      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch));
+      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch));
       setFilters(currentFilters);
       dispatch({ type: "INIT", filter: _.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')) });
     }
@@ -84,7 +90,7 @@ function FiltersProvider(props) {
   return (
     <FiltersContext.Provider value={{
       filters,
-      graphqlFilters: state,
+      queryFilters: state,
       dispatch,
       loading,
     }}>
