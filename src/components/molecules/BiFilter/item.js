@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { optionValueWithSubItemsType } from './helpers';
+import { optionValueWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
 import { textSearchCompare } from '../../../helpers/common';
 import Checkbox from '../../elements/Checkbox';
 import ChevronUp from '../../icons/ChevronUp';
@@ -48,18 +48,18 @@ function BiFilterItem(props) {
 
   const onParentItemClicked = useCallback((e) => {
     if (_.includes(parentItems, e.target.value)) {
-      dispatch({ type: "REMOVE_PARENT", parentValue: e.target.value })
+      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_PARENT, parentValue: e.target.value })
     } else {
-      dispatch({ type: "ADD_PARENT", parentValue: e.target.value, children: _.map(filteredSubItems, 'value') });
+      dispatch({ type: FILTER_ACTION_TYPES.ADD_PARENT, parentValue: e.target.value, children: _.map(filteredSubItems, 'value') });
     }
   }, [dispatch, parentItems, filteredSubItems]);
 
   const onChildItemClicked = useCallback((e) => {
     const childItems = filterState[item.value];
     if (_.includes(childItems, e.target.value)) {
-      dispatch({ type: "REMOVE_CHILD", parentValue: item.value, childValue: e.target.value })
+      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_CHILD, parentValue: item.value, childValue: e.target.value })
     } else {
-      dispatch({ type: "ADD_CHILD", parentValue: item.value, childValue: e.target.value });
+      dispatch({ type: FILTER_ACTION_TYPES.ADD_CHILD, parentValue: item.value, childValue: e.target.value });
     }
   }, [dispatch, filterState, item.value]);
 

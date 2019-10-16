@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
 
-import { optionsWithSubItemsType } from './helpers';
+import { optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
 import { textSearchCompare } from '../../../helpers/common';
 import TextField from '../../elements/TextField';
 import Button from '../../elements/Button';
@@ -16,18 +16,18 @@ const ICON_COLOR = "#a0aec0";
 
 const biFilterReducer = (state, action) => {
   switch (action.type) {
-    case 'ADD_PARENT':
+    case FILTER_ACTION_TYPES.ADD_PARENT:
       return { ...state, [action.parentValue]: action.children };
-    case 'REMOVE_PARENT': {
+    case FILTER_ACTION_TYPES.REMOVE_PARENT: {
       return _.omit(state, action.parentValue);
     }
-    case 'ADD_CHILD':
+    case FILTER_ACTION_TYPES.ADD_CHILD:
       if (_.has(state, action.parentValue)) {
         return { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
       } else {
         return { ...state, [action.parentValue]: [action.childValue] }
       }
-    case 'REMOVE_CHILD':
+    case FILTER_ACTION_TYPES.REMOVE_CHILD:
       const childItems = _.without(state[action.parentValue], action.childValue);
       if (childItems.length) {
         return { ...state, [action.parentValue]: childItems };
