@@ -1,8 +1,13 @@
 import React from 'react';
+import LoadingSpinner from '../../elements/LoadingSpinner';
 import BiFilter from '../../molecules/BiFilter';
 
 function SidebarView(props) {
-  const { filters } = props;
+  const { filters, loading } = props;
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <React.Fragment>
