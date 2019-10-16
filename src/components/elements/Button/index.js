@@ -5,10 +5,9 @@ import cx from 'classnames';
 import './button.css';
 
 const Button = React.forwardRef((props, ref) => {
-  const { className, variant, color, label, borderRadius, children, disabled, ...rest } = props;
+  const { className, variant, color, label, children, disabled, ...rest } = props;
 
-  const borderRadiusClass = borderRadius === '' ? 'rounded' : `rounded-${borderRadius}`;
-  const computedClassName = cx(className, 'button no-underline', borderRadiusClass, {
+  const computedClassName = cx(className, 'button no-underline rounded-full', {
     'py-2 px-4': ['solid', 'outlined'].includes(variant),
     'text-gray-100 bg-primary': color === 'primary' && variant === 'solid',
     'bg-gray-400 text-gray-800': color === 'secondary' && variant === 'solid',
@@ -32,7 +31,6 @@ const Button = React.forwardRef((props, ref) => {
 Button.propTypes = {
   variant: PropTypes.oneOf(['solid', 'outlined', 'icon', 'text']),
   color: PropTypes.oneOf(['primary', 'secondary']),
-  borderRadius: PropTypes.oneOf(['', 'sm', 'lg', 'full', 'none']),
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   children: PropTypes.node,
 };
@@ -42,7 +40,6 @@ Button.defaultProps = {
   variant: 'solid',
   label: '',
   children: null,
-  borderRadius: '',
 };
 
 export default React.memo(Button);

@@ -14,11 +14,6 @@ import './datepicker.css';
 
 export const DEFAULT_PRESETS = [
   {
-    label: "Today",
-    start: new Date(),
-    end: new Date(),
-  },
-  {
     label: "Yesterday",
     start: subDays(new Date(), 1),
     end: subDays(new Date(), 1),
