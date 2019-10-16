@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
 
-import { optionsWithSubItemsType } from '../../../helpers/types';
+import { optionsWithSubItemsType } from './helpers';
 import { textSearchCompare } from '../../../helpers/common';
 import TextField from '../../elements/TextField';
 import Button from '../../elements/Button';

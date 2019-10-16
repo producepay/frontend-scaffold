@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { optionValueWithSubItemsType } from '../../../helpers/types';
+import { optionValueWithSubItemsType } from './helpers';
 import { textSearchCompare } from '../../../helpers/common';
 import Checkbox from '../../elements/Checkbox';
 import ChevronUp from '../../icons/ChevronUp';
@@ -48,7 +48,7 @@ function BiFilterItem(props) {
   const filteredSubItems = _.filter(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label));
 
   return (
-    <li className="my-1">
+    <li className="my-2">
       <div className="flex items-center justify-between">
         <ItemWithCheckbox
           item={item}
@@ -67,7 +67,7 @@ function BiFilterItem(props) {
         hasSubItems && showSubItems ? (
           <ul className="pl-4">
             {_.map(filteredSubItems, (subItem) => (
-              <li className="my-1" key={subItem.value}>
+              <li className="my-2" key={subItem.value}>
                 <ItemWithCheckbox
                   item={subItem}
                   onClick={(e) => {
