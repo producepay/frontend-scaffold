@@ -50,7 +50,7 @@ function ShowCustomerPerformance(props) {
   return (
     <ShowCustomerPerformanceView
       graphqlQuery={FETCH_SHOW_CUSTOMER_DATA}
-      graphqlFilters={{ customerId }}
+      graphqlFilters={{ erpCustomerId: customerId }}
     />
   );
 }

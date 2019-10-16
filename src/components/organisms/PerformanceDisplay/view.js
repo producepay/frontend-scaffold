@@ -50,7 +50,6 @@ function PerformanceDisplayView({
               format="MMM DD YYYY"
               inputProps={{
                 className: "w-56",
-                borderRadius: 'full',
               }}
               alignRight
               showWeekNumbers

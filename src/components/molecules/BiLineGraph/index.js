@@ -46,25 +46,11 @@ function generateWeeklyTickValues(minDate, maxDate) {
 
 function numTickValuesToTake(tickValues, device) {
   const numTicks = tickValues.length;
-  if (device === 'mobile') {
-    if (numTicks <= 12) {
-      return 6;
-    } else {
-      return 9;
-    }
-  }
-  if (device === 'tablet') {
-    if (numTicks <= 12) {
-      return 2;
-    } else {
-      return 7;
-    }
-  }
-  // desktop
-  if (numTicks <= 12) {
-    return 1;
-  } else {
-    return 5;
+
+  switch (device) {
+    case 'mobile': return (numTicks <= 12) ? 6 : 9;
+    case 'tablet': return (numTicks <= 12) ? 2 : 7;
+    default: return (numTicks <= 12) ? 1 : 5; // desktop
   }
 }
 
