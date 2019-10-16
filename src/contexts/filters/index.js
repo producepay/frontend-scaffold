@@ -101,12 +101,11 @@ function FiltersProvider(props) {
           key: 'commodityIdentifier',
           onChange: (values) => dispatch({ type: "COMMODITIES", values }),
           onSubItemsChange: (obj) => {
-            console.log('subItemsChange', obj);
             const commodityIdentifier = _.head(_.keys(obj));
             dispatch({
               type: "VARIETIES",
               commodities: _.uniq([ ...state.commodityIdentifier, commodityIdentifier ]),
-              values: obj[commodityIdentifier],
+              values: _.uniq([ ...state.varietyIdentifier, ...obj[commodityIdentifier] ]),
             })
           }
         });
@@ -116,9 +115,15 @@ function FiltersProvider(props) {
       currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch));
       currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch));
       setFilters(currentFilters);
-      dispatch({ type: "INIT", filter: _.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')) });
+      dispatch({
+        type: "INIT",
+        filter: {
+          ..._.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
+          "varietyIdentifier": _.uniq(_.map(data.erpProducts, 'varietyIdentifier')),
+        },
+      });
     }
-  }, [commodityName, data, state.commodityIdentifier]);
+  }, [commodityName, data, state.commodityIdentifier, state.varietyIdentifier]);
 
   return (
     <FiltersContext.Provider value={{
