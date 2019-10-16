@@ -19,6 +19,7 @@ function SidebarView(props) {
                 title={filter.title}
                 items={filter.items}
                 onChange={filter.onChange}
+                onSubItemsChange={filter.onSubItemsChange}
                 selectAll
               />
             </div>

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import './checkbox.css';
 
 function Checkbox(props) {
-  const { className, value, size, onClick, checked } = props;
+  const { className, value, name, size, onClick, checked } = props;
 
   const wrapperClassName = cx(
     'checkbox-wrapper block relative cursor-pointer',
@@ -25,14 +25,14 @@ function Checkbox(props) {
   );
 
   return (
-    <label className={wrapperClassName} htmlFor={value}>
+    <label className={wrapperClassName} htmlFor={name || value}>
       <input
         type="checkbox"
         value={value}
         checked={checked}
         onChange={(e) => { e.persist(); onClick(e); }}
         className="absolute cursor-pointer opacity-0"
-        id={value}
+        id={name || value}
       />
       <span className={checkboxSpanClassName}></span>
     </label>
@@ -45,11 +45,13 @@ Checkbox.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onClick: PropTypes.func.isRequired,
   checked: PropTypes.bool.isRequired,
+  name: PropTypes.string,
 };
 
 Checkbox.defaultProps = {
   className: '',
   size: 'small',
+  name: null,
 };
 
 export default React.memo(Checkbox);

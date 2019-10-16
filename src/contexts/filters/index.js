@@ -32,6 +32,9 @@ const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
     case 'COMMODITIES':
       return { ...state, commodityIdentifier: action.values };
+    case 'VARIETIES': {
+      return { ...state, commodityIdentifier: action.commodities, varietyIdentifier: action.values }
+    }
     case 'SIZE':
       return { ...state, sizeIdentifier: action.values };
     case 'PACKAGING':
@@ -68,7 +71,7 @@ function FiltersProvider(props) {
   const { data, loading } = useQuery(FETCH_FILTER_DATA, {});
   const [filters, setFilters] = useState([]); // filters is a config array to be passed to the view for render
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
-    thisYearStartDate: startOfYear(new Date()),
+    thisYearStartDate: startOfYear(new Date()), // initial dates
     thisYearEndDate: endOfYear(new Date()),
     lastYearStartDate: startOfYear(subISOYears(new Date(), 1)),
     lastYearEndDate: endOfYear(subISOYears(new Date(), 1)),
@@ -97,6 +100,15 @@ function FiltersProvider(props) {
           items: commoditiesWithSubVarieties,
           key: 'commodityIdentifier',
           onChange: (values) => dispatch({ type: "COMMODITIES", values }),
+          onSubItemsChange: (obj) => {
+            console.log('subItemsChange', obj);
+            const commodityIdentifier = _.head(_.keys(obj));
+            dispatch({
+              type: "VARIETIES",
+              commodities: _.uniq([ ...state.commodityIdentifier, commodityIdentifier ]),
+              values: obj[commodityIdentifier],
+            })
+          }
         });
       }
     
@@ -106,7 +118,7 @@ function FiltersProvider(props) {
       setFilters(currentFilters);
       dispatch({ type: "INIT", filter: _.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')) });
     }
-  }, [commodityName, data]);
+  }, [commodityName, data, state.commodityIdentifier]);
 
   return (
     <FiltersContext.Provider value={{

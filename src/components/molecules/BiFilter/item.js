@@ -11,15 +11,16 @@ import { onItemClicked } from './index';
 
 const CHEVRON_COLOR = "#a0aec0";
 
-const ItemWithCheckbox = ({ item, onClick, checked }) => (
+const ItemWithCheckbox = ({ item, onClick, checked, name }) => (
   <div className="flex items-center">
     <Checkbox
       className="mr-2"
       value={item.value}
       onClick={onClick}
       checked={checked}
+      name={name}
     />
-    <label htmlFor={item.value} className="text-sm cursor-pointer">{item.label}</label>
+    <label htmlFor={name} className="text-sm cursor-pointer">{item.label}</label>
   </div>
 )
 
@@ -30,8 +31,7 @@ function BiFilterItem(props) {
     checked,
     onSubItemClicked,
     selectAll,
-    searchTerm,
-    
+    searchTerm,   
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
@@ -54,6 +54,7 @@ function BiFilterItem(props) {
           item={item}
           onClick={onClick}
           checked={checked}
+          name={item.value}
         />
         {
           hasSubItems ? (
@@ -70,6 +71,7 @@ function BiFilterItem(props) {
               <li className="my-2" key={subItem.value}>
                 <ItemWithCheckbox
                   item={subItem}
+                  name={`${item.value}-${subItem.value}`}
                   onClick={(e) => {
                     const values = onItemClicked(e.target.value, selectedSubItems, setSelectedSubItems);
                     onSubItemClicked({ [item.value]: values });
