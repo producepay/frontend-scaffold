@@ -18,7 +18,7 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
   const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
 
-  const { data, loading, error, refetch } = useQuery(graphqlQuery, {
+  const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
       groupByInterval: dateInterval,
       thisYearSalesOrderLineItemFilters: {
@@ -38,10 +38,9 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const handleDateRangeSelected = useCallback((from, to) => {
     setThisYearStartDate(setYear(from, getYear(new Date())));
     setThisYearEndDate(setYear(to, getYear(new Date())));
-    setLastYearStartDate(setYear(from, getYear(subISOYears(new Date(), 1))));
-    setLastYearEndDate(setYear(to, getYear(subISOYears(new Date(), 1))));
-    refetch();
-  }, [setThisYearStartDate, setThisYearEndDate, setLastYearStartDate, setLastYearEndDate, refetch]);
+    setLastYearStartDate(setYear(from, getYear(new Date()) - 1));
+    setLastYearEndDate(setYear(to, getYear(new Date()) - 1));
+  }, [setThisYearStartDate, setThisYearEndDate, setLastYearStartDate, setLastYearEndDate]);
 
   return (
     <PerformanceDisplayView
