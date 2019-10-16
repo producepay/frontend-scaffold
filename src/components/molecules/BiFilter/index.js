@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
@@ -14,16 +14,30 @@ import BiFilterItem from './item';
 
 const ICON_COLOR = "#a0aec0";
 
-export function onItemClicked(value, selectedItems, setSelectedItems) {
-  let values = [];
-  if (_.includes(selectedItems, value)) {
-    values = _.without(selectedItems, value);
-  } else {
-    values = _.concat(selectedItems, value);
+const biFilterReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_PARENT':
+      return { ...state, [action.parentValue]: action.children };
+    case 'REMOVE_PARENT': {
+      return _.omit(state, action.parentValue);
+    }
+    case 'ADD_CHILD':
+      if (_.has(state, action.parentValue)) {
+        return { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
+      } else {
+        return { ...state, [action.parentValue]: [action.childValue] }
+      }
+    case 'REMOVE_CHILD':
+      const childItems = _.without(state[action.parentValue], action.childValue);
+      if (childItems.length) {
+        return { ...state, [action.parentValue]: childItems };
+      } else {
+        return _.omit(state, action.parentValue); // uncheck parent item if no children selected
+      }
+    default:
+      throw new Error();
   }
-  setSelectedItems(values);
-  return values;
-}
+};
 
 function BiFilter(props) {
   const {
@@ -32,7 +46,6 @@ function BiFilter(props) {
     items,
     limit,
     onChange,
-    onSubItemsChange,
     selectAll,
     showSearch,
   } = props;
@@ -40,7 +53,7 @@ function BiFilter(props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showMore, setShowMore] = useState(false);
-  const [selected, setSelected] = useState(selectAll ? _.map(items, 'value') : []);
+  const didMountRef = useRef(false);
 
   const wrapperClassName = cx(
     "w-full",
@@ -54,6 +67,24 @@ function BiFilter(props) {
     )
   );
   const finalItems = showMore ? filteredItems : _.take(filteredItems, limit);
+
+  const defaultState = selectAll ? _.reduce(_.keyBy(finalItems, 'value'),
+    (result, item, parentValue) => {
+      result[parentValue] = _.get(item, 'subItems', []).length > 0 ? _.map(item.subItems, 'value') : [];
+      return result;
+    },
+  {}) : {};
+  const [state, dispatch] = useReducer(biFilterReducer, defaultState);
+
+  useEffect(() => {
+    if (didMountRef.current) {
+      onChange(state);
+    }
+  }, [state, onChange]);
+
+  useEffect(() => {
+    didMountRef.current = true;
+  }, []);
 
   return (
     <div className={wrapperClassName}>
@@ -81,14 +112,9 @@ function BiFilter(props) {
                 <BiFilterItem
                   key={item.value}
                   item={item}
-                  onClick={(e) => {
-                    const values = onItemClicked(e.target.value, selected, setSelected);
-                    onChange(values);
-                  }}
                   searchTerm={searchTerm}
-                  checked={_.includes(selected, item.value)}
-                  onSubItemClicked={onSubItemsChange}
-                  selectAll
+                  dispatch={dispatch}
+                  filterState={state}
                 />
               ))}
             </ul>
@@ -116,7 +142,6 @@ BiFilter.propTypes = {
   showSearch: PropTypes.bool,
   limit: PropTypes.number,
   onChange: PropTypes.func,
-  onSubItemsChange: PropTypes.func,
   selectAll: PropTypes.bool,
 };
 
@@ -125,7 +150,6 @@ BiFilter.defaultProps = {
   showSearch: true,
   limit: 5,
   onChange: () => {},
-  onSubItemsChange: () => {},
   selectAll: false,
 };
 

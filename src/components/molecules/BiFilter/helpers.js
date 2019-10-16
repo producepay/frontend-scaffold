@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 
+export const valueDef = PropTypes.oneOfType([PropTypes.string, PropTypes.number]);
+
 const optionValueDef = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: valueDef.isRequired,
 };
 
 export const optionValueType = PropTypes.shape({...optionValueDef});

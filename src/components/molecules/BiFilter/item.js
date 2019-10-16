@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -7,7 +7,6 @@ import { textSearchCompare } from '../../../helpers/common';
 import Checkbox from '../../elements/Checkbox';
 import ChevronUp from '../../icons/ChevronUp';
 import ChevronDown from '../../icons/ChevronDown';
-import { onItemClicked } from './index';
 
 const CHEVRON_COLOR = "#a0aec0";
 
@@ -27,17 +26,14 @@ const ItemWithCheckbox = ({ item, onClick, checked, name }) => (
 function BiFilterItem(props) {
   const {
     item,
-    onClick,
-    checked,
-    onSubItemClicked,
-    selectAll,
-    searchTerm,   
+    filterState,
+    dispatch,
+    searchTerm,
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
 
   const [showSubItems, setShowSubItems] = useState(false);
-  const [selectedSubItems, setSelectedSubItems] = useState(selectAll && hasSubItems ? _.map(item.subItems, 'value') : []);
 
   useEffect(() => {
     if (searchTerm !== '' && _.some(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label))) {
@@ -45,15 +41,35 @@ function BiFilterItem(props) {
     }
   }, [setShowSubItems, searchTerm, item.subItems]);
 
-  const filteredSubItems = _.filter(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label));
+  const filteredSubItems = _.filter(item.subItems, (subItem) =>
+    textSearchCompare(searchTerm, item.label) || textSearchCompare(searchTerm, subItem.label)
+  );
+  const parentItems = _.keys(filterState);
+
+  const onParentItemClicked = useCallback((e) => {
+    if (_.includes(parentItems, e.target.value)) {
+      dispatch({ type: "REMOVE_PARENT", parentValue: e.target.value })
+    } else {
+      dispatch({ type: "ADD_PARENT", parentValue: e.target.value, children: _.map(filteredSubItems, 'value') });
+    }
+  }, [dispatch, parentItems, filteredSubItems]);
+
+  const onChildItemClicked = useCallback((e) => {
+    const childItems = filterState[item.value];
+    if (_.includes(childItems, e.target.value)) {
+      dispatch({ type: "REMOVE_CHILD", parentValue: item.value, childValue: e.target.value })
+    } else {
+      dispatch({ type: "ADD_CHILD", parentValue: item.value, childValue: e.target.value });
+    }
+  }, [dispatch, filterState, item.value]);
 
   return (
     <li className="my-2">
       <div className="flex items-center justify-between">
         <ItemWithCheckbox
           item={item}
-          onClick={onClick}
-          checked={checked}
+          onClick={onParentItemClicked}
+          checked={_.includes(parentItems, item.value)}
           name={item.value}
         />
         {
@@ -72,11 +88,8 @@ function BiFilterItem(props) {
                 <ItemWithCheckbox
                   item={subItem}
                   name={`${item.value}-${subItem.value}`}
-                  onClick={(e) => {
-                    const values = onItemClicked(e.target.value, selectedSubItems, setSelectedSubItems);
-                    onSubItemClicked({ [item.value]: values });
-                  }}
-                  checked={_.includes(selectedSubItems, subItem.value)}
+                  onClick={onChildItemClicked}
+                  checked={_.includes(filterState[item.value], subItem.value)}
                 />
               </li>
             ))}
@@ -89,11 +102,9 @@ function BiFilterItem(props) {
 
 BiFilterItem.propTypes = {
   item: optionValueWithSubItemsType.isRequired,
-  onClick: PropTypes.func.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onSubItemClicked: PropTypes.func,
-  selectAll: PropTypes.bool.isRequired,
   searchTerm: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  filterState: PropTypes.object.isRequired,
 };
 
 BiFilterItem.defaultProps = {
