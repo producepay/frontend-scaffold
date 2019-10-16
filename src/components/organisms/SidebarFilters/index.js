@@ -26,6 +26,13 @@ const FETCH_FILTER_DATA = gql`
   }
 `;
 
+function generateFilter(collection, title, key, label) {
+  return {
+    title,
+    items: _.uniqBy(collectionAsOptions(collection, { key, label }), 'value'),
+  };
+}
+
 function SidebarFilters(props) {
   const { customerId, commodityName } = props.match.params;
 
@@ -43,7 +50,7 @@ function SidebarFilters(props) {
         result.push({
           value: commodityIdentifier,
           label: _.get(erpProducts, '[0].commodityName'),
-          subItems: _.uniqBy(collectionAsOptions(erpProducts, { key: 'varietyIdentifier', label: 'varietyName' }), 'value'),
+          subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName').items,
         });
         return result;
       }, []);
@@ -51,16 +58,8 @@ function SidebarFilters(props) {
   }
 
   // Size
-  filters.push({
-    title: "Size",
-    items: _.uniqBy(collectionAsOptions(data.erpProducts, { key: 'sizeIdentifier', label: 'sizeName' }), 'value'),
-  });
-
-  // Packaging
-  filters.push({
-    title: "Packaging",
-    items: _.uniqBy(collectionAsOptions(data.erpProducts, { key: 'packagingIdentifier', label: 'packagingName' }), 'value'),
-  });
+  filters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName"));
+  filters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName"));
 
   return (
     <SidebarView filters={filters} />
