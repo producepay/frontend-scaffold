@@ -18,8 +18,6 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
   const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
 
-  console.log(graphqlFilters);
-
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
       groupByInterval: dateInterval,
