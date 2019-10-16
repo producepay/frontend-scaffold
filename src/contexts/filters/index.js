@@ -1,6 +1,11 @@
-import React, { useState, useReducer, useEffect, useContext } from 'react';
+import React, { useState, useReducer, useEffect, useContext, useCallback } from 'react';
 import gql from 'graphql-tag';
 import _ from 'lodash';
+import subISOYears from 'date-fns/sub_iso_years';
+import startOfYear from 'date-fns/start_of_year';
+import endOfYear from 'date-fns/end_of_year';
+import setYear from 'date-fns/set_year';
+import getYear from 'date-fns/get_year';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
@@ -31,8 +36,14 @@ const graphqlFiltersReducer = (state, action) => {
       return { ...state, sizeIdentifier: action.values };
     case 'PACKAGING':
       return { ...state, packagingIdentifier: action.values };
+    case 'THIS_YEAR_DATE_RANGE': {
+      return { ...state, thisYearStartDate: action.startDate, thisYearEndDate: action.endDate };
+    }
+    case 'LAST_YEAR_DATE_RANGE': {
+      return { ...state, lastYearStartDate: action.startDate, lastYearEndDate: action.endDate };
+    }
     case 'INIT': {
-      return action.filter;
+      return { ...state, ...action.filter };
     }
     default:
       throw new Error();
@@ -56,7 +67,17 @@ function FiltersProvider(props) {
 
   const { data, loading } = useQuery(FETCH_FILTER_DATA, {});
   const [filters, setFilters] = useState([]); // filters is a config array to be passed to the view for render
-  const [state, dispatch] = useReducer(graphqlFiltersReducer, {}); // contains graphql filters
+  const [state, dispatch] = useReducer(graphqlFiltersReducer, {
+    thisYearStartDate: startOfYear(new Date()),
+    thisYearEndDate: endOfYear(new Date()),
+    lastYearStartDate: startOfYear(subISOYears(new Date(), 1)),
+    lastYearEndDate: endOfYear(subISOYears(new Date(), 1)),
+  });
+
+  const handleDateRangeSelected = useCallback((from, to) => {
+    dispatch({ type: "THIS_YEAR_DATE_RANGE", startDate: setYear(from, getYear(new Date())), endDate: setYear(to, getYear(new Date())) });
+    dispatch({ type: "LAST_YEAR_DATE_RANGE", startDate: setYear(from, getYear(new Date()) - 1), endDate: setYear(to, getYear(new Date()) - 1) });
+  }, [dispatch]);
 
   useEffect(() => {
     if (data && data.erpProducts) {
@@ -93,6 +114,7 @@ function FiltersProvider(props) {
       queryFilters: state,
       dispatch,
       loading,
+      handleDateRangeSelected,
     }}>
       {children}
     </FiltersContext.Provider> 
