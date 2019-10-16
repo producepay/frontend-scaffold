@@ -19,7 +19,7 @@ export function formatPrice(value, trunc = true) {
         style: 'currency', currency: 'USD'
       }).format(num / 1e6) + 'M';
     }
-    if (num >= 1e5) {
+    if (num >= 1e4) {
       return new Intl.NumberFormat('en-US', {
         style: 'currency', currency: 'USD', maximumSignificantDigits: 3
       }).format(num / 1000) + 'K';

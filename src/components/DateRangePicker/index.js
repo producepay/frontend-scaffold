@@ -12,7 +12,23 @@ import { isBetween } from '../../helpers/dates';
 import 'react-day-picker/lib/style.css';
 import './datepicker.css';
 
-const FORMAT_DATE_STRING = "MM/DD/YYYY";
+export const DEFAULT_PRESETS = [
+  {
+    label: "Yesterday",
+    start: subDays(new Date(), 1),
+    end: subDays(new Date(), 1),
+  },
+  {
+    label: "Last Week",
+    start: subWeeks(new Date(), 1),
+    end: new Date(),
+  },
+  {
+    label: "Last 30 Days",
+    start: subDays(new Date(), 30),
+    end: new Date(),
+  },
+];
 
 const CalendarMenu = ({
   setFrom,
@@ -33,7 +49,7 @@ const CalendarMenu = ({
     <div className={cx({[classNames.overlayWrapper]: numberOfMonths === 1})} {...props}>
       <div className={cx(classNames.overlay, { "InsightsDatePickerOverlayAlignRight": alignRight })}>
         {children}
-        <div className="text-left pb-4 w-full">
+        <div className="text-left pb-4 pr-4 w-full">
           {presets.map(({ label, start, end }) => (
             <Button
               key={label}
@@ -56,11 +72,11 @@ const CalendarMenu = ({
 }
 
 const InputButton = React.forwardRef((props, ref) => {
-  const { from, to, ...rest } = props;
+  const { from, to, format, ...rest } = props;
   return (
     <Button
       ref={ref}
-      label={from && to ? formatDateRange(from, to, FORMAT_DATE_STRING) : 'Please select a date range'}
+      label={from && to ? formatDateRange(from, to, format) : 'Please select a date range'}
       {...rest}
     />
   )
@@ -81,6 +97,7 @@ const DateRangePicker = ({
   numberOfMonths,
   presets,
   alignRight,
+  format,
   ...rest
 }) => {
   const [from, setFrom] = useState(defaultFrom);
@@ -153,10 +170,11 @@ const DateRangePicker = ({
               {children}
             </CalendarMenu>
           )}
-          inputProps={{ from, to, ...inputProps }}
+          inputProps={{ from, to, format, ...inputProps }}
           component={InputButton}
           hideOnDayClick={false}
           showOverlay={showPicker}
+          format={format}
           dayPickerProps={{
             className: "InsightsDatePicker",
             selectedDays: [from, { from, to: enteredTo }],
@@ -179,6 +197,7 @@ DateRangePicker.propTypes = {
   onRangeSelected: PropTypes.func,
   inputProps: PropTypes.object,
   numberOfMonths: PropTypes.number,
+  format: PropTypes.string,
   presets: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     start: PropTypes.instanceOf(Date).isRequired,
@@ -194,28 +213,8 @@ DateRangePicker.defaultProps = {
   onRangeSelected: () => {},
   inputProps: {},
   numberOfMonths: 2,
-  presets: [
-    {
-      label: "Today",
-      start: new Date(),
-      end: new Date(),
-    },
-    {
-      label: "Yesterday",
-      start: subDays(new Date(), 1),
-      end: subDays(new Date(), 1),
-    },
-    {
-      label: "Last Week",
-      start: subWeeks(new Date(), 1),
-      end: new Date(),
-    },
-    {
-      label: "Last 30 Days",
-      start: subDays(new Date(), 30),
-      end: new Date(),
-    },
-  ],
+  format: "MM/DD/YYYY",
+  presets: DEFAULT_PRESETS,
   alignRight: false,
 }
 

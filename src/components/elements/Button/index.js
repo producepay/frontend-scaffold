@@ -7,8 +7,8 @@ import './button.css';
 const Button = React.forwardRef((props, ref) => {
   const { className, variant, color, label, children, disabled, ...rest } = props;
 
-  const computedClassName = cx(className, 'button no-underline', {
-    'py-2 px-4 rounded': ['solid', 'outlined'].includes(variant),
+  const computedClassName = cx(className, 'button no-underline rounded-full', {
+    'py-2 px-4': ['solid', 'outlined'].includes(variant),
     'text-gray-100 bg-primary': color === 'primary' && variant === 'solid',
     'bg-gray-400 text-gray-800': color === 'secondary' && variant === 'solid',
     'text-primary': color === 'primary' && ['outlined', 'icon', 'text'].includes(variant),

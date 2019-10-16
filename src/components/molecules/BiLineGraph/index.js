@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import getMonth from 'date-fns/get_month';
 import getIsoWeek from 'date-fns/get_iso_week';
+import differenceInMonths from 'date-fns/difference_in_months';
+import differenceInWeeks from 'date-fns/difference_in_weeks';
 
 import { monthNumToName } from '../../../helpers/dates';
 import { formatWeek } from '../../../helpers/format';
@@ -18,9 +20,6 @@ function groupLineItemsByWeek(lineItems) {
   return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getIsoWeek(item.groupedValue));
 }
 
-const generateMonthlyTickValues = () => _.range(11);
-const generateWeeklyTickValues = () => _.range(1, 53);
-
 function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   return {
     id: lineSeriesKey,
@@ -28,12 +27,39 @@ function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
   };
 }
 
-function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
+function generateWeeklyTickValues(minDate, maxDate) {
+  if (minDate && maxDate) {
+    const diffInMonths = differenceInMonths(maxDate, minDate);
+    if (diffInMonths >= 6) {
+      return _.range(1, 53);
+    } else {
+      const startWeek = getIsoWeek(minDate);
+      const endWeek = getIsoWeek(maxDate);
+      if (differenceInWeeks(maxDate, minDate) >= 52) {
+        return _.range(1, 53);
+      }
+      return _.range(_.clamp(startWeek - 1, 1, 53), _.clamp(endWeek + 1, 1, 53));
+    }
+  }
+  return _.range(1, 53);
+}
+
+function numTickValuesToTake(tickValues, device) {
+  const numTicks = tickValues.length;
+
+  switch (device) {
+    case 'mobile': return (numTicks <= 12) ? 6 : 9;
+    case 'tablet': return (numTicks <= 12) ? 2 : 7;
+    default: return (numTicks <= 12) ? 1 : 5; // desktop
+  }
+}
+
+function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate, ...rest }) {
   const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
     formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
   );
 
-  const tickValues = xInterval === "month" ? generateMonthlyTickValues() : generateWeeklyTickValues();
+  const tickValues = xInterval === "month" ? _.range(11) : generateWeeklyTickValues(minDate, maxDate);
 
   let commonLineGraphProps = {
     data: graphData,
@@ -59,7 +85,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
           lineWidth={2}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, xInterval === "month" ? 6 : 9)
+            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "mobile"))
           }}
           {...rest}
         />
@@ -71,7 +97,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, xInterval === "month" ? 2 : 7),
+            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "tablet")),
           }}
           {...rest}
         />
@@ -83,7 +109,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, ...rest }) {
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, xInterval === "month" ? 1 : 5),
+            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "desktop")),
           }}
           {...rest}
         />
@@ -103,10 +129,14 @@ BiLineGraph.propTypes = {
     'month',
     'week', // NOTE: can add day if we need to in the future?
   ]),
+  minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date),
 }
 
 BiLineGraph.defaultProps = {
   xInterval: 'month',
+  minDate: null,
+  maxDate: null,
 }
 
 export default React.memo(BiLineGraph);
