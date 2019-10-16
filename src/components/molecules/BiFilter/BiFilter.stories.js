@@ -90,6 +90,20 @@ storiesOf('Components/molecules/BiFilter', module)
           },
         ],
       },
+      {
+        label: "Oranges",
+        value: "Oranges",
+        subItems: [
+          {
+            label: "Navel",
+            value: "Navel",
+          },
+          {
+            label: "Valencia",
+            value: "Valencia",
+          },
+        ],
+      },
     ]}
     onChange={action('onChange')}
     onSubItemsChange={action('onSubItemsChange')}

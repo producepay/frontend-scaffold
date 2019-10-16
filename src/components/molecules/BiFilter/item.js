@@ -72,7 +72,7 @@ function BiFilterItem(props) {
                   item={subItem}
                   onClick={(e) => {
                     const values = onItemClicked(e.target.value, selectedSubItems, setSelectedSubItems);
-                    onSubItemClicked(values);
+                    onSubItemClicked({ [item.value]: values });
                   }}
                   checked={_.includes(selectedSubItems, subItem.value)}
                 />
