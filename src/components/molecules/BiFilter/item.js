@@ -11,6 +11,18 @@ import { onItemClicked } from './index';
 
 const CHEVRON_COLOR = "#a0aec0";
 
+const ItemWithCheckbox = ({ item, onClick, checked }) => (
+  <div className="flex items-center">
+    <Checkbox
+      className="mr-2"
+      value={item.value}
+      onClick={onClick}
+      checked={checked}
+    />
+    <label htmlFor={item.value} className="text-sm cursor-pointer">{item.label}</label>
+  </div>
+)
+
 function BiFilterItem(props) {
   const {
     item,
@@ -38,15 +50,11 @@ function BiFilterItem(props) {
   return (
     <li className="my-1">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <Checkbox
-            className="mr-2"
-            value={item.value}
-            onClick={onClick}
-            checked={checked}
-          />
-          <label htmlFor={item.value} className="text-sm cursor-pointer">{item.label}</label>
-        </div>
+        <ItemWithCheckbox
+          item={item}
+          onClick={onClick}
+          checked={checked}
+        />
         {
           hasSubItems ? (
             <div className="cursor-pointer" onClick={() => setShowSubItems(!showSubItems)}>
@@ -60,18 +68,14 @@ function BiFilterItem(props) {
           <ul className="pl-4">
             {_.map(filteredSubItems, (subItem) => (
               <li className="my-1" key={subItem.value}>
-                <div className="flex items-center">
-                  <Checkbox
-                    className="mr-2"
-                    value={subItem.value}
-                    onClick={(e) => {
-                      const values = onItemClicked(e.target.value, selectedSubItems, setSelectedSubItems);
-                      onSubItemClicked(values);
-                    }}
-                    checked={_.includes(selectedSubItems, subItem.value)}
-                  />
-                  <label htmlFor={subItem.value} className="text-sm cursor-pointer">{subItem.label}</label>
-                </div>
+                <ItemWithCheckbox
+                  item={subItem}
+                  onClick={(e) => {
+                    const values = onItemClicked(e.target.value, selectedSubItems, setSelectedSubItems);
+                    onSubItemClicked(values);
+                  }}
+                  checked={_.includes(selectedSubItems, subItem.value)}
+                />
               </li>
             ))}
           </ul>
