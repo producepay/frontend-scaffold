@@ -64,6 +64,13 @@ storiesOf('Components/molecules/BiFilter', module)
     onChange={action('onChange')}
     selectAll
   />
+)).add('no search', () => (
+  <Wrapper
+    title="Commodity"
+    items={items}
+    onChange={action('onChange')}
+    showSearch={false}
+  />
 )).add('with subitems', () => (
   <Wrapper
     title="Commodity"
@@ -85,6 +92,7 @@ storiesOf('Components/molecules/BiFilter', module)
       },
     ]}
     onChange={action('onChange')}
+    onSubItemsChange={action('onSubItemsChange')}
     selectAll
   />
 ));
