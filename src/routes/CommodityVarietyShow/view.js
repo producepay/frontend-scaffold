@@ -22,7 +22,6 @@ function CommodityVarietyShow(props) {
     commodityUuid,
     varietyUuid,
     loading,
-    error,
     data,
   } = props;
 

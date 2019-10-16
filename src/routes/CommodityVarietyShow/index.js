@@ -200,7 +200,7 @@ function CommodityVarietyShow(props) {
         isCurrentSeason: true,
         dateRanges: [{
           startDate: gqlF(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK)),
-          endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), {weekStartsOn: 1})),
+          endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 })),
         }],
       },
       lastYearMovementFilters: {

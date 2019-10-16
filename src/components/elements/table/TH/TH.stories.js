@@ -37,15 +37,15 @@ storiesOf('Elements/TH', module)
   <MockTable
     className="table-secondary table-p-sm table-alternating-rows"
     thNodes={[
-    { label: "Name", props: { align: "left" }},
-    { label: "Quantity", props: {}},
-    { label: "Amount", props: {}},
-  ]}/>
+      { label: "Name", props: { align: "left" } },
+      { label: "Quantity", props: {} },
+      { label: "Amount", props: {} },
+    ]}/>
 )).add('with active', () => (
   <MockTable
     className="table-secondary table-alternating-rows table-p-lg table-border-th-solid"
     thNodes={[
-      { label: "Name", props: { align: "left", active: true }},
+      { label: "Name", props: { align: "left", active: true } },
       { label: "Quantity", props: {} },
       { label: "Amount", props: {} },
     ]}

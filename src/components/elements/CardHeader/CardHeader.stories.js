@@ -35,7 +35,7 @@ storiesOf('Elements/CardHeader', module)
             { label: "White", value: "white" },
             { label: "Unspecified", value: "unspecified" },
           ]}
-        onChange={action('onChange')}
+          onChange={action('onChange')}
         />
       )}
       actionItemClassName="pl-4"

@@ -61,7 +61,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate
 
   const tickValues = xInterval === "month" ? _.range(11) : generateWeeklyTickValues(minDate, maxDate);
 
-  let commonLineGraphProps = {
+  const commonLineGraphProps = {
     data: graphData,
     xScale: { min: tickValues[0], max: _.last(tickValues) },
     xFormat: xInterval === "month" ? monthNumToName : formatWeek, // for tooltip
