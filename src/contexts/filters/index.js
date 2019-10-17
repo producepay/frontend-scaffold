@@ -30,10 +30,11 @@ const FETCH_FILTER_DATA = gql`
 
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
-    case 'COMMODITIES':
-      return { ...state, commodityIdentifier: action.values };
-    case 'VARIETIES': {
-      return { ...state, commodityIdentifier: action.commodities, varietyIdentifier: action.values }
+    case 'COMMODITIES_AND_VARIETIES': {
+      const cvPairs = _.map(action.commodityVarietyIdentifiers, (varieties, commodityIdentifier) => (
+        _.map(varieties, (varietyIdentifier) => ({ commodityIdentifier, varietyIdentifier }))
+      ));
+      return { ...state, commodityVarietyIdentifierPairs: cvPairs };
     }
     case 'SIZE':
       return { ...state, sizeIdentifier: action.values };
@@ -58,7 +59,9 @@ function generateFilter(collection, title, key, label, dispatch) {
     title,
     items: _.uniqBy(collectionAsOptions(collection, { key, label }), 'value'),
     key,
-    onChange: (values) => dispatch({ type: _.toUpper(title), values }),
+    onChange: (obj) => {
+      dispatch({ type: _.toUpper(title), values: _.keys(obj) })
+    },
   };
 }
 
@@ -85,6 +88,7 @@ function FiltersProvider(props) {
   useEffect(() => {
     if (data && data.erpProducts) {
       let currentFilters = [];
+      let defaultState = {};
       if (!commodityName) { // not in a commodity specific view
         const commoditiesWithSubVarieties =
           _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'), (result, erpProducts, commodityIdentifier) => {
@@ -99,16 +103,13 @@ function FiltersProvider(props) {
           title: "Commodities",
           items: commoditiesWithSubVarieties,
           key: 'commodityIdentifier',
-          onChange: (values) => dispatch({ type: "COMMODITIES", values }),
-          onSubItemsChange: (obj) => {
-            const commodityIdentifier = _.head(_.keys(obj));
-            dispatch({
-              type: "VARIETIES",
-              commodities: _.uniq([ ...state.commodityIdentifier, commodityIdentifier ]),
-              values: _.uniq([ ...state.varietyIdentifier, ...obj[commodityIdentifier] ]),
-            })
-          }
+          onChange: (obj) => dispatch({ type: "COMMODITIES_AND_VARIETIES", commodityVarietyIdentifiers: obj }),
         });
+        defaultState.commodityVarietyIdentifierPairs = _.flatten(
+          _.map(commoditiesWithSubVarieties, (item) => _.map(item.subItems || [], (subItem) => (
+            { commodityIdentifier: item.value, varietyIdentifier: subItem.value }
+          ))
+        ));
       }
     
       // Size
@@ -119,11 +120,11 @@ function FiltersProvider(props) {
         type: "INIT",
         filter: {
           ..._.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
-          "varietyIdentifier": _.uniq(_.map(data.erpProducts, 'varietyIdentifier')),
+          ...defaultState,
         },
       });
     }
-  }, [commodityName, data, state.commodityIdentifier, state.varietyIdentifier]);
+  }, [commodityName, data]);
 
   return (
     <FiltersContext.Provider value={{

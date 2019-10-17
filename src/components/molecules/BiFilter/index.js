@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
@@ -17,22 +17,34 @@ const ICON_COLOR = "#a0aec0";
 const biFilterReducer = (state, action) => {
   switch (action.type) {
     case FILTER_ACTION_TYPES.ADD_PARENT:
-      return { ...state, [action.parentValue]: action.children };
+      const newState = { ...state, [action.parentValue]: action.children };
+      action.onChange(newState);
+      return newState;
     case FILTER_ACTION_TYPES.REMOVE_PARENT: {
-      return _.omit(state, action.parentValue);
+      const newState = _.omit(state, action.parentValue);
+      action.onChange(newState);
+      return newState;
     }
     case FILTER_ACTION_TYPES.ADD_CHILD:
       if (_.has(state, action.parentValue)) {
-        return { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
+        const newState = { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
+        action.onChange(newState);
+        return newState;
       } else {
-        return { ...state, [action.parentValue]: [action.childValue] }
+        const newState = { ...state, [action.parentValue]: [action.childValue] }
+        action.onChange(newState);
+        return newState;
       }
     case FILTER_ACTION_TYPES.REMOVE_CHILD:
       const childItems = _.without(state[action.parentValue], action.childValue);
       if (childItems.length) {
-        return { ...state, [action.parentValue]: childItems };
+        const newState = { ...state, [action.parentValue]: childItems };
+        action.onChange(newState);
+        return newState;
       } else {
-        return _.omit(state, action.parentValue); // uncheck parent item if no children selected
+        const newState = _.omit(state, action.parentValue); // uncheck parent item if no children selected
+        action.onChange(newState);
+        return newState;
       }
     default:
       throw new Error();
@@ -53,7 +65,6 @@ function BiFilter(props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showMore, setShowMore] = useState(false);
-  const didMountRef = useRef(false);
 
   const wrapperClassName = cx(
     "w-full",
@@ -75,16 +86,6 @@ function BiFilter(props) {
     },
   {}) : {};
   const [state, dispatch] = useReducer(biFilterReducer, defaultState);
-
-  useEffect(() => {
-    if (didMountRef.current) {
-      onChange(state);
-    }
-  }, [state, onChange]);
-
-  useEffect(() => {
-    didMountRef.current = true;
-  }, []);
 
   return (
     <div className={wrapperClassName}>
@@ -115,6 +116,7 @@ function BiFilter(props) {
                   searchTerm={searchTerm}
                   dispatch={dispatch}
                   filterState={state}
+                  onChange={onChange}
                 />
               ))}
             </ul>

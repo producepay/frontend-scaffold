@@ -29,6 +29,7 @@ function BiFilterItem(props) {
     filterState,
     dispatch,
     searchTerm,
+    onChange,
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
@@ -48,20 +49,20 @@ function BiFilterItem(props) {
 
   const onParentItemClicked = useCallback((e) => {
     if (_.includes(parentItems, e.target.value)) {
-      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_PARENT, parentValue: e.target.value })
+      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_PARENT, parentValue: e.target.value, onChange })
     } else {
-      dispatch({ type: FILTER_ACTION_TYPES.ADD_PARENT, parentValue: e.target.value, children: _.map(filteredSubItems, 'value') });
+      dispatch({ type: FILTER_ACTION_TYPES.ADD_PARENT, parentValue: e.target.value, children: _.map(filteredSubItems, 'value'), onChange });
     }
-  }, [dispatch, parentItems, filteredSubItems]);
+  }, [parentItems, onChange, dispatch, filteredSubItems]);
 
   const onChildItemClicked = useCallback((e) => {
     const childItems = filterState[item.value];
     if (_.includes(childItems, e.target.value)) {
-      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_CHILD, parentValue: item.value, childValue: e.target.value })
+      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_CHILD, parentValue: item.value, childValue: e.target.value, onChange })
     } else {
-      dispatch({ type: FILTER_ACTION_TYPES.ADD_CHILD, parentValue: item.value, childValue: e.target.value });
+      dispatch({ type: FILTER_ACTION_TYPES.ADD_CHILD, parentValue: item.value, childValue: e.target.value, onChange });
     }
-  }, [dispatch, filterState, item.value]);
+  }, [dispatch, filterState, item.value, onChange]);
 
   return (
     <li className="my-2">
@@ -105,6 +106,7 @@ BiFilterItem.propTypes = {
   searchTerm: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
   filterState: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
 };
 
 BiFilterItem.defaultProps = {
