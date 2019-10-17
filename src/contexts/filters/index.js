@@ -50,7 +50,6 @@ const graphqlFiltersReducer = (state, action) => {
       return { ...state, ...action.filter };
     }
     default: {
-      console.log('unhandled error')
       throw new Error();
     }
   }
@@ -83,8 +82,16 @@ function FiltersProvider(props) {
   });
 
   const handleDateRangeSelected = useCallback((from, to) => {
-    dispatch({ type: "THIS_YEAR_DATE_RANGE", startDate: setYear(from, getYear(new Date())), endDate: setYear(to, getYear(new Date())) });
-    dispatch({ type: "LAST_YEAR_DATE_RANGE", startDate: setYear(from, getYear(new Date()) - 1), endDate: setYear(to, getYear(new Date()) - 1) });
+    dispatch({
+      type: "THIS_YEAR_DATE_RANGE",
+      startDate: setYear(from, getYear(new Date())),
+      endDate: setYear(to, getYear(new Date()))
+    });
+    dispatch({
+      type: "LAST_YEAR_DATE_RANGE",
+      startDate: setYear(from, getYear(new Date()) - 1),
+      endDate: setYear(to, getYear(new Date()) - 1)
+    });
   }, [dispatch]);
 
   useEffect(() => {
@@ -93,19 +100,22 @@ function FiltersProvider(props) {
       let defaultState = {};
       if (!commodityName) { // not in a commodity specific view
         const commoditiesWithSubVarieties =
-          _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'), (result, erpProducts, commodityIdentifier) => {
-            result.push({
-              value: commodityIdentifier,
-              label: _.get(erpProducts, '[0].commodityName'),
-              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName', () => {}).items,
-            });
-            return result;
-          }, []);
+          _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
+            (result, erpProducts, commodityIdentifier) => {
+              result.push({
+                value: commodityIdentifier,
+                label: _.get(erpProducts, '[0].commodityName'),
+                subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName', () => {}).items,
+              });
+              return result;
+            }, []);
         currentFilters.push({
           title: "Commodities",
           items: commoditiesWithSubVarieties,
           key: 'commodityIdentifier',
-          onChange: (obj) => dispatch({ type: "COMMODITIES_AND_VARIETIES", commodityVarietyIdentifiers: obj }),
+          onChange: (obj) => dispatch(
+            { type: "COMMODITIES_AND_VARIETIES", commodityVarietyIdentifiers: obj }
+          ),
         });
         defaultState.commodityVarietyIdentifierPairs = _.flatten(
           _.map(commoditiesWithSubVarieties, (item) => _.map(item.subItems || [], (subItem) => (
@@ -121,7 +131,10 @@ function FiltersProvider(props) {
       dispatch({
         type: "INIT",
         filter: {
-          ..._.omit(_.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')), 'commodityIdentifier'),
+          ..._.omit(_.mapValues(
+            _.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
+            'commodityIdentifier'
+          ),
           ...defaultState,
         },
       });
