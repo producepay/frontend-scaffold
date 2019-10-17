@@ -31,9 +31,11 @@ const FETCH_FILTER_DATA = gql`
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
     case 'COMMODITIES_AND_VARIETIES': {
-      const cvPairs = _.map(action.commodityVarietyIdentifiers, (varieties, commodityIdentifier) => (
-        _.map(varieties, (varietyIdentifier) => ({ commodityIdentifier, varietyIdentifier }))
-      ));
+      const cvPairs = _.flatten(
+        _.map(action.commodityVarietyIdentifiers, (varieties, commodityIdentifier) => (
+          _.map(varieties, (varietyIdentifier) => ({ commodityIdentifier, varietyIdentifier }))
+        ))
+      );
       return { ...state, commodityVarietyIdentifierPairs: cvPairs };
     }
     case 'SIZE':

@@ -12,7 +12,7 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const { queryFilters, handleDateRangeSelected } = useFilters();
   const { thisYearStartDate, thisYearEndDate, lastYearStartDate, lastYearEndDate, ...rest } = queryFilters;
 
-  const { data, loading, error, networkStatus } = useQuery(graphqlQuery, {
+  const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
       groupByInterval: dateInterval,
       thisYearSalesOrderLineItemFilters: {
@@ -27,7 +27,7 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
         ...graphqlFilters,
         ...rest,
       },
-      filters: { ...graphqlFilters, ...rest },
+      filters: { ...graphqlFilters },
     },
   });
 
