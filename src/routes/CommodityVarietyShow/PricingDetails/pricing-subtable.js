@@ -13,7 +13,7 @@ function PricingSubtable({ label, reports }) {
   return (
     <React.Fragment>
       <tr>
-        <td colSpan={4} className='pt-3' style={{paddingLeft: 0, paddingRight: 0, paddingBottom: 0}}>
+        <td colSpan={4} className='pt-3' style={{ paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }}>
           <div className='py-2 px-4 bg-gray-200 border rounded-sm text-xs font-semibold tracking-wide leading-none'>
             {label}
           </div>

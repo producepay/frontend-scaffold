@@ -73,7 +73,7 @@ function PriceLineGraph(props) {
             <div className='text-xl pb-1'>
               {latestReportDate === data.reportDate ? formatPrice(data.price) : '--'}
             </div>
-            <div className='text-xs font-medium' style={{color: data.color}}>{data.cityName}</div>
+            <div className='text-xs font-medium' style={{ color: data.color }}>{data.cityName}</div>
           </div>
         ))}
       </div>

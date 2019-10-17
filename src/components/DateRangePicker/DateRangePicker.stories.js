@@ -26,7 +26,7 @@ storiesOf('Components/DateRangePicker', module)
 .add('with future dates disabled', () =>
   <DateRangePicker
     month={subMonths(new Date(), 1)}
-    disabledDays={{after: new Date()}}
+    disabledDays={{ after: new Date() }}
     onRangeSelected={action('onRangeSelected')}
   />
 ).add('customize input component', () =>

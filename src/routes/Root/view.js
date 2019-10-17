@@ -13,7 +13,9 @@ function RootView(props) {
       <h2 className='text-center text-3xl mb-6'>Uh oh!</h2>
 
       <div className='leading-relaxed text-center'>
-        Looks like we've run into a problem! Our team has been alerted and we're working on getting a fix out. Thanks for your patience!
+        Looks like we've run into a problem!
+        Our team has been alerted and we're working on getting a fix out.
+        Thanks for your patience!
       </div>
     </div>
   ) : (

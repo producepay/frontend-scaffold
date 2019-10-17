@@ -23,8 +23,8 @@ function WeatherSection(props) {
     >
       <div className="flex">
         <div className="flex items-center">
-          {dataAvailable ?
-            (hasAlerts ? (
+          {dataAvailable ? (
+            hasAlerts ? (
               <AlertCircle className="mr-3" size={19} color="#E34848" />
             ) : (
               <CheckmarkCircle className="mr-3" size={19} color="#68B858" />
@@ -40,8 +40,8 @@ function WeatherSection(props) {
           {hasAlerts ?
             `${alertsCount} Weather ${pluralize('Alert', alertsCount)}`
             : dataAvailable ?
-                'No Weather Alerts'
-                : 'No Weather Data Available'
+              'No Weather Alerts'
+              : 'No Weather Data Available'
           }
         </span>
         <div>

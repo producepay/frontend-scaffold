@@ -33,7 +33,7 @@ function PricingDetailsView(props) {
           </React.Fragment>
         )}
         className={cx('sm:block', {
-          'hidden': latestReports.length === 0,
+          hidden: latestReports.length === 0,
         })}
       />
 
