@@ -146,7 +146,7 @@ function useFilters() {
 }
 
 export default withRouter(FiltersProvider);
-const WrappedFiltersProvider = withRouter(React.memo(FiltersProvider));
+const WrappedFiltersProvider = withRouter(FiltersProvider);
 
 export {
   WrappedFiltersProvider as FiltersProvider,
