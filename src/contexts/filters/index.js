@@ -49,8 +49,10 @@ const graphqlFiltersReducer = (state, action) => {
     case 'INIT': {
       return { ...state, ...action.filter };
     }
-    default:
+    default: {
+      console.log('unhandled error')
       throw new Error();
+    }
   }
 };
 
@@ -119,7 +121,7 @@ function FiltersProvider(props) {
       dispatch({
         type: "INIT",
         filter: {
-          ..._.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
+          ..._.omit(_.mapValues(_.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')), 'commodityIdentifier'),
           ...defaultState,
         },
       });

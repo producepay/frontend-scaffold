@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
@@ -9,6 +9,7 @@ import TextField from '../../elements/TextField';
 import Button from '../../elements/Button';
 import PlusIcon from '../../icons/Plus';
 import MinusIcon from '../../icons/Minus';
+import { useDidMount } from '../../../hooks/did-mount';
 
 import BiFilterItem from './item';
 
@@ -18,32 +19,32 @@ const biFilterReducer = (state, action) => {
   switch (action.type) {
     case FILTER_ACTION_TYPES.ADD_PARENT:
       const newState = { ...state, [action.parentValue]: action.children };
-      action.onChange(newState);
+      // action.onChange(newState);
       return newState;
     case FILTER_ACTION_TYPES.REMOVE_PARENT: {
       const newState = _.omit(state, action.parentValue);
-      action.onChange(newState);
+      // action.onChange(newState);
       return newState;
     }
     case FILTER_ACTION_TYPES.ADD_CHILD:
       if (_.has(state, action.parentValue)) {
         const newState = { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
-        action.onChange(newState);
+        // action.onChange(newState);
         return newState;
       } else {
         const newState = { ...state, [action.parentValue]: [action.childValue] }
-        action.onChange(newState);
+        // action.onChange(newState);
         return newState;
       }
     case FILTER_ACTION_TYPES.REMOVE_CHILD:
       const childItems = _.without(state[action.parentValue], action.childValue);
       if (childItems.length) {
         const newState = { ...state, [action.parentValue]: childItems };
-        action.onChange(newState);
+        // action.onChange(newState);
         return newState;
       } else {
         const newState = _.omit(state, action.parentValue); // uncheck parent item if no children selected
-        action.onChange(newState);
+        // action.onChange(newState);
         return newState;
       }
     default:
@@ -65,6 +66,7 @@ function BiFilter(props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showMore, setShowMore] = useState(false);
+  const didMount = useDidMount();
 
   const wrapperClassName = cx(
     "w-full",
@@ -79,13 +81,19 @@ function BiFilter(props) {
   );
   const finalItems = showMore ? filteredItems : _.take(filteredItems, limit);
 
-  const defaultState = selectAll ? _.reduce(_.keyBy(finalItems, 'value'),
+  const defaultState = selectAll ? _.reduce(_.keyBy(items, 'value'),
     (result, item, parentValue) => {
       result[parentValue] = _.get(item, 'subItems', []).length > 0 ? _.map(item.subItems, 'value') : [];
       return result;
     },
   {}) : {};
   const [state, dispatch] = useReducer(biFilterReducer, defaultState);
+
+  useEffect(() => {
+    if (!didMount) {
+      onChange(state);
+    }
+  }, [state, onChange, didMount])
 
   return (
     <div className={wrapperClassName}>
