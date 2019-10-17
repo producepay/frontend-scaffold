@@ -9,7 +9,7 @@ import getYear from 'date-fns/get_year';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
-import { collectionAsOptions } from './helpers';
+import { collectionAsOptions, FILTER_CONTEXT_ACTION_TYPES } from './helpers';
 
 const FETCH_FILTER_DATA = gql`
   query FetchFilterData {
@@ -30,7 +30,7 @@ const FETCH_FILTER_DATA = gql`
 
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
-    case 'COMMODITIES_AND_VARIETIES': {
+    case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES: {
       const cvPairs = _.flatten(
         _.map(action.commodityVarietyIdentifiers, (varieties, commodityIdentifier) => (
           _.map(varieties, (varietyIdentifier) => ({ commodityIdentifier, varietyIdentifier }))
@@ -38,17 +38,17 @@ const graphqlFiltersReducer = (state, action) => {
       );
       return { ...state, commodityVarietyIdentifierPairs: cvPairs };
     }
-    case 'SIZE':
+    case FILTER_CONTEXT_ACTION_TYPES.SIZE:
       return { ...state, sizeIdentifier: action.values };
-    case 'PACKAGING':
+    case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
       return { ...state, packagingIdentifier: action.values };
-    case 'THIS_YEAR_DATE_RANGE': {
+    case FILTER_CONTEXT_ACTION_TYPES.THIS_YEAR_DATE_RANGE: {
       return { ...state, thisYearStartDate: action.startDate, thisYearEndDate: action.endDate };
     }
-    case 'LAST_YEAR_DATE_RANGE': {
+    case FILTER_CONTEXT_ACTION_TYPES.LAST_YEAR_DATE_RANGE: {
       return { ...state, lastYearStartDate: action.startDate, lastYearEndDate: action.endDate };
     }
-    case 'INIT': {
+    case FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS: {
       return { ...state, ...action.filter };
     }
     default: {
@@ -63,7 +63,7 @@ function generateFilter(collection, title, key, label, dispatch) {
     items: _.uniqBy(collectionAsOptions(collection, { key, label }), 'value'),
     key,
     onChange: (obj) => {
-      dispatch({ type: _.toUpper(title), values: _.keys(obj) })
+      dispatch({ type: FILTER_CONTEXT_ACTION_TYPES[_.toUpper(title)], values: _.keys(obj) })
     },
   };
 }
@@ -116,7 +116,7 @@ function FiltersProvider(props) {
           items: commoditiesWithSubVarieties,
           key: 'commodityIdentifier',
           onChange: (obj) => dispatch(
-            { type: "COMMODITIES_AND_VARIETIES", commodityVarietyIdentifiers: obj }
+            { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: obj }
           ),
         });
         defaultState.commodityVarietyIdentifierPairs = _.flatten(
@@ -131,7 +131,7 @@ function FiltersProvider(props) {
       currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch));
       setFilters(currentFilters);
       dispatch({
-        type: "INIT",
+        type: FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS,
         filter: {
           ..._.omit(_.mapValues(
             _.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
