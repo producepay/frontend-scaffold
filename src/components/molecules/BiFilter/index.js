@@ -112,7 +112,6 @@ function BiFilter(props) {
                   searchTerm={searchTerm}
                   dispatch={dispatch}
                   filterState={state}
-                  onChange={onChange}
                 />
               ))}
             </ul>

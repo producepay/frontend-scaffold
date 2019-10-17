@@ -35,12 +35,17 @@ const FETCH_FILTER_DATA = gql`
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
     case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES: {
-      const cvPairs = _.flatten(
-        _.map(action.commodityVarietyIdentifiers, (varieties, commodityIdentifier) => (
-          _.map(varieties, (varietyIdentifier) => ({ commodityIdentifier, varietyIdentifier }))
-        ))
-      );
-      return { ...state, commodityVarietyIdentifierPairs: cvPairs };
+      const hasVarieties = _.flatten(_.values(action.commodityVarietyIdentifiers)).length !== 0;
+      if (hasVarieties) {
+        const cvPairs = _.flatten(
+          _.map(action.commodityVarietyIdentifiers, (varieties, commodityIdentifier) => (
+            _.map(varieties, (varietyIdentifier) => ({ commodityIdentifier, varietyIdentifier }))
+          ))
+        );
+        return { ...state, commodityVarietyIdentifierPairs: cvPairs };
+      } else {
+        return { ...state, commodityIdentifier: _.keys(action.commodityVarietyIdentifiers) };
+      }
     }
     case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
       return _.omit(state, 'commodityVarietyIdentifierPairs');
@@ -113,7 +118,7 @@ function FiltersProvider(props) {
   useEffect(() => {
     if (data && data.erpProducts) {
       let currentFilters = [];
-      let defaultState = {};
+      // let defaultState = {};
       if (!commodityNameParam) { // not in a commodity specific view
         const commoditiesWithSubVarieties =
           _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
@@ -133,11 +138,11 @@ function FiltersProvider(props) {
             { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: obj }
           ),
         });
-        defaultState.commodityVarietyIdentifierPairs = _.flatten(
-          _.map(commoditiesWithSubVarieties, (item) => _.map(item.subItems || [], (subItem) => (
-            { commodityIdentifier: item.value, varietyIdentifier: subItem.value }
-          ))
-        ));
+        // defaultState.commodityVarietyIdentifierPairs = _.flatten(
+        //   _.map(commoditiesWithSubVarieties, (item) => _.map(item.subItems || [], (subItem) => (
+        //     { commodityIdentifier: item.value, varietyIdentifier: subItem.value }
+        //   ))
+        // ));
       } else {
         // remove commodity variety identifier pairs here
         dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE });
@@ -149,22 +154,22 @@ function FiltersProvider(props) {
 
       if (!customerIdParam) { // not in a customer specific view
         currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch));
-        defaultState.erpCustomerId = _.map(data.erpCustomers, "id");
+        // defaultState.erpCustomerId = _.map(data.erpCustomers, "id");
       } else {
         dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
       }
 
       setFiltersToRender(currentFilters);
-      dispatch({
-        type: FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS,
-        filter: {
-          ..._.omit(_.mapValues(
-            _.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
-            ['commodityIdentifier', 'id']
-          ),
-          ...defaultState,
-        },
-      });
+      // dispatch({
+      //   type: FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS,
+      //   filter: {
+      //     ..._.omit(_.mapValues(
+      //       _.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
+      //       ['commodityIdentifier', 'id']
+      //     ),
+      //     ...defaultState,
+      //   },
+      // });
     }
   }, [commodityNameParam, customerId, customerIdParam, data]);
 
