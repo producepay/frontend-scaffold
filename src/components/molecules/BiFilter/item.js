@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -25,6 +26,7 @@ const ItemWithCheckbox = ({ item, onClick, checked, name }) => (
 
 function BiFilterItem(props) {
   const {
+    className,
     item,
     filterState,
     dispatch,
@@ -64,7 +66,7 @@ function BiFilterItem(props) {
   }, [dispatch, filterState, item.value]);
 
   return (
-    <li className="my-2">
+    <li className={cx("my-2", className)}>
       <div className="flex items-center justify-between">
         <ItemWithCheckbox
           item={item}
@@ -101,6 +103,7 @@ function BiFilterItem(props) {
 }
 
 BiFilterItem.propTypes = {
+  className: PropTypes.string,
   item: optionValueWithSubItemsType.isRequired,
   searchTerm: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -109,6 +112,7 @@ BiFilterItem.propTypes = {
 
 BiFilterItem.defaultProps = {
   onSubItemClicked: () => {},
+  className: '',
 }
 
 export default React.memo(BiFilterItem);

@@ -48,7 +48,7 @@ const graphqlFiltersReducer = (state, action) => {
       }
     }
     case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
-      return _.omit(state, 'commodityVarietyIdentifierPairs');
+      return _.omit(state, ['commodityVarietyIdentifierPairs', 'commodityIdentifier']);
     }
     case FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE: {
       return _.omit(state, 'erpCustomerId');

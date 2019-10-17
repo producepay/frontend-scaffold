@@ -1,19 +1,11 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import _ from 'lodash';
 
-import { optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
-import { textSearchCompare } from '../../../helpers/common';
-import TextField from '../../elements/TextField';
-import Button from '../../elements/Button';
-import PlusIcon from '../../icons/Plus';
-import MinusIcon from '../../icons/Minus';
 import { useDidMount } from '../../../hooks/did-mount';
 
-import BiFilterItem from './item';
-
-const ICON_COLOR = "#a0aec0";
+import { optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
+import BiFilterView from './view';
 
 const biFilterReducer = (state, action) => {
   switch (action.type) {
@@ -51,23 +43,7 @@ function BiFilter(props) {
     showSearch,
   } = props;
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showMore, setShowMore] = useState(false);
   const didMount = useDidMount();
-
-  const wrapperClassName = cx(
-    "w-full",
-    className,
-  );
-
-  const filteredItems = _.filter(items,
-    (option) => textSearchCompare(searchTerm, option.label) || _.some(
-      _.get(option, 'subItems', []),
-      (subItem) => textSearchCompare(searchTerm, subItem.label)
-    )
-  );
-  const finalItems = showMore ? filteredItems : _.take(filteredItems, limit);
 
   const defaultState = selectAll ? _.reduce(_.keyBy(items, 'value'),
     (result, item, parentValue) => {
@@ -81,54 +57,19 @@ function BiFilter(props) {
     if (!didMount) {
       onChange(state);
     }
-  }, [state, onChange, didMount])
+  }, [state, onChange, didMount]);
 
   return (
-    <div className={wrapperClassName}>
-      <div className="flex justify-between items-center">
-        <div className="font-medium">{title}</div>
-        <div className="cursor-pointer" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? <PlusIcon size={14} color={ICON_COLOR} /> : <MinusIcon size={14} color={ICON_COLOR} />}
-        </div>
-      </div>
-      {
-        isCollapsed ? null : (
-          <div>
-            {showSearch && (
-              <TextField
-                className="my-2"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search"
-                size="sm"
-                rounded={false}
-              />
-            )}
-            <ul>
-              {finalItems.map(item => (
-                <BiFilterItem
-                  key={item.value}
-                  item={item}
-                  searchTerm={searchTerm}
-                  dispatch={dispatch}
-                  filterState={state}
-                />
-              ))}
-            </ul>
-            {
-              filteredItems.length > limit ? (
-                <Button
-                  onClick={() => setShowMore(!showMore)}
-                  variant="text"
-                  label={showMore ? "Show Less" : "Show More"}
-                  className="text-xs font-medium"
-                />
-              ) : null
-            }
-          </div>
-        )
-      }
-    </div>
+    <BiFilterView
+      className={className}
+      title={title}
+      items={items}
+      showSearch={showSearch}
+      limit={limit}
+      dispatch={dispatch}
+      state={state}
+      selectAll
+    />
   );
 }
 
