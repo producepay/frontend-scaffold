@@ -12,8 +12,8 @@ import { withRouter } from 'react-router-dom';
 import { collectionAsOptions, FILTER_CONTEXT_ACTION_TYPES } from './helpers';
 
 const FETCH_FILTER_DATA = gql`
-  query FetchFilterData {
-    erpProducts: erpProducts {
+  query FetchFilterData($erpProductFilters: ErpProductFilterInput) {
+    erpProducts: erpProducts(filters: $erpProductFilters) {
       commodityName
       commodityIdentifier
       varietyName
@@ -65,9 +65,6 @@ const graphqlFiltersReducer = (state, action) => {
     case FILTER_CONTEXT_ACTION_TYPES.LAST_YEAR_DATE_RANGE: {
       return { ...state, lastYearStartDate: action.startDate, lastYearEndDate: action.endDate };
     }
-    case FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS: {
-      return { ...state, ...action.filter };
-    }
     default: {
       throw new Error();
     }
@@ -98,15 +95,23 @@ function FiltersProvider(props) {
   const { children } = props;
   const { customerId, commodityName } = props.match.params;
 
-  const { data, loading } = useQuery(FETCH_FILTER_DATA, {});
   const [filtersToRender, setFiltersToRender] = useState([]); // filters is a config array to be passed to the view for render
   const [commodityNameParam, setCommodityNameParam] = useState(commodityName);
   const [customerIdParam, setCustomerIdParam] = useState(customerId);
+
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
     thisYearStartDate: startOfYear(new Date()), // initial dates
     thisYearEndDate: endOfYear(new Date()),
     lastYearStartDate: startOfYear(subISOYears(new Date(), 1)),
     lastYearEndDate: endOfYear(subISOYears(new Date(), 1)),
+  });
+
+  const erpProductFilters = {
+    ...(commodityNameParam ? { commodityName: commodityNameParam } : {}),
+  };
+
+  const { data, loading } = useQuery(FETCH_FILTER_DATA, {
+    variables: { erpProductFilters },
   });
 
   const handleDateRangeSelected = useCallback((from, to) => {
@@ -125,7 +130,6 @@ function FiltersProvider(props) {
   useEffect(() => {
     if (data && data.erpProducts) {
       let currentFilters = [];
-      // let defaultState = {};
       if (!commodityNameParam) { // not in a commodity specific view
         const commoditiesWithSubVarieties =
           _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
@@ -145,11 +149,6 @@ function FiltersProvider(props) {
             { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: obj }
           ),
         });
-        // defaultState.commodityVarietyIdentifierPairs = _.flatten(
-        //   _.map(commoditiesWithSubVarieties, (item) => _.map(item.subItems || [], (subItem) => (
-        //     { commodityIdentifier: item.value, varietyIdentifier: subItem.value }
-        //   ))
-        // ));
       } else {
         // remove commodity variety identifier pairs here
         dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE });
@@ -161,22 +160,11 @@ function FiltersProvider(props) {
 
       if (!customerIdParam) { // not in a customer specific view
         currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch));
-        // defaultState.erpCustomerId = _.map(data.erpCustomers, "id");
       } else {
         dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
       }
 
       setFiltersToRender(currentFilters);
-      // dispatch({
-      //   type: FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS,
-      //   filter: {
-      //     ..._.omit(_.mapValues(
-      //       _.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
-      //       ['commodityIdentifier', 'id']
-      //     ),
-      //     ...defaultState,
-      //   },
-      // });
     }
   }, [commodityNameParam, customerId, customerIdParam, data]);
 
