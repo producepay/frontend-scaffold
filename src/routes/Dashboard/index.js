@@ -22,7 +22,7 @@ const FETCH_DASHBOARD_DATA = gql`
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
   ) {
     thisYearSalesOrderLineItems: groupedSalesOrderLineItems(
-      groupBy: "orderCreatedAt",
+      groupBy: "invoiceCreatedAt",
       groupByInterval: $groupByInterval,
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
       filters: $thisYearSalesOrderLineItemFilters,
@@ -30,7 +30,7 @@ const FETCH_DASHBOARD_DATA = gql`
       ...groupedGraphData
     }
     lastYearSalesOrderLineItems: groupedSalesOrderLineItems(
-      groupBy: "orderCreatedAt",
+      groupBy: "invoiceCreatedAt",
       groupByInterval: $groupByInterval,
       summedFields: ["shipmentQuantity", "totalSaleAmount"],
       filters: $lastYearSalesOrderLineItemFilters
