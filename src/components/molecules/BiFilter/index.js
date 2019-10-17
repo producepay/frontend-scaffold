@@ -18,34 +18,22 @@ const ICON_COLOR = "#a0aec0";
 const biFilterReducer = (state, action) => {
   switch (action.type) {
     case FILTER_ACTION_TYPES.ADD_PARENT:
-      const newState = { ...state, [action.parentValue]: action.children };
-      // action.onChange(newState);
-      return newState;
+      return { ...state, [action.parentValue]: action.children };
     case FILTER_ACTION_TYPES.REMOVE_PARENT: {
-      const newState = _.omit(state, action.parentValue);
-      // action.onChange(newState);
-      return newState;
+      return _.omit(state, action.parentValue);
     }
     case FILTER_ACTION_TYPES.ADD_CHILD:
       if (_.has(state, action.parentValue)) {
-        const newState = { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
-        // action.onChange(newState);
-        return newState;
+        return { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
       } else {
-        const newState = { ...state, [action.parentValue]: [action.childValue] }
-        // action.onChange(newState);
-        return newState;
+        return { ...state, [action.parentValue]: [action.childValue] };
       }
     case FILTER_ACTION_TYPES.REMOVE_CHILD:
       const childItems = _.without(state[action.parentValue], action.childValue);
       if (childItems.length) {
-        const newState = { ...state, [action.parentValue]: childItems };
-        // action.onChange(newState);
-        return newState;
+        return { ...state, [action.parentValue]: childItems };
       } else {
-        const newState = _.omit(state, action.parentValue); // uncheck parent item if no children selected
-        // action.onChange(newState);
-        return newState;
+        return _.omit(state, action.parentValue);
       }
     default:
       throw new Error();
