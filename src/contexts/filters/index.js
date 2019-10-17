@@ -44,7 +44,7 @@ const graphqlFiltersReducer = (state, action) => {
         );
         return { ...state, commodityVarietyIdentifierPairs: cvPairs };
       } else {
-        return { ...state, commodityIdentifier: _.keys(action.commodityVarietyIdentifiers) };
+        return setFilterState(state, 'commodityIdentifier', _.keys(action.commodityVarietyIdentifiers));
       }
     }
     case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
@@ -54,11 +54,11 @@ const graphqlFiltersReducer = (state, action) => {
       return _.omit(state, 'erpCustomerId');
     }
     case FILTER_CONTEXT_ACTION_TYPES.SIZE:
-      return { ...state, sizeIdentifier: action.values };
+      return setFilterState(state, 'sizeIdentifier', action.values);
     case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
-      return { ...state, packagingIdentifier: action.values };
+      return setFilterState(state, 'packagingIdentifier', action.values);
     case FILTER_CONTEXT_ACTION_TYPES.CUSTOMER:
-        return { ...state, erpCustomerId: action.values };
+        return setFilterState(state, 'erpCustomerId', action.values);
     case FILTER_CONTEXT_ACTION_TYPES.THIS_YEAR_DATE_RANGE: {
       return { ...state, thisYearStartDate: action.startDate, thisYearEndDate: action.endDate };
     }
@@ -73,6 +73,13 @@ const graphqlFiltersReducer = (state, action) => {
     }
   }
 };
+
+function setFilterState(state, key, values) {
+  if (values && values.length === 0) {
+    return _.omit(state, key);
+  }
+  return { ...state, [key]: values }
+}
 
 function generateFilter(collection, title, key, label, dispatch) {
   return {
