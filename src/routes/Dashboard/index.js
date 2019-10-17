@@ -4,6 +4,11 @@ import gql from 'graphql-tag';
 import DashboardView from './view';
 
 const FETCH_DASHBOARD_DATA = gql`
+  fragment groupedSummaryData on GroupedSalesOrderLineItem {
+    shipmentQuantity
+    totalSaleAmount
+  }
+
   fragment groupedGraphData on GroupedSalesOrderLineItem {
     totalSaleAmount
     shipmentQuantity
@@ -21,6 +26,18 @@ const FETCH_DASHBOARD_DATA = gql`
     $thisYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
     $lastYearSalesOrderLineItemFilters: SalesOrderLineItemFilterInput,
   ) {
+    thisYearSummary: groupedSalesOrderLineItems(
+      summedFields: ["shipmentQuantity", "totalSaleAmount"]
+      filters: $thisYearSalesOrderLineItemFilters
+    ) {
+      ...groupedSummaryData
+    }
+    lastYearSummary: groupedSalesOrderLineItems(
+      summedFields: ["shipmentQuantity", "totalSaleAmount"]
+      filters: $lastYearSalesOrderLineItemFilters
+    ) {
+      ...groupedSummaryData
+    }
     thisYearSalesOrderLineItems: groupedSalesOrderLineItems(
       groupBy: "invoiceCreatedAt",
       groupByInterval: $groupByInterval,

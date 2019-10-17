@@ -1,9 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import subISOYears from 'date-fns/sub_iso_years';
-import startOfYear from 'date-fns/start_of_year';
-import endOfYear from 'date-fns/end_of_year';
-import setYear from 'date-fns/set_year';
-import getYear from 'date-fns/get_year';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
@@ -13,22 +9,20 @@ import PerformanceDisplayView from './view';
 
 function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
-  const [thisYearStartDate, setThisYearStartDate] = useState(startOfYear(new Date()));
-  const [thisYearEndDate, setThisYearEndDate] = useState(endOfYear(new Date()));
-  const [lastYearStartDate, setLastYearStartDate] = useState(startOfYear(subISOYears(new Date(), 1)));
-  const [lastYearEndDate, setLastYearEndDate] = useState(endOfYear(subISOYears(new Date(), 1)));
+  const [startDate, setStartDate] = useState(subISOYears(new Date(), 1));
+  const [endDate, setEndDate] = useState(new Date());
 
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
       groupByInterval: dateInterval,
       thisYearSalesOrderLineItemFilters: {
-        startDate: gqlF(thisYearStartDate),
-        endDate: gqlF(thisYearEndDate),
+        startDate: gqlF(startDate),
+        endDate: gqlF(endDate),
         ...graphqlFilters,
       },
       lastYearSalesOrderLineItemFilters: {
-        startDate: gqlF(lastYearStartDate),
-        endDate: gqlF(lastYearEndDate),
+        startDate: gqlF(subISOYears(startDate, 1)),
+        endDate: gqlF(subISOYears(endDate, 1)),
         ...graphqlFilters,
       },
       filters: graphqlFilters,
@@ -36,11 +30,9 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   });
 
   const handleDateRangeSelected = useCallback((from, to) => {
-    setThisYearStartDate(setYear(from, getYear(new Date())));
-    setThisYearEndDate(setYear(to, getYear(new Date())));
-    setLastYearStartDate(setYear(from, getYear(new Date()) - 1));
-    setLastYearEndDate(setYear(to, getYear(new Date()) - 1));
-  }, [setThisYearStartDate, setThisYearEndDate, setLastYearStartDate, setLastYearEndDate]);
+    setStartDate(from);
+    setEndDate(to);
+  }, [setStartDate, setEndDate]);
 
   return (
     <PerformanceDisplayView
@@ -50,8 +42,8 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
       dateInterval={dateInterval}
       setDateInterval={setDateInterval}
       handleDateRangeSelected={handleDateRangeSelected}
-      thisYearStartDate={thisYearStartDate}
-      thisYearEndDate={thisYearEndDate}
+      startDate={startDate}
+      endDate={endDate}
       history={history}
     />
   );

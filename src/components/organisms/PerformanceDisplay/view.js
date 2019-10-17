@@ -12,6 +12,7 @@ import PageSpinner from '../../elements/PageSpinner';
 import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
 import PerformanceGraph from '../../molecules/PerformanceGraph';
+import PerformanceSummary from '../../molecules/PerformanceSummary';
 import DateRangePicker, { DEFAULT_PRESETS } from '../../DateRangePicker';
 
 const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
@@ -23,9 +24,11 @@ function PerformanceDisplayView({
   setDateInterval,
   history,
   handleDateRangeSelected,
-  thisYearStartDate,
-  thisYearEndDate,
+  startDate,
+  endDate,
 }) {
+  const thisYearSummary = _.get(data, 'thisYearSummary[0]');
+  const lastYearSummary = _.get(data, 'lastYearSummary[0]');
   const thisYearSalesOrderLineItems = _.get(data, 'thisYearSalesOrderLineItems', []);
   const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
   const customerRankingData = _.get(data, 'customerRankingData', []);
@@ -44,8 +47,8 @@ function PerformanceDisplayView({
           <div>
             <DateRangePicker
               onRangeSelected={handleDateRangeSelected}
-              defaultFrom={thisYearStartDate}
-              defaultTo={thisYearEndDate}
+              defaultFrom={startDate}
+              defaultTo={endDate}
               month={subMonths(new Date(), 1)}
               format="MMM DD YYYY"
               inputProps={{
@@ -62,12 +65,20 @@ function PerformanceDisplayView({
           </div>
         </div>
       </div>
+
+      <div className={`${SECTION_SPACING} border-b`}>
+        <PerformanceSummary
+          thisYear={thisYearSummary}
+          lastYear={lastYearSummary}
+        />
+      </div>
+
       <div className={`${SECTION_SPACING} border-b`}>
         <PerformanceGraph
           thisYearLineItems={thisYearSalesOrderLineItems}
           lastYearLineItems={lastYearSalesOrderLineItems}
-          minDate={thisYearStartDate}
-          maxDate={thisYearEndDate}
+          minDate={startDate}
+          maxDate={endDate}
           type='totalSales'
         />
       </div>
@@ -76,8 +87,8 @@ function PerformanceDisplayView({
         <PerformanceGraph
           thisYearLineItems={thisYearSalesOrderLineItems}
           lastYearLineItems={lastYearSalesOrderLineItems}
-          minDate={thisYearStartDate}
-          maxDate={thisYearEndDate}
+          minDate={startDate}
+          maxDate={endDate}
           type='volumeSold'
         />
       </div>
