@@ -25,6 +25,10 @@ const FETCH_FILTER_DATA = gql`
       gradeName
       gradeIdentifier
     }
+    erpCustomers: erpCustomers {
+      id
+      name
+    }
   }
 `;
 
@@ -42,6 +46,8 @@ const graphqlFiltersReducer = (state, action) => {
       return { ...state, sizeIdentifier: action.values };
     case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
       return { ...state, packagingIdentifier: action.values };
+    case FILTER_CONTEXT_ACTION_TYPES.CUSTOMER:
+        return { ...state, erpCustomerId: action.values };
     case FILTER_CONTEXT_ACTION_TYPES.THIS_YEAR_DATE_RANGE: {
       return { ...state, thisYearStartDate: action.startDate, thisYearEndDate: action.endDate };
     }
@@ -126,22 +132,28 @@ function FiltersProvider(props) {
         ));
       }
     
-      // Size
+      // Size and Packaging
       currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch));
       currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch));
+
+      if (!customerId) { // not in a customer specific view
+        currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch));
+        defaultState.erpCustomerId = _.map(data.erpCustomers, "id");
+      }
+
       setFilters(currentFilters);
       dispatch({
         type: FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS,
         filter: {
           ..._.omit(_.mapValues(
             _.keyBy(currentFilters, 'key'), (filter) => _.map(filter.items, 'value')),
-            'commodityIdentifier'
+            ['commodityIdentifier', 'id']
           ),
           ...defaultState,
         },
       });
     }
-  }, [commodityName, data]);
+  }, [commodityName, customerId, data]);
 
   return (
     <FiltersContext.Provider value={{
