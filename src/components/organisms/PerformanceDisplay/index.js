@@ -9,8 +9,8 @@ import PerformanceDisplayView from './view';
 
 function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
-  const { queryFilters, handleDateRangeSelected, setCommodityNameParam, setCustomerIdParam } = useFilters();
-  const { thisYearStartDate, thisYearEndDate, lastYearStartDate, lastYearEndDate, ...rest } = queryFilters;
+  const { gqlFilterVariables, handleDateRangeSelected, setCommodityNameParam, setCustomerIdParam } = useFilters();
+  const { thisYearStartDate, thisYearEndDate, lastYearStartDate, lastYearEndDate, ...rest } = gqlFilterVariables;
 
   useEffect(() => {
     setCommodityNameParam(match.params.commodityName);

@@ -171,7 +171,7 @@ function FiltersProvider(props) {
   return (
     <FiltersContext.Provider value={{
       filters: filtersToRender,
-      queryFilters: state,
+      gqlFilterVariables: state,
       dispatch,
       loading,
       handleDateRangeSelected,
