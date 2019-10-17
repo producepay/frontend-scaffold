@@ -8,23 +8,20 @@ import MarketInsightsDashboard from './MarketInsightsDashboard';
 import MarketInsightsAll from './MarketInsightsAll';
 
 function MarketInsightsView() {
+  const { user } = useAuth()
+  const [isSubscribed, setIsSubscribed] = useState(user.unsubscribedAt)
 
-  function handleSubscription() {
-    setSubscribed(!subscribed)
+  function toggleSubscription() {
+    setIsSubscribed(!isSubscribed)
   }
-
-  let { user } = useAuth()
-  const [subscribed, setSubscribed] = useState(user.unsubscribedAt)
 
   return (
     <React.Fragment>
       <div className='flex'>
         <div className='p-4'>Market Insights</div>
-        {subscribed ? (
-          <div className='p-4 cursor-pointer' onClick={handleSubscription}>Unsubscribe to Email</div>
-        ) : (
-          <div className='p-4 cursor-pointer' onClick={handleSubscription}>Subscribe to Email</div>
-        )}
+        <div className='p-4 cursor-pointer' onClick={toggleSubscription}>
+          { isSubscribed ? 'Unsubscribe' : 'Subscribe' } to Emails
+        </div>
       </div>
       <div>
         <Link className='p-4' to={routes.marketInsightsDashboard()}>Your Watch List</Link>
@@ -32,7 +29,7 @@ function MarketInsightsView() {
       </div>
 
       <Switch>
-        <Route exact path={routes.marketInsightsDashboard()} render={() => <MarketInsightsDashboard foo={"bar"}/>} />
+        <Route exact path={routes.marketInsightsDashboard()} component={MarketInsightsDashboard} />
         <Route exact path={routes.marketInsightsAll()} component={MarketInsightsAll} />
 
         <Redirect to={routes.marketInsightsDashboard()} />

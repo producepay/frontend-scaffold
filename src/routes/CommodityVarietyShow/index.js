@@ -25,7 +25,6 @@ const FETCH_DATA = gql`
     resolvedHighPriceMax
     resolvedAveragePrice
   }
-
   fragment movementGraphFragment on MovementReport {
     reportDate
     year
@@ -33,7 +32,6 @@ const FETCH_DATA = gql`
     commodityUsdaName
     packageWeight
   }
-
   query loadCommodityVarietyData(
     $commodityUuids: [String!],
     $varietyUuids: [String!],
@@ -72,19 +70,16 @@ const FETCH_DATA = gql`
       reportDate
       packageWeight
     }
-
     tablePricingData: shippingPointPriceReports(group: $tableGroups, filter: $tableFilters) {
       ...pricingDataFragment
       gradeUsdaName
       varietyUsdaName
       sizeUsdaName
     }
-
     graphPricingData: shippingPointPriceReports(group: $graphGroups, filter: $graphFilters) {
       ...pricingDataFragment
       varietyUsdaName
     }
-
     currentYearMovementReports: movementReports(
       filter: $currentYearMovementFilters
       group: $movementGroups
@@ -97,7 +92,6 @@ const FETCH_DATA = gql`
     ) {
       ...movementGraphFragment
     }
-
     growingRegions(commodityUuids: $commodityUuids, inSeason: true) {
       name
       weatherForecasts {
@@ -108,7 +102,6 @@ const FETCH_DATA = gql`
         }
       }
     }
-
     mostPopularSkus(commodityUuids: $commodityUuids, varietyUuids: $varietyUuids) {
       varietySkuName
     }
@@ -150,7 +143,6 @@ function CommodityVarietyShow(props) {
       },
       summaryThisYearMovementFilters: {
         ...commonMovementFilters,
-        isCurrentSeason: true,
         dateRanges: [{
           startDate: gqlF(subDays(startOfWeek, 14)),
           endDate: gqlF(endOfLastWeek),
@@ -158,7 +150,6 @@ function CommodityVarietyShow(props) {
       },
       summaryLastYearMovementFilters: {
         ...commonMovementFilters,
-        isLastSeason: true,
         dateRanges: [{
           startDate: gqlF(subISOYears(subDays(startOfWeek, 7), 1)),
           endDate: gqlF(subISOYears(endOfLastWeek, 1)),
@@ -197,7 +188,6 @@ function CommodityVarietyShow(props) {
       },
       currentYearMovementFilters: {
         ...commonMovementFilters,
-        isCurrentSeason: true,
         dateRanges: [{
           startDate: gqlF(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK)),
           endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 })),
@@ -205,13 +195,12 @@ function CommodityVarietyShow(props) {
       },
       lastYearMovementFilters: {
         ...commonMovementFilters,
-        isLastSeason: true,
         dateRanges: [
           { startDate: lastYearStartDate, endDate: lastYearEndDate },
         ],
       },
     },
-  });
+  })
 
   return (
     <CommodityVarietyShowView

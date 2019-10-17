@@ -1,4 +1,5 @@
 import React from 'react';
+import PageSpinner from '../../../../components/elements/PageSpinner'
 
 function MarketInsightsDashboardView(props) {
   const {
@@ -7,25 +8,24 @@ function MarketInsightsDashboardView(props) {
     data,
   } = props;
 
-  if (loading) return 'Loading...';
-  if (error) return `Error: ${error.message}`;
+  if (loading) return (
+    <PageSpinner />
+  );
 
-  const listCommodities = data.userCommodityVarietyPreferences.map((preference) => {
-    if(preference.commodityVarietyInfo.variety.id != null) {
-      return <li key={preference.id}>
-        {preference.commodityVarietyInfo.commodity.id}: {preference.commodityVarietyInfo.name}
-      </li>
-    } else {
-      return <li key={preference.id}>
-        {preference.commodityVarietyInfo.commodity.id}: {preference.commodityVarietyInfo.name}
-      </li>
-    }
-  });
+  if (error) return `Error: ${error.message}`;
 
   return (
     <div className='p-4'>
       MarketInsightsDashboardView
-      {listCommodities}
+      {
+        data.userCommodityVarietyPreferences.map((preference) => {
+          return (
+            <li key={preference.id}>  
+              {preference.commodityVarietyInfo.commodity.id}: {preference.commodityVarietyInfo.name}
+            </li>
+          )
+        })
+      }
     </div>
   );
 }

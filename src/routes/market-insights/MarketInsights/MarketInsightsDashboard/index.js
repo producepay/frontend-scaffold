@@ -1,7 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import { useAuth } from '../../../../contexts/auth';
 
 import MarketInsightsDashboardView from './view';
 
@@ -25,7 +24,6 @@ query CommodityVarietyPreferenceQuery {
 `
 
 function MarketInsightsDashboard(props) {
-  const { user } = useAuth()
   const { loading, error, data } = useQuery(FETCH_DATA)
   return (
     <MarketInsightsDashboardView
