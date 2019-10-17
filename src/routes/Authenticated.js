@@ -14,7 +14,7 @@ const SIDEBAR_WIDTH = 220;
 
 function Authenticated(props) {
   return (
-    <FiltersProvider>      
+    <FiltersProvider>
       <div className='flex'>
         <Sidebar />
 

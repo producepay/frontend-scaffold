@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
@@ -7,10 +7,15 @@ import { useFilters } from '../../../contexts/filters';
 
 import PerformanceDisplayView from './view';
 
-function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
+function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
-  const { queryFilters, handleDateRangeSelected } = useFilters();
+  const { queryFilters, handleDateRangeSelected, setCommodityNameParam, setCustomerIdParam } = useFilters();
   const { thisYearStartDate, thisYearEndDate, lastYearStartDate, lastYearEndDate, ...rest } = queryFilters;
+
+  useEffect(() => {
+    setCommodityNameParam(match.params.commodityName);
+    setCustomerIdParam(match.params.customerId)
+  }, [match.params, setCommodityNameParam, setCustomerIdParam]);
 
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {

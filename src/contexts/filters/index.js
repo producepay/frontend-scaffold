@@ -42,6 +42,12 @@ const graphqlFiltersReducer = (state, action) => {
       );
       return { ...state, commodityVarietyIdentifierPairs: cvPairs };
     }
+    case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
+      return _.omit(state, 'commodityVarietyIdentifierPairs');
+    }
+    case FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE: {
+      return _.omit(state, 'erpCustomerId');
+    }
     case FILTER_CONTEXT_ACTION_TYPES.SIZE:
       return { ...state, sizeIdentifier: action.values };
     case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
@@ -81,7 +87,9 @@ function FiltersProvider(props) {
   const { customerId, commodityName } = props.match.params;
 
   const { data, loading } = useQuery(FETCH_FILTER_DATA, {});
-  const [filters, setFilters] = useState([]); // filters is a config array to be passed to the view for render
+  const [filtersToRender, setFiltersToRender] = useState([]); // filters is a config array to be passed to the view for render
+  const [commodityNameParam, setCommodityNameParam] = useState(commodityName);
+  const [customerIdParam, setCustomerIdParam] = useState(customerId);
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
     thisYearStartDate: startOfYear(new Date()), // initial dates
     thisYearEndDate: endOfYear(new Date()),
@@ -106,7 +114,7 @@ function FiltersProvider(props) {
     if (data && data.erpProducts) {
       let currentFilters = [];
       let defaultState = {};
-      if (!commodityName) { // not in a commodity specific view
+      if (!commodityNameParam) { // not in a commodity specific view
         const commoditiesWithSubVarieties =
           _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
             (result, erpProducts, commodityIdentifier) => {
@@ -130,18 +138,23 @@ function FiltersProvider(props) {
             { commodityIdentifier: item.value, varietyIdentifier: subItem.value }
           ))
         ));
+      } else {
+        // remove commodity variety identifier pairs here
+        dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE });
       }
     
       // Size and Packaging
       currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch));
       currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch));
 
-      if (!customerId) { // not in a customer specific view
+      if (!customerIdParam) { // not in a customer specific view
         currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch));
         defaultState.erpCustomerId = _.map(data.erpCustomers, "id");
+      } else {
+        dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
       }
 
-      setFilters(currentFilters);
+      setFiltersToRender(currentFilters);
       dispatch({
         type: FILTER_CONTEXT_ACTION_TYPES.INIT_FILTERS,
         filter: {
@@ -153,15 +166,17 @@ function FiltersProvider(props) {
         },
       });
     }
-  }, [commodityName, customerId, data]);
+  }, [commodityNameParam, customerId, customerIdParam, data]);
 
   return (
     <FiltersContext.Provider value={{
-      filters,
+      filters: filtersToRender,
       queryFilters: state,
       dispatch,
       loading,
       handleDateRangeSelected,
+      setCommodityNameParam, // components using this context must set this on route change
+      setCustomerIdParam,    // components using this context must set this on route change
     }}>
       {children}
     </FiltersContext.Provider> 
