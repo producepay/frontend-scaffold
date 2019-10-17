@@ -2,15 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import _ from 'lodash';
-<<<<<<< HEAD
 import subDays from 'date-fns/sub_days';
-=======
-import format from 'date-fns/format';
-import subDays from 'date-fns/sub_days';
-import subWeeks from 'date-fns/sub_weeks';
-import addWeeks from 'date-fns/add_weeks';
-import endOfWeek from 'date-fns/end_of_week';
->>>>>>> 289b5a51418e50aa17fa7ad08afdfdcd3c74efe4
 import startOfISOWeek from 'date-fns/start_of_iso_week';
 import subISOYears from 'date-fns/sub_iso_years';
 
@@ -20,11 +12,6 @@ import { allCommoditiesAndVarieties } from '../../../../helpers/commodities-and-
 
 import MarketInsightsAllView from './view';
 
-<<<<<<< HEAD
-=======
-const MOVEMENT_GRAPH_WEEKS_BACK = 44;
-
->>>>>>> 289b5a51418e50aa17fa7ad08afdfdcd3c74efe4
 const FETCH_DATA = gql`
   query CommodityQuery(
     $commodityUuids: [String!],
@@ -98,7 +85,6 @@ const FETCH_DATA = gql`
   }
 `
 
-<<<<<<< HEAD
 const commodityUuids = _.uniq(_.map(allCommoditiesAndVarieties, 'commodityUuid'), (commodityAndVariety) => {
   return [
     commodityAndVariety.commodityUuid
@@ -110,19 +96,6 @@ const varietyUuids = _.uniq(_.map(allCommoditiesAndVarieties, 'varietyUuid'), (c
     commodityAndVariety.varietyUuid
   ]
 })
-=======
-const commodityUuids = _.flatten(_.map(_.uniqBy(allCommoditiesAndVarieties, 'commodityUuid'), (commodityAndVariety) => {
-  return [
-    commodityAndVariety.commodityUuid
-  ]
-}))
-
-const varietyUuids = _.flatten(_.map(_.uniqBy(allCommoditiesAndVarieties, 'varietyUuid'), (commodityAndVariety) => {
-  return [
-    commodityAndVariety.varietyUuid
-  ]
-}))
->>>>>>> 289b5a51418e50aa17fa7ad08afdfdcd3c74efe4
 
 const commonMovementFilters = {
   impExpFlag: ['D', 'I'],
@@ -131,11 +104,6 @@ const commonMovementFilters = {
 
 const startOfWeek = startOfISOWeek(new Date());
 const endOfLastWeek = subDays(startOfWeek, 1);
-<<<<<<< HEAD
-=======
-const lastYearStartDate = gqlF(subISOYears(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK), 1));
-const lastYearEndDate = gqlF(subISOYears(endOfWeek(addWeeks(startOfWeek, 8)), 1));
->>>>>>> 289b5a51418e50aa17fa7ad08afdfdcd3c74efe4
 
 function MarketInsightsAll(props) {
   const { loading, error, data } = useQuery(FETCH_DATA, {
@@ -143,19 +111,11 @@ function MarketInsightsAll(props) {
       commodityUuids: commodityUuids,
       summaryPricingFilters: {
         commodityUuid: commodityUuids,
-<<<<<<< HEAD
         varietyUuid: [...varietyUuids, '0'],
         dateRanges: [{
           startDate: gqlF(subDays(new Date(), 14)),
           endDate: gqlF(subDays(new Date(), 1)),
         }],
-=======
-        varietyUuid: varietyUuids || '0',
-        dateRanges: [{
-          startDate: gqlF(subDays(new Date(), 14)),
-          endDate: gqlF(subDays(new Date(), 1)),
-          }],
->>>>>>> 289b5a51418e50aa17fa7ad08afdfdcd3c74efe4
         quality: [''],
       },
       summaryPricingGroups: {
