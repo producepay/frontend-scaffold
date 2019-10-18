@@ -29,7 +29,7 @@ function MarketInsightsView() {
       </div>
 
       <Switch>
-        <Route exact path={routes.marketInsightsDashboard()} render={() => <MarketInsightsDashboard foo={"bar"}/>} />
+        <Route exact path={routes.marketInsightsDashboard()} component={MarketInsightsDashboard} />
         <Route exact path={routes.marketInsightsAll()} component={MarketInsightsAll} />
 
         <Redirect to={routes.marketInsightsDashboard()} />
