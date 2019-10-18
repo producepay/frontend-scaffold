@@ -19,7 +19,7 @@ function SidebarView(props) {
                 title={filter.title}
                 items={filter.items}
                 onChange={filter.onChange}
-                // defaultValues={filter.defaultValues || {}}
+                defaultValues={filter.defaultValues || []}
               />
             </div>
           </div>
