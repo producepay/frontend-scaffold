@@ -4,7 +4,7 @@ import _ from 'lodash';
 import differenceInCalendarWeeks from 'date-fns/difference_in_calendar_weeks';
 import format from 'date-fns/format';
 
-import { getUTCDate, utcDateStrToTimeZoneOffset } from '../../../helpers/dates';
+import { utcDateStrToTimeZoneOffset } from '../../../helpers/dates';
 
 import LineGraph from '../../nivo/LineGraph';
 

@@ -9,8 +9,6 @@ import DataSummary from './DataSummary';
 function PerformanceSummary(props) {
   const { thisYear, lastYear } = props;
 
-  // const salesPercentageDifference = (thisYear.totalSaleAmount - lastYear.totalSaleAmount) / lastYear.tot
-
   return (
     <div className='flex'>
       <DataSummary
