@@ -11,7 +11,7 @@ function TextField(props) {
     className,
     `textfield w-full border outline-none focus:border-blue-400 textfield-${size} text-${size}`,
     {
-      'rounded': rounded,
+      rounded: rounded,
     }
   );
 

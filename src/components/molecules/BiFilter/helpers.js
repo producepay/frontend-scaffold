@@ -14,7 +14,7 @@ const optionValueDef = {
   value: valueDef,
 };
 
-export const optionValueType = PropTypes.shape({...optionValueDef});
+export const optionValueType = PropTypes.shape({ ...optionValueDef });
 
 export const optionValueWithSubItemsType = PropTypes.shape({
   ...optionValueDef,
