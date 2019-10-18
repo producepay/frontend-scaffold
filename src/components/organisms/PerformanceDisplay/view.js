@@ -66,12 +66,14 @@ function PerformanceDisplayView({
         </div>
       </div>
 
-      <div className={`${SECTION_SPACING} border-b`}>
-        <PerformanceSummary
-          thisYear={thisYearSummary}
-          lastYear={lastYearSummary}
-        />
-      </div>
+      {!_.isEmpty(thisYearSummary) ? (
+        <div className={`${SECTION_SPACING} border-b`}>
+          <PerformanceSummary
+            thisYear={thisYearSummary}
+            lastYear={lastYearSummary}
+          />
+        </div>
+      ) : null}
 
       <div className={`${SECTION_SPACING} border-b`}>
         <PerformanceGraph

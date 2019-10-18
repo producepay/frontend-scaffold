@@ -4,16 +4,16 @@ import _ from 'lodash';
 import differenceInCalendarWeeks from 'date-fns/difference_in_calendar_weeks';
 import format from 'date-fns/format';
 
-import { getUTCDate } from '../../../helpers/dates';
+import { getUTCDate, utcDateStrToTimeZoneOffset } from '../../../helpers/dates';
 
 import LineGraph from '../../nivo/LineGraph';
 
 const mapDataForNivo = (data, yAxisField) => data.map((d) => ({
-  x: d.groupedValue.replace(' 00:00:00 UTC', ''),
+  x: utcDateStrToTimeZoneOffset(d.groupedValue),
   y: d[yAxisField],
 }));
 
-const formatDate = (d) => format(getUTCDate(d), 'MMM D, \'YY')
+const formatDate = (d) => format(d, 'MMM D, \'YY');
 
 function numTickValuesToTake(tickValues, device) {
   const numTicks = tickValues.length;
@@ -31,7 +31,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate
 
   const commonLineGraphProps = {
     data: graphData,
-    xScale: { type: 'time', format: '%Y-%m-%d', precision: 'day' },
+    xScale: { type: 'time', format: '%Y-%m-%d %H:%M:%S', precision: 'day' },
     xFormat: formatDate,
   };
 

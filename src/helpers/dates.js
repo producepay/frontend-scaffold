@@ -1,6 +1,7 @@
-const format = require('date-fns/format');
-const isBefore = require('date-fns/is_before');
-const isAfter = require('date-fns/is_after');
+import format from 'date-fns/format';
+import isBefore from 'date-fns/is_before';
+import isAfter from 'date-fns/is_after';
+import _ from 'lodash';
 
 const MONTHS = [
   'JAN', 'FEB', 'MAR', 'APR', 'MAY',
@@ -8,7 +9,7 @@ const MONTHS = [
   'OCT', 'NOV', 'DEC'
 ];
 
-function getUTCDate(dateString = Date.now()) {
+export function getUTCDate(dateString = Date.now()) {
   const date = new Date(dateString);
 
   return new Date(
@@ -21,26 +22,27 @@ function getUTCDate(dateString = Date.now()) {
   );
 };
 
-function gqlF(date) {
+export function gqlF(date) {
   return format(date, 'YYYY-MM-DD');
 }
 
-function monthNumToName(monthNum) {
+export function monthNumToName(monthNum) {
   return MONTHS[monthNum] || '';
 }
-function monthNameToNum(name) {
+export function monthNameToNum(name) {
   var month = MONTHS.indexOf(name);
   return month ? month : 0;
 }
 
-function isBetween(d, dStart, dEnd) {
+export function isBetween(d, dStart, dEnd) {
   return isAfter(d, dStart) && isBefore(d, dEnd);
 }
 
-module.exports = {
-  getUTCDate,
-  gqlF,
-  monthNumToName,
-  monthNameToNum,
-  isBetween,
+// Convert a date string in the format YYYY-MM-DD 00:00:00 UTC to YYYY-MM-DD 07:00:00
+export function utcDateStrToTimeZoneOffset(dateStr) {
+  const timezoneOffset = new Date().getTimezoneOffset();
+  const hoursOffset = _.padStart(Math.floor(timezoneOffset / 60), 2, '0');
+  const minsOffset = _.padStart(timezoneOffset % 60, 2, '0');
+
+  return dateStr.replace('00:00:00 UTC', `${hoursOffset}:${minsOffset}:00`);
 }
