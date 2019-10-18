@@ -20,8 +20,6 @@ const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
 function PerformanceDisplayView({
   loading,
   data,
-  dateInterval,
-  setDateInterval,
   history,
   handleDateRangeSelected,
   startDate,
@@ -33,6 +31,8 @@ function PerformanceDisplayView({
   const lastYearSalesOrderLineItems = _.get(data, 'lastYearSalesOrderLineItems', []);
   const customerRankingData = _.get(data, 'customerRankingData', []);
   const commodityRankingData = _.get(data, 'commodityRankingData', []);
+
+  // console.log(data);
 
   const onClickCustomer = (cData) => history.push(routes.showCustomer(cData.erpCustomersId));
   const onClickCommodity = (cData) => history.push(routes.showCommodity(cData.groupedValue));

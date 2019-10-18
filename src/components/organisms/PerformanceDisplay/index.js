@@ -39,6 +39,8 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
     },
   });
 
+  console.log(data);
+
   return (
     <PerformanceDisplayView
       data={data}
