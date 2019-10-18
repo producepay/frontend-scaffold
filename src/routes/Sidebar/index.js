@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import routes from '../../routes';
 import { useAuth } from '../../contexts/auth';
+import { useFilters } from '../../contexts/filters';
 
 import logo from '../../assets/images/pp-logo.svg';
 import SidebarFilters from '../../components/organisms/SidebarFilters';
@@ -11,6 +12,7 @@ const SIDEBAR_WIDTH = 220;
 
 function Sidebar(props) {
   const { logout } = useAuth();
+  const { setSessionFilters } = useFilters();
 
   return (
     <div className='fixed overflow-y-scroll top-0 bottom-0' style={{ width: SIDEBAR_WIDTH }}>
@@ -30,7 +32,15 @@ function Sidebar(props) {
         Market Insights
       </Link>
 
-      <div className='p-4 pointer' onClick={logout}>Log Out</div>
+      <div
+        className='p-4 pointer'
+        onClick={() => {
+          logout();
+          setSessionFilters({});
+        }}
+      >
+        Log Out
+      </div>
     </div>
   );
 }

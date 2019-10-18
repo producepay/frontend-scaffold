@@ -215,6 +215,7 @@ function FiltersProvider(props) {
       handleDateRangeSelected,
       setCommodityNameParam, // components using this context must set this on route change
       setCustomerIdParam,    // components using this context must set this on route change
+      setSessionFilters,
     }}>
       {children}
     </FiltersContext.Provider> 
