@@ -57,12 +57,28 @@ storiesOf('Components/molecules/BiFilter', module)
     ]}
     onChange={action('onChange')}
   />
-)).add('default select all', () => (
+)).add('select some by default', () => (
   <Wrapper
     title="Commodity"
-    items={items}
+    items={[
+      ...items,
+      {
+        label: "Apples",
+        value: "Apples",
+        subItems: [
+          {
+            label: "Fuji",
+            value: "Fuji",
+          },
+          {
+            label: "Golden",
+            value: "Golden",
+          },
+        ],
+      },
+    ]}
     onChange={action('onChange')}
-    selectAll
+    defaultValues={{"Avocados": [], "Apples": ["Fuji"]}}
   />
 )).add('no search', () => (
   <Wrapper
@@ -107,6 +123,5 @@ storiesOf('Components/molecules/BiFilter', module)
     ]}
     onChange={action('onChange')}
     onSubItemsChange={action('onSubItemsChange')}
-    selectAll
   />
 ));

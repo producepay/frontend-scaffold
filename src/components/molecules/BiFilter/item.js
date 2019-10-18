@@ -35,7 +35,7 @@ function BiFilterItem(props) {
 
   const hasSubItems = item.subItems && item.subItems.length;
 
-  const [showSubItems, setShowSubItems] = useState(false);
+  const [showSubItems, setShowSubItems] = useState((filterState[item.value] || []).length > 0);
 
   useEffect(() => {
     if (searchTerm !== '' && _.some(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label))) {

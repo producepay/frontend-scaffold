@@ -99,7 +99,6 @@ BiFilterView.propTypes = {
   items: optionsWithSubItemsType.isRequired,
   dispatch: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
-  selectAll: PropTypes.bool.isRequired,
   showSearch: PropTypes.bool.isRequired,
   limit: PropTypes.number.isRequired,
 };

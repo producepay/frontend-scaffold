@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { useDidMount } from '../../../hooks/did-mount';
 
-import { optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
+import { optionsWithSubItemsType, valueDef, FILTER_ACTION_TYPES } from './helpers';
 import BiFilterView from './view';
 
 const biFilterReducer = (state, action) => {
@@ -39,18 +39,25 @@ function BiFilter(props) {
     items,
     limit,
     onChange,
-    selectAll,
     showSearch,
+    defaultValues,
   } = props;
 
   const didMount = useDidMount();
 
-  const defaultState = selectAll ? _.reduce(_.keyBy(items, 'value'),
-    (result, item, parentValue) => {
-      result[parentValue] = _.get(item, 'subItems', []).length > 0 ? _.map(item.subItems, 'value') : [];
-      return result;
-    },
-  {}) : {};
+  const parentDefaultValues = _.keys(defaultValues);
+
+  const defaultState = parentDefaultValues.length > 0 ?
+    _.reduce(_.keyBy(_.filter(items, (item) => _.includes(parentDefaultValues, item.value)), 'value'),
+      (result, item, parentValue) => {
+        const childDefaultValues = defaultValues[parentValue] || [];
+        const hasSubItems = _.get(item, 'subItems', []).length > 0;
+        result[parentValue] = hasSubItems ?
+          _.map(_.filter(item.subItems, (subItem) => _.includes(childDefaultValues, subItem.value)), 'value')
+          : [];
+        return result;
+      },
+    {}) : {};
   const [state, dispatch] = useReducer(biFilterReducer, defaultState);
 
   useEffect(() => {
@@ -68,7 +75,6 @@ function BiFilter(props) {
       limit={limit}
       dispatch={dispatch}
       state={state}
-      selectAll
     />
   );
 }
@@ -80,7 +86,9 @@ BiFilter.propTypes = {
   showSearch: PropTypes.bool,
   limit: PropTypes.number,
   onChange: PropTypes.func,
-  selectAll: PropTypes.bool,
+  defaultValues: PropTypes.shape({
+    valueDef: PropTypes.arrayOf(valueDef),
+  }),
 };
 
 BiFilter.defaultProps = {
@@ -88,7 +96,7 @@ BiFilter.defaultProps = {
   showSearch: true,
   limit: 5,
   onChange: () => {},
-  selectAll: false,
+  defaultValues: {},
 };
 
 export default React.memo(BiFilter);
