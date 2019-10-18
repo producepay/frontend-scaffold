@@ -3,7 +3,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { optionValueWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
+import { optionValueWithSubItemsType, optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
 import { textSearchCompare } from '../../../helpers/common';
 import Checkbox from '../../elements/Checkbox';
 import ChevronUp from '../../icons/ChevronUp';
@@ -34,8 +34,9 @@ function BiFilterItem(props) {
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
+  const parentItem = _.find(filterState, i => i.value === item.value);
 
-  const [showSubItems, setShowSubItems] = useState((filterState[item.value] || []).length > 0);
+  const [showSubItems, setShowSubItems] = useState((parentItem ? (parentItem.subItems || []) : []).length > 0);
 
   useEffect(() => {
     if (searchTerm !== '' && _.some(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label))) {
@@ -46,24 +47,38 @@ function BiFilterItem(props) {
   const filteredSubItems = _.filter(item.subItems, (subItem) =>
     textSearchCompare(searchTerm, item.label) || textSearchCompare(searchTerm, subItem.label)
   );
-  const parentItems = _.keys(filterState);
+
+  const parentItemValues = _.map(filterState, 'value');
+  const childItemValues = parentItem && parentItem.subItems ? _.map(parentItem.subItems, 'value') : [];
 
   const onParentItemClicked = useCallback((e) => {
-    if (_.includes(parentItems, e.target.value)) {
-      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_PARENT, parentValue: e.target.value });
+    const selected = _.includes(parentItemValues, e.target.value);
+    if (selected) {
+      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_ITEM, item });
     } else {
-      dispatch({ type: FILTER_ACTION_TYPES.ADD_PARENT, parentValue: e.target.value, children: _.map(filteredSubItems, 'value') });
+      dispatch({ type: FILTER_ACTION_TYPES.ADD_ITEM, item });
     }
-  }, [parentItems, dispatch, filteredSubItems]);
+  }, [parentItemValues, dispatch, item]);
 
   const onChildItemClicked = useCallback((e) => {
-    const childItems = filterState[item.value];
-    if (_.includes(childItems, e.target.value)) {
-      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_CHILD, parentValue: item.value, childValue: e.target.value })
+    const selectedChildItem = _.find(item.subItems, i => i.value === e.target.value);
+
+    if (parentItem) {
+      const existingChild = _.find(parentItem.subItems, i => i.value === e.target.value);
+      if (existingChild) {
+        if (parentItem.subItems.length === 1) { // remove parent as well
+          dispatch({ type: FILTER_ACTION_TYPES.REMOVE_ITEM, item });
+        } else {
+          dispatch({ type: FILTER_ACTION_TYPES.REMOVE_SUB_ITEM, item, subItem: existingChild });
+        }
+      } else {
+        dispatch({ type: FILTER_ACTION_TYPES.ADD_SUB_ITEM, item, subItem: selectedChildItem });
+      }
     } else {
-      dispatch({ type: FILTER_ACTION_TYPES.ADD_CHILD, parentValue: item.value, childValue: e.target.value });
+      const newParentItem = { ...item, subItems: [selectedChildItem] };
+      dispatch({ type: FILTER_ACTION_TYPES.ADD_ITEM, item: newParentItem });
     }
-  }, [dispatch, filterState, item.value]);
+  }, [dispatch, item, parentItem]);
 
   return (
     <li className={cx("my-2", className)}>
@@ -71,7 +86,7 @@ function BiFilterItem(props) {
         <ItemWithCheckbox
           item={item}
           onClick={onParentItemClicked}
-          checked={_.includes(parentItems, item.value)}
+          checked={_.includes(parentItemValues, item.value)}
           name={item.value}
         />
         {
@@ -91,7 +106,7 @@ function BiFilterItem(props) {
                   item={subItem}
                   name={`${item.value}-${subItem.value}`}
                   onClick={onChildItemClicked}
-                  checked={_.includes(filterState[item.value], subItem.value)}
+                  checked={_.includes(childItemValues, subItem.value)}
                 />
               </li>
             ))}
@@ -107,7 +122,7 @@ BiFilterItem.propTypes = {
   item: optionValueWithSubItemsType.isRequired,
   searchTerm: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
-  filterState: PropTypes.object.isRequired,
+  filterState: optionsWithSubItemsType,
 };
 
 BiFilterItem.defaultProps = {

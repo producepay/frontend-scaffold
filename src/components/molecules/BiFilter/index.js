@@ -4,29 +4,30 @@ import _ from 'lodash';
 
 import { useDidMount } from '../../../hooks/did-mount';
 
-import { optionsWithSubItemsType, valueDef, FILTER_ACTION_TYPES } from './helpers';
+import { optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
 import BiFilterView from './view';
 
 const biFilterReducer = (state, action) => {
   switch (action.type) {
-    case FILTER_ACTION_TYPES.ADD_PARENT:
-      return { ...state, [action.parentValue]: action.children };
-    case FILTER_ACTION_TYPES.REMOVE_PARENT: {
-      return _.omit(state, action.parentValue);
+    case FILTER_ACTION_TYPES.ADD_ITEM: {
+      return [ ...state, action.item ];
     }
-    case FILTER_ACTION_TYPES.ADD_CHILD:
-      if (_.has(state, action.parentValue)) {
-        return { ...state, [action.parentValue]: [...state[action.parentValue], action.childValue] };
-      } else {
-        return { ...state, [action.parentValue]: [action.childValue] };
-      }
-    case FILTER_ACTION_TYPES.REMOVE_CHILD:
-      const childItems = _.without(state[action.parentValue], action.childValue);
-      if (childItems.length) {
-        return { ...state, [action.parentValue]: childItems };
-      } else {
-        return _.omit(state, action.parentValue);
-      }
+    case FILTER_ACTION_TYPES.REMOVE_ITEM: {
+      return _.filter(state, (item) => item.value !== action.item.value);
+    }
+    case FILTER_ACTION_TYPES.ADD_SUB_ITEM: {
+      const parentItem = _.find(state, (item) => item.value === action.item.value);
+      const newParentItem = { ...parentItem, subItems: [...parentItem.subItems, action.subItem ] }
+      return [..._.filter(state, (item) => item.value !== parentItem.value), newParentItem];
+    }
+    case FILTER_ACTION_TYPES.REMOVE_SUB_ITEM: {
+      const parentItem = _.find(state, (item) => item.value === action.item.value);
+      const newParentItem = {
+        ...parentItem,
+        subItems: _.filter(parentItem.subItems, (subItem) => subItem.value !== action.subItem.value)
+      };
+      return [..._.filter(state, (item) => item.value !== parentItem.value), newParentItem];
+    }
     default:
       throw new Error();
   }
@@ -45,20 +46,7 @@ function BiFilter(props) {
 
   const didMount = useDidMount();
 
-  const parentDefaultValues = _.keys(defaultValues);
-
-  const defaultState = parentDefaultValues.length > 0 ?
-    _.reduce(_.keyBy(_.filter(items, (item) => _.includes(parentDefaultValues, item.value)), 'value'),
-      (result, item, parentValue) => {
-        const childDefaultValues = defaultValues[parentValue] || [];
-        const hasSubItems = _.get(item, 'subItems', []).length > 0;
-        result[parentValue] = hasSubItems ?
-          _.map(_.filter(item.subItems, (subItem) => _.includes(childDefaultValues, subItem.value)), 'value')
-          : [];
-        return result;
-      },
-    {}) : {};
-  const [state, dispatch] = useReducer(biFilterReducer, defaultState);
+  const [state, dispatch] = useReducer(biFilterReducer, defaultValues);
 
   useEffect(() => {
     if (!didMount) {
@@ -86,9 +74,7 @@ BiFilter.propTypes = {
   showSearch: PropTypes.bool,
   limit: PropTypes.number,
   onChange: PropTypes.func,
-  defaultValues: PropTypes.shape({
-    valueDef: PropTypes.arrayOf(valueDef),
-  }),
+  defaultValues: optionsWithSubItemsType,
 };
 
 BiFilter.defaultProps = {
@@ -96,7 +82,7 @@ BiFilter.defaultProps = {
   showSearch: true,
   limit: 5,
   onChange: () => {},
-  defaultValues: {},
+  defaultValues: [],
 };
 
 export default React.memo(BiFilter);

@@ -78,7 +78,22 @@ storiesOf('Components/molecules/BiFilter', module)
       },
     ]}
     onChange={action('onChange')}
-    defaultValues={{"Avocados": [], "Apples": ["Fuji"]}}
+    defaultValues={[
+      {
+        label: "Avocados",
+        value: "Avocados",
+      },
+      {
+        label: "Apples",
+        value: "Apples",
+        subItems: [
+          {
+            label: "Fuji",
+            value: "Fuji",
+          },
+        ],
+      },
+    ]}
   />
 )).add('no search', () => (
   <Wrapper
