@@ -184,7 +184,6 @@ function FiltersProvider(props) {
               });
               return result;
             }, []);
-        const commodityValues = _.map(commoditiesWithSubVarieties, 'value');
         currentFilters.push({
           title: "Commodities",
           items: commoditiesWithSubVarieties,
@@ -194,7 +193,7 @@ function FiltersProvider(props) {
               { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: items }
             )},
           defaultValues: sessionFilters.commodityIdentifier ?
-            _.filter(commoditiesWithSubVarieties, i => _.includes(commodityValues, i.value)) : 
+            _.filter(commoditiesWithSubVarieties, i => _.includes(sessionFilters.commodityIdentifier, i.value)) : 
             sessionFilters.commodityVarietyIdentifierPairs ?
               restoreDefaultCvOptions(sessionFilters.commodityVarietyIdentifierPairs, commoditiesWithSubVarieties) :
               [],
