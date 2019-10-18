@@ -55,8 +55,10 @@ function BiFilterItem(props) {
     const selected = _.includes(parentItemValues, e.target.value);
     if (selected) {
       dispatch({ type: FILTER_ACTION_TYPES.REMOVE_ITEM, item });
+      setShowSubItems(false);
     } else {
       dispatch({ type: FILTER_ACTION_TYPES.ADD_ITEM, item });
+      setShowSubItems(true);
     }
   }, [parentItemValues, dispatch, item]);
 

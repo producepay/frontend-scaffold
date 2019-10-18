@@ -52,7 +52,7 @@ function BiFilter(props) {
     if (!didMount) {
       onChange(state);
     }
-  }, [state, onChange, didMount]);
+  }, [didMount, onChange, state]);
 
   return (
     <BiFilterView
