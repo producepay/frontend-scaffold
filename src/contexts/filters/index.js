@@ -97,7 +97,7 @@ function generateFilter(collection, title, key, label, dispatch, restoredValues)
   };
 }
 
-function buildRestoredCommodityVarietyPairs(restoredCommodityVarietyPairs, options) {
+function restoreDefaultCvOptions(restoredCommodityVarietyPairs, options) {
   return _.reduce(restoredCommodityVarietyPairs, (result, cvPair) => {
     const optionItem = _.find(options, item => item.value === cvPair.commodityIdentifier);
     if (optionItem) {
@@ -126,7 +126,6 @@ function FiltersProvider(props) {
   const [filtersToRender, setFiltersToRender] = useState([]); // filters is a config array to be passed to the view for render
   const [commodityNameParam, setCommodityNameParam] = useState(commodityName);
   const [customerIdParam, setCustomerIdParam] = useState(customerId);
-  const [restoredFilters, setRestoredFilters] = useState({});
 
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
     startDate: subISOYears(new Date(), 1), // initial dates
@@ -153,7 +152,6 @@ function FiltersProvider(props) {
           ...(sessionFilters.endDate ? { endDate: new Date(sessionFilters.endDate) } : {}),
         };
         if (!_.isEqual(transformSessionFilters, sessionFilters)) {
-          setRestoredFilters(transformSessionFilters);
           dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.RESTORE_FILTERS, filters: transformSessionFilters });
         }
       }
@@ -195,10 +193,10 @@ function FiltersProvider(props) {
             dispatch(
               { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: items }
             )},
-          defaultValues: restoredFilters.commodityIdentifier ?
+          defaultValues: sessionFilters.commodityIdentifier ?
             _.filter(commoditiesWithSubVarieties, i => _.includes(commodityValues, i.value)) : 
-            restoredFilters.commodityVarietyIdentifierPairs ?
-              buildRestoredCommodityVarietyPairs(restoredFilters.commodityVarietyIdentifierPairs, commoditiesWithSubVarieties) :
+            sessionFilters.commodityVarietyIdentifierPairs ?
+              restoreDefaultCvOptions(sessionFilters.commodityVarietyIdentifierPairs, commoditiesWithSubVarieties) :
               [],
         });
       } else {
@@ -207,18 +205,18 @@ function FiltersProvider(props) {
       }
     
       // Size and Packaging
-      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch, restoredFilters.sizeIdentifier));
-      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch, restoredFilters.packagingIdentifier));
+      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch, sessionFilters.sizeIdentifier));
+      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch, sessionFilters.packagingIdentifier));
 
       if (!customerIdParam) { // not in a customer specific view
-        currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, restoredFilters.erpCustomerId));
+        currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, sessionFilters.erpCustomerId));
       } else {
         dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
       }
 
       setFiltersToRender(currentFilters);
     }
-  }, [commodityNameParam, customerId, customerIdParam, data, restoredFilters]);
+  }, [commodityNameParam, customerId, customerIdParam, data, sessionFilters]);
 
   return (
     <FiltersContext.Provider value={{
