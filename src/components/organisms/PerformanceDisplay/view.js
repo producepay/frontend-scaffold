@@ -52,7 +52,7 @@ function PerformanceDisplayView({
               month={subMonths(new Date(), 1)}
               format="MMM DD YYYY"
               inputProps={{
-                className: "w-56",
+                className: 'px-6',
               }}
               alignRight
               showWeekNumbers
