@@ -13,8 +13,6 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
   const { gqlFilterVariables, handleDateRangeSelected, setCommodityNameParam, setCustomerIdParam } = useFilters();
   const { startDate, endDate, ...rest } = gqlFilterVariables;
 
-  console.log(gqlFilterVariables);
-
   useEffect(() => {
     setCommodityNameParam(match.params.commodityName);
     setCustomerIdParam(match.params.customerId)
@@ -38,8 +36,6 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
       filters: graphqlFilters,
     },
   });
-
-  console.log(data);
 
   return (
     <PerformanceDisplayView
