@@ -13,7 +13,7 @@ import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
 import PerformanceGraph from '../../molecules/PerformanceGraph';
 import PerformanceSummary from '../../molecules/PerformanceSummary';
-import DateRangePicker, { DEFAULT_PRESETS } from '../../DateRangePicker';
+import DateRangePicker, { DEFAULT_PRESETS } from '../../elements/DateRangePicker';
 
 const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
 
