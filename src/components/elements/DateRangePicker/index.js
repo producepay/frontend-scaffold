@@ -5,9 +5,11 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { DateUtils } from 'react-day-picker';
 import subDays from 'date-fns/sub_days';
 import subWeeks from 'date-fns/sub_weeks';
-import Button from '../elements/Button';
-import { formatDateRange } from '../../helpers/format';
-import { isBetween } from '../../helpers/dates';
+
+import { formatDateRange } from '../../../helpers/format';
+import { isBetween } from '../../../helpers/dates';
+
+import Button from '../Button';
 
 import 'react-day-picker/lib/style.css';
 import './datepicker.css';
@@ -46,8 +48,8 @@ const CalendarMenu = ({
   ...props
 }) => {
   return (
-    <div className={cx({[classNames.overlayWrapper]: numberOfMonths === 1})} {...props}>
-      <div className={cx(classNames.overlay, { "InsightsDatePickerOverlayAlignRight": alignRight })}>
+    <div className={cx({ [classNames.overlayWrapper]: numberOfMonths === 1 })} {...props}>
+      <div className={cx(classNames.overlay, { InsightsDatePickerOverlayAlignRight: alignRight })}>
         {children}
         <div className="text-left pb-4 pr-4 w-full">
           {presets.map(({ label, start, end }) => (
@@ -150,7 +152,7 @@ const DateRangePicker = ({
   }, [handleClick]);
 
   return (
-    <div className={cx({'text-right': alignRight})}>
+    <div className={cx({ 'text-right': alignRight })}>
       <div ref={datePickerNode} className="inline-block">
         <DayPickerInput
           ref={dayPickerInput}

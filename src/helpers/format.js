@@ -4,25 +4,25 @@ import isSameDay from 'date-fns/is_same_day';
 
 import { getPercentage } from './math';
 
+const FORMAT_PROPS = { style: 'currency', currency: 'USD' };
+
 export function formatPrice(value, trunc = true) {
   if (value === null || value === undefined) return null;
 
   if (trunc) {
-    let num = Math.floor(value);
+    const num = Math.floor(value);
     if (num >= 1e9) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency', currency: 'USD'
-      }).format(num / 1e9) + 'B';
+      return `${new Intl.NumberFormat('en-US', FORMAT_PROPS).format(num / 1e9)}B`;
     }
     if (num >= 1e6) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency', currency: 'USD'
-      }).format(num / 1e6) + 'M';
+      return `${new Intl.NumberFormat('en-US', FORMAT_PROPS).format(num / 1e6)}M`;
     }
     if (num >= 1e4) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency', currency: 'USD', maximumSignificantDigits: 3
-      }).format(num / 1000) + 'K';
+      const val = new Intl.NumberFormat(
+        'en-US',
+        { ...FORMAT_PROPS, maximumSignificantDigits: 3 },
+      ).format(num / 1000);
+      return `${val}K`;
     }
   }
 
@@ -32,15 +32,15 @@ export function formatPrice(value, trunc = true) {
 }
 
 export function formatLargeLoads(value) {
-  let num = Math.floor(value);
+  const num = Math.floor(value);
   if (num >= 1e9) {
-    return new Intl.NumberFormat('en-US').format(num / 1e9) + 'B';
+    return `${new Intl.NumberFormat('en-US').format(num / 1e9)}B`;
   }
   if (num >= 1e6) {
-    return new Intl.NumberFormat('en-US').format(num / 1e6) + 'M';
+    return `${new Intl.NumberFormat('en-US').format(num / 1e6)}M`;
   }
   if (num >= 1e4) {
-    return new Intl.NumberFormat('en-US').format(num / 1000) + 'K';
+    return `${new Intl.NumberFormat('en-US').format(num / 1000)}K`;
   }
 
   return formatLoads(value);
@@ -67,6 +67,6 @@ export function getRoundedPercentage (newVal, oldVal, precision = 0) {
 
 export function formatDateRange(startDate, endDate, formatStr = 'MM/DD/YYYY') {
   return isSameDay(startDate, endDate) ?
-          format(startDate, formatStr) :
-          `${format(startDate, formatStr)} - ${format(endDate, formatStr)}`;
+    format(startDate, formatStr) :
+    `${format(startDate, formatStr)} - ${format(endDate, formatStr)}`;
 }

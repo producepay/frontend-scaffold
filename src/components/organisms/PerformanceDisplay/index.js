@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
+import subISOYears from 'date-fns/sub_iso_years';
 
 import { gqlF } from '../../../helpers/dates';
 import { useFilters } from '../../../contexts/filters';
@@ -10,7 +11,9 @@ import PerformanceDisplayView from './view';
 function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
   const { gqlFilterVariables, handleDateRangeSelected, setCommodityNameParam, setCustomerIdParam } = useFilters();
-  const { thisYearStartDate, thisYearEndDate, lastYearStartDate, lastYearEndDate, ...rest } = gqlFilterVariables;
+  const { startDate, endDate, ...rest } = gqlFilterVariables;
+
+  console.log(gqlFilterVariables);
 
   useEffect(() => {
     setCommodityNameParam(match.params.commodityName);
@@ -21,18 +24,18 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
     variables: {
       groupByInterval: dateInterval,
       thisYearSalesOrderLineItemFilters: {
-        startDate: gqlF(thisYearStartDate),
-        endDate: gqlF(thisYearEndDate),
+        startDate: gqlF(startDate),
+        endDate: gqlF(endDate),
         ...graphqlFilters,
         ...rest,
       },
       lastYearSalesOrderLineItemFilters: {
-        startDate: gqlF(lastYearStartDate),
-        endDate: gqlF(lastYearEndDate),
+        startDate: gqlF(subISOYears(startDate, 1)),
+        endDate: gqlF(subISOYears(endDate, 1)),
         ...graphqlFilters,
         ...rest,
       },
-      filters: { ...graphqlFilters },
+      filters: graphqlFilters,
     },
   });
 
@@ -44,8 +47,8 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
       dateInterval={dateInterval}
       setDateInterval={setDateInterval}
       handleDateRangeSelected={handleDateRangeSelected}
-      thisYearStartDate={thisYearStartDate}
-      thisYearEndDate={thisYearEndDate}
+      startDate={startDate}
+      endDate={endDate}
       history={history}
     />
   );

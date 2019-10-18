@@ -2,10 +2,6 @@ import React, { useState, useReducer, useEffect, useContext, useCallback } from 
 import gql from 'graphql-tag';
 import _ from 'lodash';
 import subISOYears from 'date-fns/sub_iso_years';
-import startOfYear from 'date-fns/start_of_year';
-import endOfYear from 'date-fns/end_of_year';
-import setYear from 'date-fns/set_year';
-import getYear from 'date-fns/get_year';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
@@ -40,8 +36,8 @@ const graphqlFiltersReducer = (state, action) => {
     case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES: {
       if (action.commodityVarietyIdentifiers.length === 0) {
         return state.commodityVarietyIdentifierPairs ?
-                { ...state, commodityVarietyIdentifierPairs: [] } :
-                { ...state, commodityIdentifier: [] };
+          { ...state, commodityVarietyIdentifierPairs: [] } :
+          { ...state, commodityIdentifier: [] };
       }
       const hasVarieties = _.flatten(_.map(action.commodityVarietyIdentifiers, 'subItems')).length !== 0;
       if (hasVarieties) {
@@ -66,12 +62,9 @@ const graphqlFiltersReducer = (state, action) => {
     case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
       return setFilterState(state, 'packagingIdentifier', action.values);
     case FILTER_CONTEXT_ACTION_TYPES.CUSTOMER:
-        return setFilterState(state, 'erpCustomerId', action.values);
-    case FILTER_CONTEXT_ACTION_TYPES.THIS_YEAR_DATE_RANGE: {
-      return { ...state, thisYearStartDate: action.startDate, thisYearEndDate: action.endDate };
-    }
-    case FILTER_CONTEXT_ACTION_TYPES.LAST_YEAR_DATE_RANGE: {
-      return { ...state, lastYearStartDate: action.startDate, lastYearEndDate: action.endDate };
+      return setFilterState(state, 'erpCustomerId', action.values);
+    case FILTER_CONTEXT_ACTION_TYPES.DATE_RANGE: {
+      return { ...state, startDate: action.startDate, endDate: action.endDate };
     }
     case FILTER_CONTEXT_ACTION_TYPES.RESTORE_FILTERS: {
       return action.filters;
@@ -100,7 +93,7 @@ function generateFilter(collection, title, key, label, dispatch, restoredValues)
       dispatch({ type: FILTER_CONTEXT_ACTION_TYPES[_.toUpper(title)], values });
     },
     defaultValues: restoredValues ?
-     _.filter(items, (i) => _.includes(restoredValues, i.value) ) : [],
+      _.filter(items, (i) => _.includes(restoredValues, i.value) ) : [],
   };
 }
 
@@ -136,10 +129,8 @@ function FiltersProvider(props) {
   const [restoredFilters, setRestoredFilters] = useState({});
 
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
-    thisYearStartDate: startOfYear(new Date()), // initial dates
-    thisYearEndDate: endOfYear(new Date()),
-    lastYearStartDate: startOfYear(subISOYears(new Date(), 1)),
-    lastYearEndDate: endOfYear(subISOYears(new Date(), 1)),
+    startDate: subISOYears(new Date(), 1), // initial dates
+    endDate: new Date(),
   });
   const [sessionFilters, setSessionFilters] = useSessionStorage('filters', state);
 
@@ -158,10 +149,8 @@ function FiltersProvider(props) {
         // Restore dates from date strings
         const transformSessionFilters = {
           ...sessionFilters,
-          ...(sessionFilters.thisYearStartDate ? { thisYearStartDate: new Date(sessionFilters.thisYearStartDate)} : {}),
-          ...(sessionFilters.thisYearEndDate ? { thisYearEndDate: new Date(sessionFilters.thisYearEndDate)} : {}),
-          ...(sessionFilters.lastYearStartDate ? { lastYearStartDate: new Date(sessionFilters.lastYearStartDate)} : {}),
-          ...(sessionFilters.lastYearEndDate ? { lastYearEndDate: new Date(sessionFilters.lastYearEndDate)} : {}),
+          ...(sessionFilters.startDate ? { startDate: new Date(sessionFilters.startDate) } : {}),
+          ...(sessionFilters.endDate ? { endDate: new Date(sessionFilters.endDate) } : {}),
         };
         if (!_.isEqual(transformSessionFilters, sessionFilters)) {
           setRestoredFilters(transformSessionFilters);
@@ -177,20 +166,15 @@ function FiltersProvider(props) {
 
   const handleDateRangeSelected = useCallback((from, to) => {
     dispatch({
-      type: "THIS_YEAR_DATE_RANGE",
-      startDate: setYear(from, getYear(new Date())),
-      endDate: setYear(to, getYear(new Date()))
-    });
-    dispatch({
-      type: "LAST_YEAR_DATE_RANGE",
-      startDate: setYear(from, getYear(new Date()) - 1),
-      endDate: setYear(to, getYear(new Date()) - 1)
+      type: FILTER_CONTEXT_ACTION_TYPES.DATE_RANGE,
+      startDate: from,
+      endDate: to,
     });
   }, [dispatch]);
 
   useEffect(() => {
     if (data && data.erpProducts) {
-      let currentFilters = [];
+      const currentFilters = [];
       if (!commodityNameParam) { // not in a commodity specific view
         const commoditiesWithSubVarieties =
           _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
@@ -210,7 +194,7 @@ function FiltersProvider(props) {
           onChange: (items) => {
             dispatch(
               { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: items }
-          )},
+            )},
           defaultValues: restoredFilters.commodityIdentifier ?
             _.filter(commoditiesWithSubVarieties, i => _.includes(commodityValues, i.value)) : 
             restoredFilters.commodityVarietyIdentifierPairs ?

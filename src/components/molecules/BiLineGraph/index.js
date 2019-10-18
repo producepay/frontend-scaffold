@@ -1,48 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import getMonth from 'date-fns/get_month';
-import getIsoWeek from 'date-fns/get_iso_week';
-import differenceInMonths from 'date-fns/difference_in_months';
-import differenceInWeeks from 'date-fns/difference_in_weeks';
+import differenceInCalendarWeeks from 'date-fns/difference_in_calendar_weeks';
+import format from 'date-fns/format';
 
-import { monthNumToName } from '../../../helpers/dates';
-import { formatWeek } from '../../../helpers/format';
-import { takeNth } from '../../../helpers/lodash';
+import { utcDateStrToTimeZoneOffset } from '../../../helpers/dates';
 
 import LineGraph from '../../nivo/LineGraph';
 
-function groupLineItemsByMonth(lineItems) {
-  return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getMonth(item.groupedValue));
-}
+const mapDataForNivo = (data, yAxisField) => data.map((d) => ({
+  x: utcDateStrToTimeZoneOffset(d.groupedValue),
+  y: d[yAxisField],
+}));
 
-function groupLineItemsByWeek(lineItems) {
-  return _.groupBy(_.filter(lineItems, 'groupedValue'), item => getIsoWeek(item.groupedValue));
-}
-
-function formatToNivoData(lineSeriesKey, groupedLineItems, yAxisField) {
-  return {
-    id: lineSeriesKey,
-    data: _.map(groupedLineItems, (items, month) => ({ x: month, y: _.sumBy(items, yAxisField) })),
-  };
-}
-
-function generateWeeklyTickValues(minDate, maxDate) {
-  if (minDate && maxDate) {
-    const diffInMonths = differenceInMonths(maxDate, minDate);
-    if (diffInMonths >= 6) {
-      return _.range(1, 53);
-    } else {
-      const startWeek = getIsoWeek(minDate);
-      const endWeek = getIsoWeek(maxDate);
-      if (differenceInWeeks(maxDate, minDate) >= 52) {
-        return _.range(1, 53);
-      }
-      return _.range(_.clamp(startWeek - 1, 1, 53), _.clamp(endWeek + 1, 1, 53));
-    }
-  }
-  return _.range(1, 53);
-}
+const formatDate = (d) => format(d, 'MMM D, \'YY');
 
 function numTickValuesToTake(tickValues, device) {
   const numTicks = tickValues.length;
@@ -55,26 +26,19 @@ function numTickValuesToTake(tickValues, device) {
 }
 
 function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate, ...rest }) {
-  const graphData = _.map(lineSeriesConfig, ({ id, data }) =>
-    formatToNivoData(id, xInterval === "month" ? groupLineItemsByMonth(data) : groupLineItemsByWeek(data), yAxisField)
-  );
+  const graphData = _.map(lineSeriesConfig, ({ id, data }) => ({ id, data: mapDataForNivo(data, yAxisField) }));
+  const numWeeks = differenceInCalendarWeeks(maxDate, minDate);
 
-  const tickValues = xInterval === "month" ? _.range(11) : generateWeeklyTickValues(minDate, maxDate);
-
-  let commonLineGraphProps = {
+  const commonLineGraphProps = {
     data: graphData,
-    xScale: { min: tickValues[0], max: _.last(tickValues) },
-    xFormat: xInterval === "month" ? monthNumToName : formatWeek, // for tooltip
+    xScale: { type: 'time', format: '%Y-%m-%d %H:%M:%S', precision: 'day' },
+    xFormat: formatDate,
   };
 
   const colors = _.map(lineSeriesConfig, 'color');
-  if (colors && colors.length) {
-    commonLineGraphProps.colors = colors; 
-  }
+  if (colors && colors.length) commonLineGraphProps.colors = colors; 
 
-  const commonBottomAxisProps = {
-    format: xInterval === "month" ? monthNumToName : formatWeek, // for bottom axis names
-  };
+  const commonBottomAxisProps = { format: formatDate };
 
   return (
     <React.Fragment>
@@ -85,7 +49,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate
           lineWidth={2}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "mobile"))
+            tickValues: `every ${numTickValuesToTake(numWeeks, 'mobile')} weeks`,
           }}
           {...rest}
         />
@@ -97,7 +61,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "tablet")),
+            tickValues: `every ${numTickValuesToTake(numWeeks, 'tablet')} weeks`,
           }}
           {...rest}
         />
@@ -109,7 +73,7 @@ function BiLineGraph({ yAxisField, lineSeriesConfig, xInterval, minDate, maxDate
           {...commonLineGraphProps}
           axisBottom={{
             ...commonBottomAxisProps,
-            tickValues: takeNth(tickValues, numTickValuesToTake(tickValues, "desktop")),
+            tickValues: `every ${numTickValuesToTake(numWeeks, 'desktop')} weeks`,
           }}
           {...rest}
         />

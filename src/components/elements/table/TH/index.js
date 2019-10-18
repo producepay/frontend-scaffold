@@ -8,8 +8,8 @@ function TH(props) {
   const finalWeight = active ? 'semibold' : weight;
 
   const cName = cx(className, `text-${size} tracking-wide font-${finalWeight}`, {
-    'uppercase': uppercase,
-    'active': active,
+    uppercase: uppercase,
+    active: active,
   });
 
   return (
