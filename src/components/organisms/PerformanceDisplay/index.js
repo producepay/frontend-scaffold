@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import _ from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 import subISOYears from 'date-fns/sub_iso_years';
@@ -10,13 +11,14 @@ import PerformanceDisplayView from './view';
 
 function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
-  const { gqlFilterVariables, handleDateRangeSelected, setCommodityNameParam, setCustomerIdParam } = useFilters();
+  const { gqlFilterVariables, handleDateRangeSelected } = useFilters();
+  const { customerId, commodityName } = match.params;
   const { startDate, endDate, ...rest } = gqlFilterVariables;
 
-  useEffect(() => {
-    setCommodityNameParam(match.params.commodityName);
-    setCustomerIdParam(match.params.customerId)
-  }, [match.params, setCommodityNameParam, setCustomerIdParam]);
+  const filterVariables = commodityName ?
+    _.omit(rest, ['commodityIdentifier', 'commodityVarietyIdentifierPairs']) :
+    customerId ?
+      _.omit(rest, ['erpCustomerId']) : rest;
 
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
@@ -25,13 +27,13 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
         startDate: gqlF(startDate),
         endDate: gqlF(endDate),
         ...graphqlFilters,
-        ...rest,
+        ...filterVariables,
       },
       lastYearSalesOrderLineItemFilters: {
         startDate: gqlF(subISOYears(startDate, 1)),
         endDate: gqlF(subISOYears(endDate, 1)),
         ...graphqlFilters,
-        ...rest,
+        ...filterVariables,
       },
       filters: graphqlFilters,
     },

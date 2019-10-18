@@ -121,11 +121,11 @@ const FiltersContext = React.createContext();
 
 function FiltersProvider(props) {
   const { children } = props;
-  const { customerId, commodityName } = props.match.params;
+  // const { customerId, commodityName } = props.match.params;
 
   const [filtersToRender, setFiltersToRender] = useState([]); // filters is a config array to be passed to the view for render
-  const [commodityNameParam, setCommodityNameParam] = useState(commodityName);
-  const [customerIdParam, setCustomerIdParam] = useState(customerId);
+  // const [commodityNameParam, setCommodityNameParam] = useState(commodityName);
+  // const [customerIdParam, setCustomerIdParam] = useState(customerId);
 
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
     startDate: subISOYears(new Date(), 1), // initial dates
@@ -134,11 +134,11 @@ function FiltersProvider(props) {
   const [sessionFilters, setSessionFilters] = useSessionStorage('filters', state);
 
   const { data, loading } = useQuery(FETCH_FILTER_DATA, {
-    variables: {
-      erpProductFilters: {
-        ...(commodityNameParam ? { commodityName: commodityNameParam } : {}),
-      },
-    },
+    // variables: {
+    //   erpProductFilters: {
+    //     ...(commodityNameParam ? { commodityName: commodityNameParam } : {}),
+    //   },
+    // },
   });
 
   const didMount = useDidMount();
@@ -173,49 +173,49 @@ function FiltersProvider(props) {
   useEffect(() => {
     if (data && data.erpProducts) {
       const currentFilters = [];
-      if (!commodityNameParam) { // not in a commodity specific view
-        const commoditiesWithSubVarieties =
-          _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
-            (result, erpProducts, commodityIdentifier) => {
-              result.push({
-                value: commodityIdentifier,
-                label: _.get(erpProducts, '[0].commodityName'),
-                subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName', () => {}, []).items,
-              });
-              return result;
-            }, []);
-        currentFilters.push({
-          title: "Commodities",
-          items: commoditiesWithSubVarieties,
-          key: 'commodityIdentifier',
-          onChange: (items) => {
-            dispatch(
-              { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: items }
-            )},
-          defaultValues: sessionFilters.commodityIdentifier ?
-            _.filter(commoditiesWithSubVarieties, i => _.includes(sessionFilters.commodityIdentifier, i.value)) : 
-            sessionFilters.commodityVarietyIdentifierPairs ?
-              restoreDefaultCvOptions(sessionFilters.commodityVarietyIdentifierPairs, commoditiesWithSubVarieties) :
-              [],
-        });
-      } else {
-        // remove commodity variety identifier pairs here
-        dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE });
-      }
+      // if (!commodityNameParam) { // not in a commodity specific view
+      const commoditiesWithSubVarieties =
+        _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
+          (result, erpProducts, commodityIdentifier) => {
+            result.push({
+              value: commodityIdentifier,
+              label: _.get(erpProducts, '[0].commodityName'),
+              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName', () => {}, []).items,
+            });
+            return result;
+          }, []);
+      currentFilters.push({
+        title: "Commodities",
+        items: commoditiesWithSubVarieties,
+        key: 'commodityIdentifier',
+        onChange: (items) => {
+          dispatch(
+            { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: items }
+          )},
+        defaultValues: sessionFilters.commodityIdentifier ?
+          _.filter(commoditiesWithSubVarieties, i => _.includes(sessionFilters.commodityIdentifier, i.value)) : 
+          sessionFilters.commodityVarietyIdentifierPairs ?
+            restoreDefaultCvOptions(sessionFilters.commodityVarietyIdentifierPairs, commoditiesWithSubVarieties) :
+            [],
+      });
+      // } else {
+      //   // remove commodity variety identifier pairs here
+      //   dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE });
+      // }
     
       // Size and Packaging
       currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch, sessionFilters.sizeIdentifier));
       currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch, sessionFilters.packagingIdentifier));
 
-      if (!customerIdParam) { // not in a customer specific view
-        currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, sessionFilters.erpCustomerId));
-      } else {
-        dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
-      }
+      // if (!customerIdParam) { // not in a customer specific view
+      currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, sessionFilters.erpCustomerId));
+      // } else {
+      //   dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
+      // }
 
       setFiltersToRender(currentFilters);
     }
-  }, [commodityNameParam, customerId, customerIdParam, data, sessionFilters]);
+  }, [data, sessionFilters]);
 
   return (
     <FiltersContext.Provider value={{
@@ -224,8 +224,8 @@ function FiltersProvider(props) {
       dispatch,
       loading,
       handleDateRangeSelected,
-      setCommodityNameParam, // components using this context must set this on route change
-      setCustomerIdParam,    // components using this context must set this on route change
+      // setCommodityNameParam, // components using this context must set this on route change
+      // setCustomerIdParam,    // components using this context must set this on route change
       setSessionFilters,
     }}>
       {children}
