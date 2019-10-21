@@ -37,6 +37,7 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
       },
       filters: graphqlFilters,
     },
+    fetchPolicy: 'network-only', // query was not refetching when commodityVarietyIdentifierPairs changed sometimes (specifically variety sub items)
   });
 
   return (
