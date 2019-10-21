@@ -114,8 +114,8 @@ function setFilterState(state, key, item, subItem) {
   }
 }
 
-function generateFilter(collection, title, key, label, dispatch, restoredValues) {
-  const items = _.uniqBy(collectionAsOptions(collection, { key, label }), 'value');
+function generateFilter(collection, title, key, itemKey, itemLabel, dispatch) {
+  const items = _.uniqBy(collectionAsOptions(collection, { key: itemKey, label: itemLabel }), 'value');
   return {
     title,
     items,
@@ -123,30 +123,28 @@ function generateFilter(collection, title, key, label, dispatch, restoredValues)
     onChange: (item, subItem) => {
       dispatch({ type: FILTER_CONTEXT_ACTION_TYPES[_.toUpper(title).replace(/ /g, '')], item, subItem });
     },
-    defaultValues: restoredValues ?
-      _.filter(items, (i) => _.includes(restoredValues, i.value) ) : [],
   };
 }
 
-function restoreDefaultCvOptions(restoredCommodityVarietyPairs, options) {
-  return _.reduce(restoredCommodityVarietyPairs, (result, cvPair) => {
-    const optionItem = _.find(options, item => item.value === cvPair.commodityIdentifier);
-    if (optionItem) {
-      const subItem = _.find(optionItem.subItems, subItem => subItem.value === cvPair.varietyIdentifier);
-      const existingItemIdx = _.findIndex(result, i => i.value === optionItem.value);
-      if (existingItemIdx > -1) {
-        result[existingItemIdx].subItems.push(subItem);
-      } else {
-        result.push({
-          value: optionItem.value,
-          label: optionItem.label,
-          subItems: [subItem],
-        });
-      }
-    }
-    return result;
-  }, []);
-}
+// function restoreDefaultCvOptions(restoredCommodityVarietyPairs, options) {
+//   return _.reduce(restoredCommodityVarietyPairs, (result, cvPair) => {
+//     const optionItem = _.find(options, item => item.value === cvPair.commodityIdentifier);
+//     if (optionItem) {
+//       const subItem = _.find(optionItem.subItems, subItem => subItem.value === cvPair.varietyIdentifier);
+//       const existingItemIdx = _.findIndex(result, i => i.value === optionItem.value);
+//       if (existingItemIdx > -1) {
+//         result[existingItemIdx].subItems.push(subItem);
+//       } else {
+//         result.push({
+//           value: optionItem.value,
+//           label: optionItem.label,
+//           subItems: [subItem],
+//         });
+//       }
+//     }
+//     return result;
+//   }, []);
+// }
 
 const FiltersContext = React.createContext();
 
@@ -202,7 +200,7 @@ function FiltersProvider(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (data && data.erpProducts && data.erpCustomers && data.otherLineItemFields) {
+    if (data && data.erpProducts && data.erpCustomers) {
       const currentFilters = [];
       // if (!commodityNameParam) { // not in a commodity specific view
       const hasVarieties = _.compact(_.map(data.erpProducts, 'varietyIdentifier')).length > 0;
@@ -212,7 +210,7 @@ function FiltersProvider(props) {
             result.push({
               value: commodityIdentifier,
               label: _.get(erpProducts, '[0].commodityName'),
-              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyName', () => {}, []).items,
+              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyIdentifier', 'varietyName', () => {}).items,
             });
             return result;
           }, []);
@@ -223,12 +221,8 @@ function FiltersProvider(props) {
         onChange: (item, subItem) => {
           dispatch(
             { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, item, subItem }
-          )},
-        defaultValues: true ?
-          _.filter(commoditiesWithSubVarieties, i => _.includes({}, i.value)) : 
-          true ?
-            restoreDefaultCvOptions({}, commoditiesWithSubVarieties) :
-            [],
+          )
+        },
       });
       // } else {
       //   // remove commodity variety identifier pairs here
@@ -236,11 +230,11 @@ function FiltersProvider(props) {
       // }
     
       // Size and Packaging
-      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch, {}));
-      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch, {}));
+      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeIdentifier", "sizeName", dispatch));
+      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingIdentifier", "packagingName", dispatch));
 
       // if (!customerIdParam) { // not in a customer specific view
-      currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, {}));
+      currentFilters.push(generateFilter(data.erpCustomers, "Customer", "erpCustomerId", "id", "name", dispatch));
       // } else {
       //   dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
       // }
