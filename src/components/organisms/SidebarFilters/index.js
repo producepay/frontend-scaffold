@@ -26,17 +26,24 @@ const FETCH_FILTER_DATA = gql`
       id
       name
     }
+    otherFilterFields: uniqueSalesOrderLineItems(
+      selectableFields: ["salespersonName", "shippedFromCountry"],
+    ) {
+      salespersonName
+      shippedFromCountry
+    }
   }
 `;
 
 function generateFilter(collection, title, key, itemKey, itemLabel, dispatch) {
   const items = _.uniqBy(collectionAsOptions(collection, { key: itemKey, label: itemLabel }), 'value');
+  if (items.length === 0) return null;
   return {
     title,
     items,
     key,
     onChange: (item, subItem) => {
-      dispatch({ type: _.toUpper(title).replace(/ /g, ''), item, subItem });
+      dispatch({ type: _.toUpper(title).replace(/ /g, '_'), item, subItem });
     },
   };
 }
@@ -64,7 +71,8 @@ function SidebarFilters(props) {
   });
 
   useEffect(() => {
-    if (data && data.erpProducts && data.erpCustomers) {
+    if (data && data.erpProducts && data.erpCustomers && data.otherFilterFields) {
+      const hasVarieties = _.compact(_.map(data.erpProducts, 'varietyIdentifier')).length > 0;
       setFiltersToRender(
         _.compact(
           [
@@ -86,6 +94,8 @@ function SidebarFilters(props) {
               !erpCustomerId ?
                 generateFilter(data.erpCustomers, "Customer", "erpCustomerId", "id", "name", dispatch) : null
             ),
+            generateFilter(data.otherFilterFields, "Sales Person", "salespersonName", "salespersonName", "salespersonName", dispatch),
+            generateFilter(data.otherFilterFields, "Country of Origin", "shippedFromCountry", "shippedFromCountry", "shippedFromCountry", dispatch),
           ]
         )
       );
