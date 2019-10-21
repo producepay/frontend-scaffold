@@ -34,22 +34,6 @@ const FETCH_FILTER_DATA = gql`
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
     case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES: {
-      // if (action.commodityVarietyIdentifiers.length === 0) {
-      //   return state.commodityVarietyIdentifierPairs ?
-      //     { ...state, commodityVarietyIdentifierPairs: [] } :
-      //     { ...state, commodityIdentifier: [] };
-      // }
-      // const hasVarieties = _.flatten(_.map(action.commodityVarietyIdentifiers, 'subItems')).length !== 0;
-      // if (hasVarieties) {
-      //   const cvPairs = _.flatten(
-      //     _.map(action.commodityVarietyIdentifiers, (item) => (
-      //       _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
-      //     ))
-      //   );
-      //   return { ...state, commodityVarietyIdentifierPairs: cvPairs };
-      // } else {
-      //   return setFilterState(state, 'commodityIdentifier', _.map(action.commodityVarietyIdentifiers, 'value'));
-      // }
       return setFilterState(state, 'commodityVarietyIdentifierPairs', action.item, action.subItem);
     }
     case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES: {
@@ -123,26 +107,6 @@ function generateFilter(collection, title, key, itemKey, itemLabel, dispatch) {
     },
   };
 }
-
-// function restoreDefaultCvOptions(restoredCommodityVarietyPairs, options) {
-//   return _.reduce(restoredCommodityVarietyPairs, (result, cvPair) => {
-//     const optionItem = _.find(options, item => item.value === cvPair.commodityIdentifier);
-//     if (optionItem) {
-//       const subItem = _.find(optionItem.subItems, subItem => subItem.value === cvPair.varietyIdentifier);
-//       const existingItemIdx = _.findIndex(result, i => i.value === optionItem.value);
-//       if (existingItemIdx > -1) {
-//         result[existingItemIdx].subItems.push(subItem);
-//       } else {
-//         result.push({
-//           value: optionItem.value,
-//           label: optionItem.label,
-//           subItems: [subItem],
-//         });
-//       }
-//     }
-//     return result;
-//   }, []);
-// }
 
 const FiltersContext = React.createContext();
 
