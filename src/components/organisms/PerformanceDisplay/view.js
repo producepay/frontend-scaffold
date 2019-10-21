@@ -1,8 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import startOfYear from 'date-fns/start_of_year';
-import endOfYear from 'date-fns/end_of_year';
-import subMonths from 'date-fns/sub_months';
 
 import { formatPrice, formatLargeLoads } from '../../../helpers/format';
 import routes from '../../../routes';
@@ -13,7 +10,7 @@ import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
 import PerformanceGraph from '../../molecules/PerformanceGraph';
 import PerformanceSummary from '../../molecules/PerformanceSummary';
-import DateRangePicker, { DEFAULT_PRESETS } from '../../elements/DateRangePicker';
+import PerformanceDateFilter from '../../molecules/PerformanceDateFilter';
 
 const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
 
@@ -43,22 +40,10 @@ function PerformanceDisplayView({
         <div className='flex justify-between'>
           <div><h3 className='font-semibold text-xl'>Performance</h3></div>
           <div>
-            <DateRangePicker
+            <PerformanceDateFilter
               onRangeSelected={handleDateRangeSelected}
-              defaultFrom={startDate}
-              defaultTo={endDate}
-              month={subMonths(new Date(), 1)}
-              format="MMM DD YYYY"
-              inputProps={{
-                className: 'px-6',
-              }}
-              alignRight
-              showWeekNumbers
-              presets={[...DEFAULT_PRESETS, {
-                label: "This Year",
-                start: startOfYear(new Date()),
-                end: endOfYear(new Date()),
-              }]}
+              startDate={startDate}
+              endDate={endDate}
             />
           </div>
         </div>
