@@ -10,7 +10,6 @@ import TextField from '../../elements/TextField';
 import { textSearchCompare } from '../../../helpers/common';
 
 import { optionsWithSubItemsType } from './helpers';
-// import BiFilterView from './view';
 import BiFilterItem from './item';
 
 const ICON_COLOR = "#a0aec0";

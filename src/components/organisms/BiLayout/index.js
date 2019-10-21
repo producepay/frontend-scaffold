@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import routes from '../../../routes';
 import { useAuth } from '../../../contexts/auth';
-import { useFilters } from '../../../contexts/filters';
+import { useFilterState } from '../../../contexts/FilterState';
 
 import logo from '../../../assets/images/pp-logo.svg';
 import SidebarFilters from '../../../components/organisms/SidebarFilters';
@@ -12,7 +12,7 @@ const SIDEBAR_WIDTH = 220;
 
 function BiLayout({ children }) {
   const { logout } = useAuth();
-  const { setSessionFilters } = useFilters();
+  const { setSessionFilters } = useFilterState();
   
   return (
     <div className='flex'>

@@ -1,35 +1,11 @@
-import React, { useState, useReducer, useEffect, useContext, useCallback } from 'react';
-import gql from 'graphql-tag';
+import React, { useReducer, useEffect, useContext, useCallback } from 'react';
 import _ from 'lodash';
 import subISOYears from 'date-fns/sub_iso_years';
-import { useQuery } from '@apollo/react-hooks';
-import { withRouter } from 'react-router-dom';
 
 import { useDidMount } from '../../hooks/did-mount';
 import { useSessionStorage } from '../../hooks/use-session-storage';
 
-import { collectionAsOptions, FILTER_CONTEXT_ACTION_TYPES } from './helpers';
-
-const FETCH_FILTER_DATA = gql`
-  query FetchFilterData($erpProductFilters: ErpProductFilterInput) {
-    erpProducts: erpProducts(filters: $erpProductFilters) {
-      commodityName
-      commodityIdentifier
-      varietyName
-      varietyIdentifier
-      packagingName
-      packagingIdentifier
-      sizeName
-      sizeIdentifier
-      gradeName
-      gradeIdentifier
-    }
-    erpCustomers: erpCustomers {
-      id
-      name
-    }
-  }
-`;
+import { FILTER_CONTEXT_ACTION_TYPES } from './helpers';
 
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
@@ -96,41 +72,16 @@ function setFilterState(state, key, item, subItem) {
   }
 }
 
-function generateFilter(collection, title, key, itemKey, itemLabel, dispatch) {
-  const items = _.uniqBy(collectionAsOptions(collection, { key: itemKey, label: itemLabel }), 'value');
-  return {
-    title,
-    items,
-    key,
-    onChange: (item, subItem) => {
-      dispatch({ type: FILTER_CONTEXT_ACTION_TYPES[_.toUpper(title).replace(/ /g, '')], item, subItem });
-    },
-  };
-}
+const FilterStateContext = React.createContext();
 
-const FiltersContext = React.createContext();
-
-function FiltersProvider(props) {
+function FilterStateProvider(props) {
   const { children } = props;
-  // const { customerId, commodityName } = props.match.params;
-
-  const [filtersToRender, setFiltersToRender] = useState([]); // filters is a config array to be passed to the view for render
-  // const [commodityNameParam, setCommodityNameParam] = useState(commodityName);
-  // const [customerIdParam, setCustomerIdParam] = useState(customerId);
 
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
     startDate: subISOYears(new Date(), 1), // initial dates
     endDate: new Date(),
   });
   const [sessionFilters, setSessionFilters] = useSessionStorage('filters', state);
-
-  const { data, loading } = useQuery(FETCH_FILTER_DATA, {
-    // variables: {
-    //   erpProductFilters: {
-    //     ...(commodityNameParam ? { commodityName: commodityNameParam } : {}),
-    //   },
-    // },
-  });
 
   const didMount = useDidMount();
   useEffect(() => {
@@ -161,54 +112,6 @@ function FiltersProvider(props) {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    if (data && data.erpProducts && data.erpCustomers) {
-      const currentFilters = [];
-      // if (!commodityNameParam) { // not in a commodity specific view
-      const hasVarieties = _.compact(_.map(data.erpProducts, 'varietyIdentifier')).length > 0;
-      const commoditiesWithSubVarieties =
-        _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
-          (result, erpProducts, commodityIdentifier) => {
-            result.push({
-              value: commodityIdentifier,
-              label: _.get(erpProducts, '[0].commodityName'),
-              subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyIdentifier', 'varietyName', () => {}).items,
-            });
-            return result;
-          }, []);
-      currentFilters.push({
-        title: "Commodities",
-        items: commoditiesWithSubVarieties,
-        key: hasVarieties ? 'commodityVarietyIdentifierPairs' : 'commodityIdentifier',
-        onChange: (item, subItem) => {
-          dispatch({
-            type: hasVarieties ?
-              FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES :
-              FILTER_CONTEXT_ACTION_TYPES.COMMODITIES,
-            item,
-            subItem
-          });
-        },
-      });
-      // } else {
-      //   // remove commodity variety identifier pairs here
-      //   dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE });
-      // }
-    
-      // Size and Packaging
-      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeIdentifier", "sizeName", dispatch));
-      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingIdentifier", "packagingName", dispatch));
-
-      // if (!customerIdParam) { // not in a customer specific view
-      currentFilters.push(generateFilter(data.erpCustomers, "Customer", "erpCustomerId", "id", "name", dispatch));
-      // } else {
-      //   dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
-      // }
-
-      setFiltersToRender(currentFilters);
-    }
-  }, [data]);
-
   const transFormFiltersToGqlVariables = useCallback(() => {
     const { commodityVarietyIdentifierPairs, startDate, endDate, ...otherFilters } = state;
     return {
@@ -230,30 +133,25 @@ function FiltersProvider(props) {
   }, [state]);
 
   return (
-    <FiltersContext.Provider value={{
-      filters: filtersToRender,
+    <FilterStateContext.Provider value={{
       gqlFilterVariables: transFormFiltersToGqlVariables(state),
       filterValues: state,
       dispatch,
-      loading,
       handleDateRangeSelected,
-      // setCommodityNameParam, // components using this context must set this on route change
-      // setCustomerIdParam,    // components using this context must set this on route change
-      setSessionFilters,
+      setSessionFilters, // used to clear state when logging out
     }}>
       {children}
-    </FiltersContext.Provider> 
+    </FilterStateContext.Provider> 
   );
 }
 
-function useFilters() {
-  return useContext(FiltersContext);
+function useFilterState() {
+  return useContext(FilterStateContext);
 }
 
-export default withRouter(FiltersProvider);
-const WrappedFiltersProvider = withRouter(FiltersProvider);
+const WrappedFilterStateProvider = React.memo(FilterStateProvider);
 
 export {
-  WrappedFiltersProvider as FiltersProvider,
-  useFilters,
+  WrappedFilterStateProvider as FilterStateProvider,
+  useFilterState,
 };

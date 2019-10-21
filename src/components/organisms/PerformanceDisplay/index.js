@@ -5,13 +5,13 @@ import { withRouter } from 'react-router-dom';
 import subISOYears from 'date-fns/sub_iso_years';
 
 import { gqlF } from '../../../helpers/dates';
-import { useFilters } from '../../../contexts/filters';
+import { useFilterState } from '../../../contexts/FilterState';
 
 import PerformanceDisplayView from './view';
 
 function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
-  const { gqlFilterVariables, handleDateRangeSelected } = useFilters();
+  const { gqlFilterVariables, handleDateRangeSelected } = useFilterState();
   const { customerId, commodityName } = match.params;
   const { startDate, endDate, ...rest } = gqlFilterVariables;
 
