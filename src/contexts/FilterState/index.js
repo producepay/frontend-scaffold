@@ -125,7 +125,10 @@ function FilterStateProvider(props) {
         commodityVarietyIdentifierPairs: 
           _.flatten(
             _.map(state.commodityVarietyIdentifierPairs, (item) => (
-              _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
+              item.subItems && item.subItems.length ? 
+                _.map(item.subItems, (subItem) =>
+                  ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value })) :
+                { commodityIdentifier: item.value, varietyIdentifier: null }
             ))
           )
       } : {}),
