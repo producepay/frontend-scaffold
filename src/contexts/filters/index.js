@@ -50,12 +50,10 @@ const graphqlFiltersReducer = (state, action) => {
       // } else {
       //   return setFilterState(state, 'commodityIdentifier', _.map(action.commodityVarietyIdentifiers, 'value'));
       // }
-      const hasVarieties = ((action.item && action.subItem) || state.commodityVarietyIdentifierPairs);
-      if (hasVarieties) {
-        return setFilterState(state, 'commodityVarietyIdentifierPairs', action.item, action.subItem);  
-      } else {
-        return setFilterState(state, 'commodityIdentifier', action.item, action.subItem);  
-      }
+      return setFilterState(state, 'commodityVarietyIdentifierPairs', action.item, action.subItem);
+    }
+    case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES: {
+      return setFilterState(state, 'commodityIdentifier', action.item, action.subItem);
     }
     case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
       return _.omit(state, ['commodityVarietyIdentifierPairs', 'commodityIdentifier']);
@@ -219,9 +217,13 @@ function FiltersProvider(props) {
         items: commoditiesWithSubVarieties,
         key: hasVarieties ? 'commodityVarietyIdentifierPairs' : 'commodityIdentifier',
         onChange: (item, subItem) => {
-          dispatch(
-            { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, item, subItem }
-          )
+          dispatch({
+            type: hasVarieties ?
+              FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES :
+              FILTER_CONTEXT_ACTION_TYPES.COMMODITIES,
+            item,
+            subItem
+          });
         },
       });
       // } else {
@@ -252,13 +254,14 @@ function FiltersProvider(props) {
         _.mapValues(otherFilters, (items) => _.map(items, 'value')),
         values => values.length === 0,
       ),
-      ...(commodityVarietyIdentifierPairs ? (
-        _.flatten(
-          _.map(state.commodityVarietyIdentifierPairs, (item) => (
-            _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
-          ))
-        )
-      ) : {}),
+      ...(commodityVarietyIdentifierPairs ? {
+        commodityVarietyIdentifierPairs: 
+          _.flatten(
+            _.map(state.commodityVarietyIdentifierPairs, (item) => (
+              _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
+            ))
+          )
+      } : {}),
     }
   }, [state]);
 

@@ -7,6 +7,7 @@ export function collectionAsOptions(collection, { key, label }) {
 
 export const FILTER_CONTEXT_ACTION_TYPES = {
   COMMODITIES_AND_VARIETIES: 'COMMODITIES_AND_VARIETIES',
+  COMMODITIES: 'COMMODITIES',
   SIZE: 'SIZE',
   PACKAGING: 'PACKAGING',
   DATE_RANGE: 'DATE_RANGE',
