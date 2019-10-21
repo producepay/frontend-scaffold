@@ -54,7 +54,7 @@ const ControlledFilter = (filterProps) => {
 
   return (
     <div className="w-56">
-      <BiFilter {...filterProps} values={filters} onChange={handleOnChange} /> 
+      <BiFilter {...filterProps} selectedItems={filters} onChange={handleOnChange} /> 
     </div>
   );
 }

@@ -28,13 +28,13 @@ function BiFilterItem(props) {
   const {
     className,
     item,
-    values,
+    selectedItems,
     onChange,
     searchTerm,
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
-  const parentItem = _.find(values, i => i.value === item.value);
+  const parentItem = _.find(selectedItems, i => i.value === item.value);
 
   const [showSubItems, setShowSubItems] = useState((parentItem ? (parentItem.subItems || []) : []).length > 0);
 
@@ -61,7 +61,7 @@ function BiFilterItem(props) {
     textSearchCompare(searchTerm, item.label) || textSearchCompare(searchTerm, subItem.label)
   );
 
-  const parentItemValues = _.map(values, 'value');
+  const parentItemValues = _.map(selectedItems, 'value');
   const childItemValues = parentItem && parentItem.subItems ? _.map(parentItem.subItems, 'value') : [];
 
   const onParentItemClicked = useCallback((e) => {
@@ -119,11 +119,10 @@ BiFilterItem.propTypes = {
   item: optionValueWithSubItemsType.isRequired,
   searchTerm: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  values: optionsWithSubItemsType.isRequired,
+  selectedItems: optionsWithSubItemsType.isRequired,
 };
 
 BiFilterItem.defaultProps = {
-  onSubItemClicked: () => {},
   className: '',
 }
 

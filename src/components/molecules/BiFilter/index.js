@@ -22,7 +22,7 @@ function BiFilter(props) {
     limit,
     onChange,
     showSearch,
-    values,
+    selectedItems,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -70,7 +70,7 @@ function BiFilter(props) {
                     key={item.value}
                     item={item}
                     searchTerm={searchTerm}
-                    values={values}
+                    selectedItems={selectedItems}
                     onChange={onChange}
                   />
                 );
@@ -97,7 +97,7 @@ BiFilter.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
   items: optionsWithSubItemsType.isRequired,
-  values: optionsWithSubItemsType.isRequired,
+  selectedItems: optionsWithSubItemsType.isRequired,
   showSearch: PropTypes.bool,
   limit: PropTypes.number,
   onChange: PropTypes.func.isRequired,

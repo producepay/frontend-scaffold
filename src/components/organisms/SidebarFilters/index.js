@@ -98,13 +98,13 @@ function SidebarFilters(props) {
     }
   }, [commodityName, data, dispatch, erpCustomerId]);
 
-  const filtersWithValues = _.map(filtersToRender, (filter) => ({
+  const filtersWithSelectedItems = _.map(filtersToRender, (filter) => ({
     ...filter,
-    values: filterValues[filter.key],
+    selectedItems: filterValues[filter.key],
   }));
 
   return (
-    <SidebarFiltersView loading={loading} filters={filtersWithValues} />
+    <SidebarFiltersView loading={loading} filters={filtersWithSelectedItems} />
   );
 }
 
