@@ -118,8 +118,8 @@ BiFilterItem.propTypes = {
   className: PropTypes.string,
   item: optionValueWithSubItemsType.isRequired,
   searchTerm: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  filterState: optionsWithSubItemsType,
+  onChange: PropTypes.func.isRequired,
+  values: optionsWithSubItemsType.isRequired,
 };
 
 BiFilterItem.defaultProps = {

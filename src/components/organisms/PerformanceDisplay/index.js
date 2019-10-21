@@ -20,6 +20,8 @@ function PerformanceDisplay({ match, history, graphqlQuery, graphqlFilters }) {
     customerId ?
       _.omit(rest, ['erpCustomerId']) : rest;
 
+  console.log(filterVariables);
+
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
       groupByInterval: dateInterval,

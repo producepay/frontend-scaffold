@@ -34,21 +34,27 @@ const FETCH_FILTER_DATA = gql`
 const graphqlFiltersReducer = (state, action) => {
   switch (action.type) {
     case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES: {
-      if (action.commodityVarietyIdentifiers.length === 0) {
-        return state.commodityVarietyIdentifierPairs ?
-          { ...state, commodityVarietyIdentifierPairs: [] } :
-          { ...state, commodityIdentifier: [] };
-      }
-      const hasVarieties = _.flatten(_.map(action.commodityVarietyIdentifiers, 'subItems')).length !== 0;
+      // if (action.commodityVarietyIdentifiers.length === 0) {
+      //   return state.commodityVarietyIdentifierPairs ?
+      //     { ...state, commodityVarietyIdentifierPairs: [] } :
+      //     { ...state, commodityIdentifier: [] };
+      // }
+      // const hasVarieties = _.flatten(_.map(action.commodityVarietyIdentifiers, 'subItems')).length !== 0;
+      // if (hasVarieties) {
+      //   const cvPairs = _.flatten(
+      //     _.map(action.commodityVarietyIdentifiers, (item) => (
+      //       _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
+      //     ))
+      //   );
+      //   return { ...state, commodityVarietyIdentifierPairs: cvPairs };
+      // } else {
+      //   return setFilterState(state, 'commodityIdentifier', _.map(action.commodityVarietyIdentifiers, 'value'));
+      // }
+      const hasVarieties = ((action.item && action.subItem) || state.commodityVarietyIdentifierPairs);
       if (hasVarieties) {
-        const cvPairs = _.flatten(
-          _.map(action.commodityVarietyIdentifiers, (item) => (
-            _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
-          ))
-        );
-        return { ...state, commodityVarietyIdentifierPairs: cvPairs };
+        return setFilterState(state, 'commodityVarietyIdentifierPairs', action.item, action.subItem);  
       } else {
-        return setFilterState(state, 'commodityIdentifier', _.map(action.commodityVarietyIdentifiers, 'value'));
+        return setFilterState(state, 'commodityIdentifier', action.item, action.subItem);  
       }
     }
     case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
@@ -58,11 +64,11 @@ const graphqlFiltersReducer = (state, action) => {
       return _.omit(state, 'erpCustomerId');
     }
     case FILTER_CONTEXT_ACTION_TYPES.SIZE:
-      return setFilterState(state, 'sizeIdentifier', action.values);
+      return setFilterState(state, 'sizeIdentifier', action.item, action.subItem);
     case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
-      return setFilterState(state, 'packagingIdentifier', action.values);
+      return setFilterState(state, 'packagingIdentifier', action.item, action.subItem);
     case FILTER_CONTEXT_ACTION_TYPES.CUSTOMER:
-      return setFilterState(state, 'erpCustomerId', action.values);
+      return setFilterState(state, 'erpCustomerId', action.item, action.subItem);
     case FILTER_CONTEXT_ACTION_TYPES.DATE_RANGE: {
       return { ...state, startDate: action.startDate, endDate: action.endDate };
     }
@@ -75,11 +81,37 @@ const graphqlFiltersReducer = (state, action) => {
   }
 };
 
-function setFilterState(state, key, values) {
-  if (values && values.length === 0) {
-    return _.omit(state, key);
+function setFilterState(state, key, item, subItem) {
+  const filters = state[key] || [];
+  const parentItem = _.find(filters, i => i.value === item.value);
+  if (subItem) { // if child item clicked
+    if (parentItem) {
+      const existingChild = _.find(parentItem.subItems, i => i.value === subItem.value);
+      if (existingChild) {
+        if (parentItem.subItems.length === 1) { // remove parent as well
+          return { ...state, [key]: _.filter(filters, i => i.value !== item.value) }
+        } else { // remove subitem only
+          const newParentItem = {
+            ...parentItem,
+            subItems: _.filter(parentItem.subItems, (child) => child.value !== subItem.value)
+          };
+          return { ...state, [key]: [..._.filter(filters, i => i.value !== parentItem.value), newParentItem] }
+        }
+      } else { // add subitem
+        const newParentItem = { ...parentItem, subItems: [...parentItem.subItems, subItem ] };
+        return { ...state, [key]: [..._.filter(filters, i => i.value !== parentItem.value), newParentItem] };
+      }
+    } else { // add parent with subitem
+      const newParentItem = { ...item, subItems: [subItem] };
+      return { ...state, [key]: [ ...filters, newParentItem ] };
+    }
+  } else { // parent item clicked
+    if (parentItem) { // need to remove parent item
+      return { ...state, [key]: _.filter(filters, i => i.value !== item.value) };
+    } else { // add parent item
+      return { ...state, [key]: [ ...filters, item ] };
+    }
   }
-  return { ...state, [key]: values }
 }
 
 function generateFilter(collection, title, key, label, dispatch, restoredValues) {
@@ -88,9 +120,8 @@ function generateFilter(collection, title, key, label, dispatch, restoredValues)
     title,
     items,
     key,
-    onChange: (items) => {
-      const values = _.map(items, 'value');
-      dispatch({ type: FILTER_CONTEXT_ACTION_TYPES[_.toUpper(title)], values });
+    onChange: (item, subItem) => {
+      dispatch({ type: FILTER_CONTEXT_ACTION_TYPES[_.toUpper(title).replace(/ /g, '')], item, subItem });
     },
     defaultValues: restoredValues ?
       _.filter(items, (i) => _.includes(restoredValues, i.value) ) : [],
@@ -171,9 +202,10 @@ function FiltersProvider(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (data && data.erpProducts) {
+    if (data && data.erpProducts && data.erpCustomers && data.otherLineItemFields) {
       const currentFilters = [];
       // if (!commodityNameParam) { // not in a commodity specific view
+      const hasVarieties = _.compact(_.map(data.erpProducts, 'varietyIdentifier')).length > 0;
       const commoditiesWithSubVarieties =
         _.reduce(_.groupBy(data.erpProducts, 'commodityIdentifier'),
           (result, erpProducts, commodityIdentifier) => {
@@ -187,15 +219,15 @@ function FiltersProvider(props) {
       currentFilters.push({
         title: "Commodities",
         items: commoditiesWithSubVarieties,
-        key: 'commodityIdentifier',
-        onChange: (items) => {
+        key: hasVarieties ? 'commodityVarietyIdentifierPairs' : 'commodityIdentifier',
+        onChange: (item, subItem) => {
           dispatch(
-            { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, commodityVarietyIdentifiers: items }
+            { type: FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES, item, subItem }
           )},
-        defaultValues: sessionFilters.commodityIdentifier ?
-          _.filter(commoditiesWithSubVarieties, i => _.includes(sessionFilters.commodityIdentifier, i.value)) : 
-          sessionFilters.commodityVarietyIdentifierPairs ?
-            restoreDefaultCvOptions(sessionFilters.commodityVarietyIdentifierPairs, commoditiesWithSubVarieties) :
+        defaultValues: true ?
+          _.filter(commoditiesWithSubVarieties, i => _.includes({}, i.value)) : 
+          true ?
+            restoreDefaultCvOptions({}, commoditiesWithSubVarieties) :
             [],
       });
       // } else {
@@ -204,23 +236,43 @@ function FiltersProvider(props) {
       // }
     
       // Size and Packaging
-      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch, sessionFilters.sizeIdentifier));
-      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch, sessionFilters.packagingIdentifier));
+      currentFilters.push(generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeName", dispatch, {}));
+      currentFilters.push(generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingName", dispatch, {}));
 
       // if (!customerIdParam) { // not in a customer specific view
-      currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, sessionFilters.erpCustomerId));
+      currentFilters.push(generateFilter(data.erpCustomers, "Customer", "id", "name", dispatch, {}));
       // } else {
       //   dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE });
       // }
 
       setFiltersToRender(currentFilters);
     }
-  }, [data, sessionFilters]);
+  }, [data]);
+
+  const transFormFiltersToGqlVariables = useCallback(() => {
+    const { commodityVarietyIdentifierPairs, startDate, endDate, ...otherFilters } = state;
+    return {
+      startDate,
+      endDate,
+      ..._.omitBy(
+        _.mapValues(otherFilters, (items) => _.map(items, 'value')),
+        values => values.length === 0,
+      ),
+      ...(commodityVarietyIdentifierPairs ? (
+        _.flatten(
+          _.map(state.commodityVarietyIdentifierPairs, (item) => (
+            _.map(item.subItems, (subItem) => ({ commodityIdentifier: item.value, varietyIdentifier: subItem.value }))
+          ))
+        )
+      ) : {}),
+    }
+  }, [state]);
 
   return (
     <FiltersContext.Provider value={{
       filters: filtersToRender,
-      gqlFilterVariables: state,
+      gqlFilterVariables: transFormFiltersToGqlVariables(state),
+      filterValues: state,
       dispatch,
       loading,
       handleDateRangeSelected,
