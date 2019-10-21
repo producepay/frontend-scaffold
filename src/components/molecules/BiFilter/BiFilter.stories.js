@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import _ from 'lodash';
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
@@ -16,21 +17,56 @@ const items = [{
   value: "Tomatoes",
 }];
 
-const Wrapper = (filterProps) => (
-  <div className="w-56">
-    <BiFilter {...filterProps} /> 
-  </div>
-)
+const ControlledFilter = (filterProps) => {
+  const [filters, setFilters] = useState(filterProps.values || []);
+
+  const handleOnChange = useCallback((item, subItem) => {
+    const parentItem = _.find(filters, i => i.value === item.value);
+    if (subItem) { // if child item clicked
+      if (parentItem) {
+        const existingChild = _.find(parentItem.subItems, i => i.value === subItem.value);
+        if (existingChild) {
+          if (parentItem.subItems.length === 1) { // remove parent as well
+            setFilters(_.filter(filters, i => i.value !== item.value));
+          } else { // remove subitem only
+            const newParentItem = {
+              ...parentItem,
+              subItems: _.filter(parentItem.subItems, (child) => child.value !== subItem.value)
+            };
+            setFilters([..._.filter(filters, i => i.value !== parentItem.value), newParentItem]);
+          }
+        } else { // add subitem
+          const newParentItem = { ...parentItem, subItems: [...parentItem.subItems, subItem ] };
+          setFilters([..._.filter(filters, i => i.value !== parentItem.value), newParentItem]);
+        }
+      } else { // add parent with subitem
+        const newParentItem = { ...item, subItems: [subItem] };
+        setFilters([ ...filters, newParentItem ]);
+      }
+    } else { // parent item clicked
+      if (parentItem) { // need to remove parent item
+        setFilters(_.filter(filters, i => i.value !== item.value));
+      } else { // add parent item
+        setFilters([ ...filters, item ]);
+      }
+    }
+  }, [filters, setFilters]);
+
+  return (
+    <div className="w-56">
+      <BiFilter {...filterProps} values={filters} onChange={handleOnChange} /> 
+    </div>
+  );
+}
 
 storiesOf('Components/molecules/BiFilter', module)
 .add('basic', () => (
-  <Wrapper
+  <ControlledFilter
     title="Commodity"
     items={items}
-    onChange={action('onChange')}
   />
 )).add('limit 5 items', () => (
-  <Wrapper
+  <ControlledFilter
     title="Commodity"
     items={[
       ...items,
@@ -55,10 +91,9 @@ storiesOf('Components/molecules/BiFilter', module)
         value: "Oranges",
       }
     ]}
-    onChange={action('onChange')}
   />
 )).add('select some by default', () => (
-  <Wrapper
+  <ControlledFilter
     title="Commodity"
     items={[
       ...items,
@@ -78,7 +113,7 @@ storiesOf('Components/molecules/BiFilter', module)
       },
     ]}
     onChange={action('onChange')}
-    defaultValues={[
+    values={[
       {
         label: "Avocados",
         value: "Avocados",
@@ -96,14 +131,13 @@ storiesOf('Components/molecules/BiFilter', module)
     ]}
   />
 )).add('no search', () => (
-  <Wrapper
+  <ControlledFilter
     title="Commodity"
     items={items}
-    onChange={action('onChange')}
     showSearch={false}
   />
 )).add('with subitems', () => (
-  <Wrapper
+  <ControlledFilter
     title="Commodity"
     items={[
       ...items,
@@ -136,7 +170,5 @@ storiesOf('Components/molecules/BiFilter', module)
         ],
       },
     ]}
-    onChange={action('onChange')}
-    onSubItemsChange={action('onSubItemsChange')}
   />
 ));

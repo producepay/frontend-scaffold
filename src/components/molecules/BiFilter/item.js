@@ -3,7 +3,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { optionValueWithSubItemsType, optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
+import { optionValueWithSubItemsType, optionsWithSubItemsType } from './helpers';
 import { textSearchCompare } from '../../../helpers/common';
 import Checkbox from '../../elements/Checkbox';
 import ChevronUp from '../../icons/ChevronUp';
@@ -28,15 +28,28 @@ function BiFilterItem(props) {
   const {
     className,
     item,
-    filterState,
-    dispatch,
+    values,
+    onChange,
     searchTerm,
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
-  const parentItem = _.find(filterState, i => i.value === item.value);
+  const parentItem = _.find(values, i => i.value === item.value);
 
   const [showSubItems, setShowSubItems] = useState((parentItem ? (parentItem.subItems || []) : []).length > 0);
+
+  useEffect(() => {
+    if (hasSubItems) {
+      if (parentItem) {
+        if ((parentItem.subItems || []).length > 0) {
+          setShowSubItems(true);
+        }
+      } else {
+        setShowSubItems(false);
+      }
+    }
+  }, [parentItem, hasSubItems, setShowSubItems])
+
 
   useEffect(() => {
     if (searchTerm !== '' && _.some(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label))) {
@@ -48,39 +61,17 @@ function BiFilterItem(props) {
     textSearchCompare(searchTerm, item.label) || textSearchCompare(searchTerm, subItem.label)
   );
 
-  const parentItemValues = _.map(filterState, 'value');
+  const parentItemValues = _.map(values, 'value');
   const childItemValues = parentItem && parentItem.subItems ? _.map(parentItem.subItems, 'value') : [];
 
   const onParentItemClicked = useCallback((e) => {
-    const selected = _.includes(parentItemValues, e.target.value);
-    if (selected) {
-      dispatch({ type: FILTER_ACTION_TYPES.REMOVE_ITEM, item });
-      setShowSubItems(false);
-    } else {
-      dispatch({ type: FILTER_ACTION_TYPES.ADD_ITEM, item });
-      setShowSubItems(true);
-    }
-  }, [parentItemValues, dispatch, item]);
+    onChange(item, null);
+  }, [item, onChange]);
 
   const onChildItemClicked = useCallback((e) => {
     const selectedChildItem = _.find(item.subItems, i => i.value === e.target.value);
-
-    if (parentItem) {
-      const existingChild = _.find(parentItem.subItems, i => i.value === e.target.value);
-      if (existingChild) {
-        if (parentItem.subItems.length === 1) { // remove parent as well
-          dispatch({ type: FILTER_ACTION_TYPES.REMOVE_ITEM, item });
-        } else {
-          dispatch({ type: FILTER_ACTION_TYPES.REMOVE_SUB_ITEM, item, subItem: existingChild });
-        }
-      } else {
-        dispatch({ type: FILTER_ACTION_TYPES.ADD_SUB_ITEM, item, subItem: selectedChildItem });
-      }
-    } else {
-      const newParentItem = { ...item, subItems: [selectedChildItem] };
-      dispatch({ type: FILTER_ACTION_TYPES.ADD_ITEM, item: newParentItem });
-    }
-  }, [dispatch, item, parentItem]);
+    onChange(item, selectedChildItem);
+  }, [item, onChange]);
 
   return (
     <li className={cx("my-2", className)}>
@@ -94,7 +85,11 @@ function BiFilterItem(props) {
         {
           hasSubItems ? (
             <div className="cursor-pointer" onClick={() => setShowSubItems(!showSubItems)}>
-              {showSubItems ? <ChevronUp size={18} color={CHEVRON_COLOR} /> : <ChevronDown size={18} color={CHEVRON_COLOR} />}
+              {
+                showSubItems ?
+                  <ChevronUp size={18} color={CHEVRON_COLOR} /> :
+                  <ChevronDown size={18} color={CHEVRON_COLOR} />
+              }
             </div>
           ) : null
         }

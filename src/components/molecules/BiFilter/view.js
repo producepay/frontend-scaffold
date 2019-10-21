@@ -21,8 +21,8 @@ function BiFilterView(props) {
     items,
     limit,
     showSearch,
-    dispatch,
-    state,
+    values,
+    onChange,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -70,8 +70,8 @@ function BiFilterView(props) {
                     key={item.value}
                     item={item}
                     searchTerm={searchTerm}
-                    dispatch={dispatch}
-                    filterState={state}
+                    values={values}
+                    onChange={onChange}
                   />
                 );
               })}
@@ -97,9 +97,9 @@ BiFilterView.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
   items: optionsWithSubItemsType.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  state: optionsWithSubItemsType,
+  values: optionsWithSubItemsType.isRequired,
   showSearch: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
   limit: PropTypes.number.isRequired,
 };
 

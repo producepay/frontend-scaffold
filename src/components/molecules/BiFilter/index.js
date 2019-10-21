@@ -1,37 +1,19 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import _ from 'lodash';
 
-import { useDidMount } from '../../../hooks/did-mount';
+import PlusIcon from '../../icons/Plus';
+import MinusIcon from '../../icons/Minus';
+import Button from '../../elements/Button';
+import TextField from '../../elements/TextField';
+import { textSearchCompare } from '../../../helpers/common';
 
-import { optionsWithSubItemsType, FILTER_ACTION_TYPES } from './helpers';
-import BiFilterView from './view';
+import { optionsWithSubItemsType } from './helpers';
+// import BiFilterView from './view';
+import BiFilterItem from './item';
 
-const biFilterReducer = (state, action) => {
-  switch (action.type) {
-    case FILTER_ACTION_TYPES.ADD_ITEM: {
-      return [ ...state, action.item ];
-    }
-    case FILTER_ACTION_TYPES.REMOVE_ITEM: {
-      return _.filter(state, (item) => item.value !== action.item.value);
-    }
-    case FILTER_ACTION_TYPES.ADD_SUB_ITEM: {
-      const parentItem = _.find(state, (item) => item.value === action.item.value);
-      const newParentItem = { ...parentItem, subItems: [...parentItem.subItems, action.subItem ] }
-      return [..._.filter(state, (item) => item.value !== parentItem.value), newParentItem];
-    }
-    case FILTER_ACTION_TYPES.REMOVE_SUB_ITEM: {
-      const parentItem = _.find(state, (item) => item.value === action.item.value);
-      const newParentItem = {
-        ...parentItem,
-        subItems: _.filter(parentItem.subItems, (subItem) => subItem.value !== action.subItem.value)
-      };
-      return [..._.filter(state, (item) => item.value !== parentItem.value), newParentItem];
-    }
-    default:
-      throw new Error();
-  }
-};
+const ICON_COLOR = "#a0aec0";
 
 function BiFilter(props) {
   const {
@@ -41,29 +23,74 @@ function BiFilter(props) {
     limit,
     onChange,
     showSearch,
-    defaultValues,
+    values,
   } = props;
 
-  const didMount = useDidMount();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showMore, setShowMore] = useState(false);
 
-  const [state, dispatch] = useReducer(biFilterReducer, defaultValues);
+  const wrapperClassName = cx(
+    "w-full",
+    className,
+  );
 
-  useEffect(() => {
-    if (!didMount) {
-      onChange(state);
-    }
-  }, [didMount, onChange, state]);
+  const filteredItems = _.filter(items,
+    (option) => textSearchCompare(searchTerm, option.label) || _.some(
+      _.get(option, 'subItems', []),
+      (subItem) => textSearchCompare(searchTerm, subItem.label)
+    )
+  );
+  const finalItems = showMore ? filteredItems : _.take(filteredItems, limit);
 
   return (
-    <BiFilterView
-      className={className}
-      title={title}
-      items={items}
-      showSearch={showSearch}
-      limit={limit}
-      dispatch={dispatch}
-      state={state}
-    />
+    <div className={wrapperClassName}>
+      <div className="flex justify-between items-center">
+        <div className="font-medium">{title}</div>
+        <div className="cursor-pointer" onClick={() => setIsCollapsed(!isCollapsed)}>
+          {isCollapsed ? <PlusIcon size={14} color={ICON_COLOR} /> : <MinusIcon size={14} color={ICON_COLOR} />}
+        </div>
+      </div>
+      {
+        isCollapsed ? null : (
+          <div>
+            {showSearch && (
+              <TextField
+                className="my-2"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search"
+                size="sm"
+                rounded={false}
+              />
+            )}
+            <ul>
+              {finalItems.map((item) => {
+                return (
+                  <BiFilterItem
+                    key={item.value}
+                    item={item}
+                    searchTerm={searchTerm}
+                    values={values}
+                    onChange={onChange}
+                  />
+                );
+              })}
+            </ul>
+            {
+              filteredItems.length > limit ? (
+                <Button
+                  onClick={() => setShowMore(!showMore)}
+                  variant="text"
+                  label={showMore ? "Show Less" : "Show More"}
+                  className="text-xs font-medium"
+                />
+              ) : null
+            }
+          </div>
+        )
+      }
+    </div>
   );
 }
 
@@ -71,18 +98,16 @@ BiFilter.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
   items: optionsWithSubItemsType.isRequired,
+  values: optionsWithSubItemsType.isRequired,
   showSearch: PropTypes.bool,
   limit: PropTypes.number,
-  onChange: PropTypes.func,
-  defaultValues: optionsWithSubItemsType,
+  onChange: PropTypes.func.isRequired,
 };
 
 BiFilter.defaultProps = {
   className: '',
   showSearch: true,
   limit: 5,
-  onChange: () => {},
-  defaultValues: [],
 };
 
 export default React.memo(BiFilter);
