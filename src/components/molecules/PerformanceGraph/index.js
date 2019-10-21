@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import format from 'date-fns/format';
+import addISOYears from 'date-fns/add_iso_years';
+
+import { formatLoads } from '../../../helpers/format';
+import { getUTCDate, isBetween } from '../../../helpers/dates';
 
 import Legend from '../../elements/Nivo/Legend';
-import { formatLoads } from '../../../helpers/format';
 import BiLineGraph from '../../molecules/BiLineGraph';
 
 const LAST_YEAR_ID = 'Last Year';
 const THIS_YEAR_ID = 'This Year';
-const THIS_YEAR_COLOR = '#0092d4';
-const LAST_YEAR_COLOR = '#afe8fe';
+const THIS_YEAR_COLOR = '#00A9EA';
+const LAST_YEAR_COLOR = '#B8EBFE';
 const LEGEND_LABEL_COLOR = '#000000';
 
 const LEGEND_ITEMS = [{
@@ -21,6 +25,19 @@ const LEGEND_ITEMS = [{
   labelColor: LEGEND_LABEL_COLOR,
 }];
 
+// Set last year's line items on the same time scale
+const transformLastYearItems = (lineItems) => {
+  return lineItems.map((li) => ({
+    ...li,
+    groupedValue: format(
+      addISOYears(getUTCDate(new Date(li.groupedValue)), 1),
+      'YYYY-MM-DD 00:00:00 UTC'
+    ),
+  }));
+}
+
+const itemsBetweenDates = (items, min, max) => items.filter(i => isBetween(i.groupedValue, min, max));
+
 function PerformanceGraph({
   thisYearLineItems,
   lastYearLineItems,
@@ -29,10 +46,15 @@ function PerformanceGraph({
   minDate,
   maxDate,
 }) {
-  const lineSeriesConfig = [
-    { id: THIS_YEAR_ID, data: thisYearLineItems, color: THIS_YEAR_COLOR },
-    { id: LAST_YEAR_ID, data: lastYearLineItems, color: LAST_YEAR_COLOR },
-  ];
+  const lineSeriesConfig = [{
+    id: THIS_YEAR_ID,
+    data: itemsBetweenDates(thisYearLineItems, minDate, maxDate),
+    color: THIS_YEAR_COLOR,
+  }, {
+    id: LAST_YEAR_ID,
+    data: itemsBetweenDates(transformLastYearItems(lastYearLineItems), minDate, maxDate),
+    color: LAST_YEAR_COLOR,
+  }];
   const commonGraphProps = { minDate, maxDate };
 
   let title, specificGraphProps;
