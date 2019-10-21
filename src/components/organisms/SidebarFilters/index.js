@@ -21,6 +21,7 @@ const FETCH_FILTER_DATA = gql`
       sizeIdentifier
       gradeName
       gradeIdentifier
+      labelName
     }
     erpCustomers: erpCustomers {
       id
@@ -90,6 +91,7 @@ function SidebarFilters(props) {
             } : null),
             generateFilter(data.erpProducts, "Size", "sizeIdentifier", "sizeIdentifier", "sizeName", dispatch),
             generateFilter(data.erpProducts, "Packaging", "packagingIdentifier", "packagingIdentifier", "packagingName", dispatch),
+            generateFilter(data.erpProducts, "Label", "labelName", "labelName", "labelName", dispatch),
             (
               !erpCustomerId ?
                 generateFilter(data.erpCustomers, "Customer", "erpCustomerId", "id", "name", dispatch) : null

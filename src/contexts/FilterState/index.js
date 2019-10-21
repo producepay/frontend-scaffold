@@ -18,6 +18,9 @@ const graphqlFiltersReducer = (state, action) => {
       return setFilterState(state, 'packagingIdentifier', action.item, action.subItem);
     case FILTER_CONTEXT_ACTION_TYPES.CUSTOMER:
       return setFilterState(state, 'erpCustomerId', action.item, action.subItem);
+    case FILTER_CONTEXT_ACTION_TYPES.LABEL: {
+      return setFilterState(state, 'labelName', action.item, action.subItem);
+    }
     case FILTER_CONTEXT_ACTION_TYPES.SALES_PERSON:
       return setFilterState(state, 'salespersonName', action.item, action.subItem);
     case FILTER_CONTEXT_ACTION_TYPES.COUNTRY_OF_ORIGIN:
