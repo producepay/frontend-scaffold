@@ -71,17 +71,16 @@ function SidebarFilters(props) {
 
   useEffect(() => {
     if (data && data.erpProducts && data.erpCustomers) {
-      const hasVarieties = _.compact(_.map(data.erpProducts, 'varietyIdentifier')).length > 0;
       setFiltersToRender(
         _.compact(
           [
             (!commodityName ? {
               title: "Commodities",
               items: buildCommodityWithVarietySubItems(data.erpProducts),
-              key: hasVarieties ? 'commodityVarietyIdentifierPairs' : 'commodityIdentifier',
+              key: 'commodityVarietyIdentifierPairs',
               onChange: (item, subItem) => {
                 dispatch({
-                  type: hasVarieties ? 'COMMODITIES_AND_VARIETIES' : 'COMMODITIES',
+                  type: 'COMMODITIES_AND_VARIETIES',
                   item,
                   subItem,
                 });

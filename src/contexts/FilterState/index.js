@@ -12,15 +12,6 @@ const graphqlFiltersReducer = (state, action) => {
     case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES_AND_VARIETIES: {
       return setFilterState(state, 'commodityVarietyIdentifierPairs', action.item, action.subItem);
     }
-    case FILTER_CONTEXT_ACTION_TYPES.COMMODITIES: {
-      return setFilterState(state, 'commodityIdentifier', action.item, action.subItem);
-    }
-    case FILTER_CONTEXT_ACTION_TYPES.IN_COMMODITY_SCOPE: {
-      return _.omit(state, ['commodityVarietyIdentifierPairs', 'commodityIdentifier']);
-    }
-    case FILTER_CONTEXT_ACTION_TYPES.IN_CUSTOMER_SCOPE: {
-      return _.omit(state, 'erpCustomerId');
-    }
     case FILTER_CONTEXT_ACTION_TYPES.SIZE:
       return setFilterState(state, 'sizeIdentifier', action.item, action.subItem);
     case FILTER_CONTEXT_ACTION_TYPES.PACKAGING:
