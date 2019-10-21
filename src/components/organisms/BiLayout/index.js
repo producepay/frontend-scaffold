@@ -44,13 +44,15 @@ function BiLayout({ children }) {
         </div>
       </div>
 
-      <div className='w-full border-l bg-white min-h-screen' style={{ marginLeft: SIDEBAR_WIDTH }}>
-        <div className='p-4 h-16 bg-white border-b'>
-          Search Bar
-        </div>
+      <div className='w-full border-l min-h-screen' style={{ paddingLeft: SIDEBAR_WIDTH }}>
+        <div className='w-full border-l bg-white min-h-screen'>
+          <div className='p-4 h-16 border-b'>
+            Search Bar
+          </div>
 
-        <div className='bg-white'>
-          {children}
+          <div>
+            {children}
+          </div>
         </div>
       </div>
     </div>
