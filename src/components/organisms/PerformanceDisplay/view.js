@@ -32,8 +32,6 @@ function PerformanceDisplayView({
   const customerRankingData = _.get(data, 'customerRankingData', []);
   const commodityRankingData = _.get(data, 'commodityRankingData', []);
 
-  // console.log(data);
-
   const onClickCustomer = (cData) => history.push(routes.showCustomer(cData.erpCustomersId));
   const onClickCommodity = (cData) => history.push(routes.showCommodity(cData.groupedValue));
 
