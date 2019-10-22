@@ -6,6 +6,7 @@ import {
   commodityDropdownListOptions,
   itemFromUuids,
 } from '../../../helpers/commodities-and-varieties';
+import { textSearchCompare } from '../../../helpers/common';
 import routes from '../../../routes';
 
 import { Link } from 'react-router-dom';
@@ -28,9 +29,6 @@ function downshiftStateReducer(state, changes) {
       return changes;
   }
 }
-
-const textSearchCompare = (search, text) =>
-  !search || text.toLowerCase().includes(search.toLowerCase());
 
 function CommoditySearch(props) {
   const { commodityId, varietyId } = props;

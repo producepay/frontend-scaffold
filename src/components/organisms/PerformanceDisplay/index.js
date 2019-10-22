@@ -1,16 +1,17 @@
-import React, { useState, useCallback } from 'react';
-import subISOYears from 'date-fns/sub_iso_years';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
+import subISOYears from 'date-fns/sub_iso_years';
 
 import { gqlF } from '../../../helpers/dates';
+import { useFilterState } from '../../../contexts/FilterState';
 
 import PerformanceDisplayView from './view';
 
 function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
   const [dateInterval, setDateInterval] = useState('week');
-  const [startDate, setStartDate] = useState(subISOYears(new Date(), 1));
-  const [endDate, setEndDate] = useState(new Date());
+  const { handleDateRangeSelected } = useFilterState();
+  const { startDate, endDate, ...rest } = graphqlFilters;
 
   const { data, loading, error } = useQuery(graphqlQuery, {
     variables: {
@@ -18,21 +19,17 @@ function PerformanceDisplay({ history, graphqlQuery, graphqlFilters }) {
       thisYearSalesOrderLineItemFilters: {
         startDate: gqlF(startDate),
         endDate: gqlF(endDate),
-        ...graphqlFilters,
+        ...rest,
       },
       lastYearSalesOrderLineItemFilters: {
         startDate: gqlF(subISOYears(startDate, 1)),
         endDate: gqlF(subISOYears(endDate, 1)),
-        ...graphqlFilters,
+        ...rest,
       },
       filters: graphqlFilters,
     },
+    fetchPolicy: 'network-only', // query was not refetching when commodityVarietyIdentifierPairs changed sometimes (specifically variety sub items)
   });
-
-  const handleDateRangeSelected = useCallback((from, to) => {
-    setStartDate(from);
-    setEndDate(to);
-  }, [setStartDate, setEndDate]);
 
   return (
     <PerformanceDisplayView

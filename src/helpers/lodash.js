@@ -15,3 +15,7 @@ export function takeNth(arr, nth) {
 
   return arr.filter((val, idx) => idx % nth === 0);
 }
+
+export function notEq(obj) {
+  return _.negate(_.matches(obj));
+}

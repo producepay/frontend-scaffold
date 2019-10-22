@@ -1,11 +1,14 @@
 import React from 'react';
 
 import { AuthProvider } from './auth';
+import { FilterStateProvider } from './FilterState';
 
 function AppProviders(props) {
   return (
     <AuthProvider>
-      {props.children}
+      <FilterStateProvider>
+        {props.children}
+      </FilterStateProvider>
     </AuthProvider>
   );
 }

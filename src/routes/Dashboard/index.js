@@ -2,6 +2,9 @@ import React from 'react';
 import gql from 'graphql-tag';
 
 import DashboardView from './view';
+import BiLayout from '../../components/organisms/BiLayout';
+
+import { useFilterState } from '../../contexts/FilterState';
 
 const FETCH_DASHBOARD_DATA = gql`
   fragment groupedSummaryData on GroupedSalesOrderLineItem {
@@ -74,10 +77,14 @@ const FETCH_DASHBOARD_DATA = gql`
 `;
 
 function Dashboard() {
+  const { gqlFilterVariables } = useFilterState();
   return (
-    <DashboardView
-      graphqlQuery={FETCH_DASHBOARD_DATA}
-    />
+    <BiLayout>
+      <DashboardView
+        graphqlQuery={FETCH_DASHBOARD_DATA}
+        graphqlFilters={gqlFilterVariables}
+      />
+    </BiLayout>
   );
 }
 

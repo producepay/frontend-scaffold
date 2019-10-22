@@ -20,8 +20,6 @@ const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
 function PerformanceDisplayView({
   loading,
   data,
-  dateInterval,
-  setDateInterval,
   history,
   handleDateRangeSelected,
   startDate,

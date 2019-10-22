@@ -2,9 +2,9 @@ import React from 'react';
 
 import PerformanceDisplay from '../../components/organisms/PerformanceDisplay';
 
-function DashboardView({ graphqlQuery }) {
+function DashboardView({ graphqlQuery, graphqlFilters }) {
   return (
-    <PerformanceDisplay graphqlQuery={graphqlQuery} />
+    <PerformanceDisplay graphqlQuery={graphqlQuery} graphqlFilters={graphqlFilters} />
   );
 }
 
