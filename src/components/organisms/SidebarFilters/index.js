@@ -53,7 +53,7 @@ function buildCommodityWithVarietySubItems(allErpProducts) {
   return _.map(_.groupBy(allErpProducts, 'commodityIdentifier'), (erpProducts, commodityIdentifier) => ({
     value: commodityIdentifier,
     label: _.get(erpProducts, '[0].commodityName'),
-    subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyIdentifier', 'varietyName', () => {}).items,
+    subItems: _.get(generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyIdentifier', 'varietyName', () => {}), 'items', []),
   }));
 }
 
