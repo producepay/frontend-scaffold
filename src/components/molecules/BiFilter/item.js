@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -52,23 +52,14 @@ function BiFilterItem(props) {
     if (hasSearchedSubItems) setShowSubItems(true);
   }, [hasSearchedSubItems, setShowSubItems]);
 
-  const childItemValues = selectedItem && selectedItem.subItems ? _.map(selectedItem.subItems, 'value') : [];
-
-  const onParentItemClicked = useCallback((e) => {
-    onChange(item, null);
-  }, [item, onChange]);
-
-  const onChildItemClicked = useCallback((e) => {
-    const selectedChildItem = _.find(item.subItems, { value: e.target.value });
-    onChange(item, selectedChildItem);
-  }, [item, onChange]);
+  const childItemValues = _.map(_.get(selectedItem, 'subItems'), 'value');
 
   return (
     <li className={cx("my-2", className)}>
       <div className="flex items-center justify-between">
         <ItemWithCheckbox
           item={item}
-          onClick={onParentItemClicked}
+          onClick={() => onChange(item, null)}
           checked={_.includes(_.map(selectedItems, 'value'), item.value)}
           name={item.value}
         />
@@ -92,7 +83,7 @@ function BiFilterItem(props) {
                 <ItemWithCheckbox
                   item={subItem}
                   name={`${item.value}-${subItem.value}`}
-                  onClick={onChildItemClicked}
+                  onClick={() => onChange(item, subItem)}
                   checked={_.includes(childItemValues, subItem.value)}
                 />
               </li>
