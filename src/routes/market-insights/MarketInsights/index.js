@@ -1,14 +1,14 @@
 import React from 'react';
 
-import ShowCommodityCustomersView from './view';
+import MarketInsights from './view';
 import BiLayout from '../../../components/organisms/BiLayout';
 
-function ShowCommodityCustomers() {
+function ShowMarketInsights() {
   return (
     <BiLayout>
-      <ShowCommodityCustomersView />
+      <MarketInsights />
     </BiLayout>
   );
 }
 
-export default React.memo(ShowCommodityCustomers);
+export default React.memo(ShowMarketInsights);
