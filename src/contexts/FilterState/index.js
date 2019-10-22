@@ -112,7 +112,7 @@ function FilterStateProvider(props) {
         _.mapValues(otherFilters, (items) => _.map(items, 'value')),
         values => values.length === 0,
       ),
-      ...(commodityVarietyIdentifierPairs ? {
+      ...(commodityVarietyIdentifierPairs && commodityVarietyIdentifierPairs.length ? {
         commodityVarietyIdentifierPairs: 
           _.flatten(
             _.map(state.commodityVarietyIdentifierPairs, (item) => (
