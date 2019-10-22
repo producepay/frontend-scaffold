@@ -34,7 +34,7 @@ function BiFilterItem(props) {
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
-  const selectedItem = _.find(selectedItems, i => i.value === item.value);
+  const selectedItem = _.find(selectedItems, { value: item.value });
   const hasSubItemsSelected = hasSubItems && selectedItem && (selectedItem.subItems || []).length > 0;
 
   const [showSubItems, setShowSubItems] = useState(hasSubItemsSelected);
@@ -43,16 +43,14 @@ function BiFilterItem(props) {
     setShowSubItems(hasSubItemsSelected);
   }, [setShowSubItems, hasSubItemsSelected])
 
+  const filteredSubItems = textSearchCompare(searchTerm, item.label) ?
+    item.subItems :
+    _.filter(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label));
+  const hasSearchedSubItems = searchTerm !== '' && (filteredSubItems || []).length;
 
   useEffect(() => {
-    if (searchTerm !== '' && _.some(item.subItems, (subItem) => textSearchCompare(searchTerm, subItem.label))) {
-      setShowSubItems(true);
-    }
-  }, [setShowSubItems, searchTerm, item.subItems]);
-
-  const filteredSubItems = _.filter(item.subItems, (subItem) =>
-    textSearchCompare(searchTerm, item.label) || textSearchCompare(searchTerm, subItem.label)
-  );
+    if (hasSearchedSubItems) setShowSubItems(true);
+  }, [hasSearchedSubItems, setShowSubItems]);
 
   const childItemValues = selectedItem && selectedItem.subItems ? _.map(selectedItem.subItems, 'value') : [];
 
@@ -61,7 +59,7 @@ function BiFilterItem(props) {
   }, [item, onChange]);
 
   const onChildItemClicked = useCallback((e) => {
-    const selectedChildItem = _.find(item.subItems, i => i.value === e.target.value);
+    const selectedChildItem = _.find(item.subItems, { value: e.target.value });
     onChange(item, selectedChildItem);
   }, [item, onChange]);
 
