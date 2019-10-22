@@ -17,7 +17,7 @@ function Checkbox(props) {
   );
 
   const checkboxSpanClassName = cx(
-    'checkbox-span',
+    'checkbox-span absolute top-0 left-0 bg-transparent rounded-sm border-gray-400 border',
     {
       'checkbox-size-small': size === 'small',
       'checkbox-size-large': size === 'large',
