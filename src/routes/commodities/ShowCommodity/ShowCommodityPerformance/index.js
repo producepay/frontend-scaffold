@@ -1,5 +1,8 @@
 import React from 'react';
+import _ from 'lodash';
 import gql from 'graphql-tag';
+
+import { useFilterState } from '../../../../contexts/FilterState';
 
 import ShowCommodityPerformanceView from './view';
 
@@ -65,11 +68,16 @@ const FETCH_SHOW_COMMODITY_DATA = gql`
 
 function ShowCommodityPerformance(props) {
   const { commodityName } = props.match.params;
+  const { gqlFilterVariables } = useFilterState();
+  const filters = {
+    commodityName,
+    ..._.omit(gqlFilterVariables, 'commodityVarietyIdentifierPairs'),
+  };
 
   return (
     <ShowCommodityPerformanceView
       graphqlQuery={FETCH_SHOW_COMMODITY_DATA}
-      graphqlFilters={{ commodityName }}
+      graphqlFilters={filters}
     />
   );
 }

@@ -1,5 +1,8 @@
 import React from 'react';
+import _ from 'lodash';
 import gql from 'graphql-tag';
+
+import { useFilterState } from '../../../../contexts/FilterState';
 
 import ShowCustomerPerformanceView from './view';
 
@@ -62,12 +65,17 @@ const FETCH_SHOW_CUSTOMER_DATA = gql`
 `;
 
 function ShowCustomerPerformance(props) {
-  const { customerId } = props.match.params;
+  const { customerId: erpCustomerId } = props.match.params;
+  const { gqlFilterVariables } = useFilterState();
+  const filters = {
+    erpCustomerId,
+    ..._.omit(gqlFilterVariables, 'erpCustomerId'),
+  };
 
   return (
     <ShowCustomerPerformanceView
       graphqlQuery={FETCH_SHOW_CUSTOMER_DATA}
-      graphqlFilters={{ erpCustomerId: customerId }}
+      graphqlFilters={filters}
     />
   );
 }
