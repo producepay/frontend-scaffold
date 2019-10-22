@@ -3,6 +3,7 @@ import _ from 'lodash';
 import subISOYears from 'date-fns/sub_iso_years';
 
 import { useSessionStorage } from '../../hooks/use-session-storage';
+import { notEq } from '../../helpers/lodash';
 
 import { FILTER_CONTEXT_ACTION_TYPES } from './helpers';
 
@@ -31,23 +32,23 @@ const graphqlFiltersReducer = (state, action) => {
 
 function setFilterState(state, key, item, subItem) {
   const filters = state[key] || [];
-  const parentItem = _.find(filters, i => i.value === item.value);
+  const parentItem = _.find(filters, { value: item.value });
   if (subItem) { // if child item clicked
     if (parentItem) {
-      const existingChild = _.find(parentItem.subItems, i => i.value === subItem.value);
+      const existingChild = _.find(parentItem.subItems, { value: subItem.value });
       if (existingChild) {
         if (parentItem.subItems.length === 1) { // remove parent as well
-          return { ...state, [key]: _.filter(filters, i => i.value !== item.value) }
+          return { ...state, [key]: _.filter(filters, notEq({ value: item.value })) }
         } else { // remove subitem only
           const newParentItem = {
             ...parentItem,
-            subItems: _.filter(parentItem.subItems, (child) => child.value !== subItem.value)
+            subItems: _.filter(parentItem.subItems, notEq({ value: subItem.value })),
           };
-          return { ...state, [key]: [..._.filter(filters, i => i.value !== parentItem.value), newParentItem] }
+          return { ...state, [key]: [..._.filter(filters, notEq({ value: parentItem.value })), newParentItem] }
         }
       } else { // add subitem
         const newParentItem = { ...parentItem, subItems: [...parentItem.subItems, subItem ] };
-        return { ...state, [key]: [..._.filter(filters, i => i.value !== parentItem.value), newParentItem] };
+        return { ...state, [key]: [..._.filter(filters, notEq({ value: parentItem.value })), newParentItem] };
       }
     } else { // add parent with subitem
       const newParentItem = { ...item, subItems: [subItem] };
@@ -55,7 +56,7 @@ function setFilterState(state, key, item, subItem) {
     }
   } else { // parent item clicked
     if (parentItem) { // need to remove parent item
-      return { ...state, [key]: _.filter(filters, i => i.value !== item.value) };
+      return { ...state, [key]: _.filter(filters, notEq({ value: item.value })) };
     } else { // add parent item
       return { ...state, [key]: [ ...filters, item ] };
     }
