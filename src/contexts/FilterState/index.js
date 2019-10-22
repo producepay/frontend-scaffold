@@ -2,7 +2,6 @@ import React, { useReducer, useEffect, useContext, useCallback } from 'react';
 import _ from 'lodash';
 import subISOYears from 'date-fns/sub_iso_years';
 
-import { useDidMount } from '../../hooks/did-mount';
 import { useSessionStorage } from '../../hooks/use-session-storage';
 
 import { FILTER_CONTEXT_ACTION_TYPES } from './helpers';
@@ -68,28 +67,12 @@ const FilterStateContext = React.createContext();
 function FilterStateProvider(props) {
   const { children } = props;
 
+  const [sessionFilters, setSessionFilters] = useSessionStorage('filters', {});
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
-    startDate: subISOYears(new Date(), 1), // initial dates
-    endDate: new Date(),
+    ...sessionFilters,
+    ...{ startDate: sessionFilters.startDate ? new Date(sessionFilters.startDate) : subISOYears(new Date(), 1) },
+    ...{ endDate: sessionFilters.endDate ? new Date(sessionFilters.endDate) : new Date() },
   });
-  const [sessionFilters, setSessionFilters] = useSessionStorage('filters', state);
-
-  const didMount = useDidMount();
-  useEffect(() => {
-    if (didMount) { // first render
-      if (!_.isEmpty(sessionFilters)) {
-        // Restore dates from date strings
-        const transformSessionFilters = {
-          ...sessionFilters,
-          ...(sessionFilters.startDate ? { startDate: new Date(sessionFilters.startDate) } : {}),
-          ...(sessionFilters.endDate ? { endDate: new Date(sessionFilters.endDate) } : {}),
-        };
-        if (!_.isEqual(transformSessionFilters, sessionFilters)) {
-          dispatch({ type: FILTER_CONTEXT_ACTION_TYPES.RESTORE_FILTERS, filters: transformSessionFilters });
-        }
-      }
-    }
-  }, [didMount, sessionFilters]);
 
   useEffect(() => {
     setSessionFilters(state);
