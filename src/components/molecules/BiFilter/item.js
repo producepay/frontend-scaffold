@@ -9,8 +9,6 @@ import Checkbox from '../../elements/Checkbox';
 import ChevronUp from '../../icons/ChevronUp';
 import ChevronDown from '../../icons/ChevronDown';
 
-const CHEVRON_COLOR = "#a0aec0";
-
 const ItemWithCheckbox = ({ item, onClick, checked, name }) => (
   <div className="flex items-center">
     <Checkbox
@@ -68,8 +66,8 @@ function BiFilterItem(props) {
             <div className="cursor-pointer" onClick={() => setShowSubItems(!showSubItems)}>
               {
                 showSubItems ?
-                  <ChevronUp size={18} color={CHEVRON_COLOR} /> :
-                  <ChevronDown size={18} color={CHEVRON_COLOR} />
+                  <ChevronUp size={18} className="text-gray-500" /> :
+                  <ChevronDown size={18} className="text-gray-500" />
               }
             </div>
           ) : null
