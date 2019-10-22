@@ -34,21 +34,14 @@ function BiFilterItem(props) {
   } = props;
 
   const hasSubItems = item.subItems && item.subItems.length;
-  const parentItem = _.find(selectedItems, i => i.value === item.value);
+  const selectedItem = _.find(selectedItems, i => i.value === item.value);
+  const hasSubItemsSelected = hasSubItems && selectedItem && (selectedItem.subItems || []).length > 0;
 
-  const [showSubItems, setShowSubItems] = useState((parentItem ? (parentItem.subItems || []) : []).length > 0);
+  const [showSubItems, setShowSubItems] = useState(hasSubItemsSelected);
 
   useEffect(() => {
-    if (hasSubItems) {
-      if (parentItem) {
-        if ((parentItem.subItems || []).length > 0) {
-          setShowSubItems(true);
-        }
-      } else {
-        setShowSubItems(false);
-      }
-    }
-  }, [parentItem, hasSubItems, setShowSubItems])
+    setShowSubItems(hasSubItemsSelected);
+  }, [setShowSubItems, hasSubItemsSelected])
 
 
   useEffect(() => {
@@ -61,8 +54,7 @@ function BiFilterItem(props) {
     textSearchCompare(searchTerm, item.label) || textSearchCompare(searchTerm, subItem.label)
   );
 
-  const parentItemValues = _.map(selectedItems, 'value');
-  const childItemValues = parentItem && parentItem.subItems ? _.map(parentItem.subItems, 'value') : [];
+  const childItemValues = selectedItem && selectedItem.subItems ? _.map(selectedItem.subItems, 'value') : [];
 
   const onParentItemClicked = useCallback((e) => {
     onChange(item, null);
@@ -79,7 +71,7 @@ function BiFilterItem(props) {
         <ItemWithCheckbox
           item={item}
           onClick={onParentItemClicked}
-          checked={_.includes(parentItemValues, item.value)}
+          checked={_.includes(_.map(selectedItems, 'value'), item.value)}
           name={item.value}
         />
         {
