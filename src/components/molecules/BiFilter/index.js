@@ -12,8 +12,6 @@ import { textSearchCompare } from '../../../helpers/common';
 import { optionsWithSubItemsType } from './helpers';
 import BiFilterItem from './item';
 
-const ICON_COLOR = "#a0aec0";
-
 function BiFilter(props) {
   const {
     title,
@@ -47,7 +45,7 @@ function BiFilter(props) {
       <div className="flex justify-between items-center">
         <div className="font-medium">{title}</div>
         <div className="cursor-pointer" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? <PlusIcon size={14} color={ICON_COLOR} /> : <MinusIcon size={14} color={ICON_COLOR} />}
+          {isCollapsed ? <PlusIcon size={14} className="text-gray-500" /> : <MinusIcon size={14} className="text-gray-500" />}
         </div>
       </div>
       {
