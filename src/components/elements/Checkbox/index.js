@@ -30,7 +30,7 @@ function Checkbox(props) {
         type="checkbox"
         value={value}
         checked={checked}
-        onChange={(e) => { e.persist(); onClick(e); }}
+        onChange={onClick}
         className="absolute cursor-pointer opacity-0"
         id={name || value}
       />
