@@ -6,7 +6,11 @@ function SidebarView(props) {
   const { filters, loading } = props;
 
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <div className='py-8 flex justify-center items-center'>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
