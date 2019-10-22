@@ -42,17 +42,11 @@ function generateFilter(collection, title, key, itemKey, itemLabel, dispatch) {
 }
 
 function buildCommodityWithVarietySubItems(allErpProducts) {
-  return _.reduce(
-    _.groupBy(allErpProducts, 'commodityIdentifier'),
-    (result, erpProducts, commodityIdentifier) => {
-      result.push({
-        value: commodityIdentifier,
-        label: _.get(erpProducts, '[0].commodityName'),
-        subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyIdentifier', 'varietyName', () => {}).items,
-      });
-      return result;
-    }, []
-  );
+  return _.map(_.groupBy(allErpProducts, 'commodityIdentifier'), (erpProducts, commodityIdentifier) => ({
+    value: commodityIdentifier,
+    label: _.get(erpProducts, '[0].commodityName'),
+    subItems: generateFilter(erpProducts, "Varieties", 'varietyIdentifier', 'varietyIdentifier', 'varietyName', () => {}).items,
+  }));
 }
 
 function SidebarFilters(props) {
