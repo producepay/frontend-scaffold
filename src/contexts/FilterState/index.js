@@ -21,9 +21,6 @@ const graphqlFiltersReducer = (state, action) => {
     case FILTER_CONTEXT_ACTION_TYPES.DATE_RANGE: {
       return { ...state, startDate: action.startDate, endDate: action.endDate };
     }
-    case FILTER_CONTEXT_ACTION_TYPES.RESTORE_FILTERS: {
-      return action.filters;
-    }
     default: {
       throw new Error();
     }
