@@ -10,23 +10,19 @@ function SidebarView(props) {
   }
 
   return (
-    <React.Fragment>
-      {
-        filters.map((filter) => (
-          <div className="px-6 pt-4" key={filter.title}>
-            <div className="pb-4 border-b border-gray-300">
-              <BiFilter
-                title={filter.title}
-                items={filter.items}
-                onChange={filter.onChange}
-                selectedItems={filter.selectedItems || []}
-              />
-            </div>
-          </div>
-        ))
-      }
-    </React.Fragment>
-  )
+    filters.map((filter) => (
+      <div className="px-6 pt-4" key={filter.title}>
+        <div className="pb-4 border-b border-gray-300">
+          <BiFilter
+            title={filter.title}
+            items={filter.items}
+            onChange={filter.onChange}
+            selectedItems={filter.selectedItems || []}
+          />
+        </div>
+      </div>
+    ))
+  );
 }
 
 export default React.memo(SidebarView);
