@@ -1,12 +1,9 @@
 import React from 'react';
-import { Switch, Route, Redirect, Link, NavLink } from 'react-router-dom';
-import cx from 'classnames';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import routes from '../../../routes';
 
-import ChevronLeft from '../../../components/icons/ChevronLeft';
 import DetailHeader from '../../../components/molecules/DetailHeader';
-import { BOTTOMLESS_SECTION_SPACING } from '../../../components/organisms/PerformanceDisplay/view';
 
 import ShowCustomerPerformance from './ShowCustomerPerformance';
 import ShowCustomerTransactions from './ShowCustomerTransactions';

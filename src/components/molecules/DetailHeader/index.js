@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, Redirect, Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import cx from 'classnames';
 
 import routes from '../../../routes';
