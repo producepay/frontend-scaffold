@@ -4,8 +4,8 @@ import { useQuery } from '@apollo/react-hooks';
 import cx from 'classnames';
 import _ from 'lodash';
 
-import routes from '../../../routes';
 import { isPresent } from '../../../helpers/lodash';
+import { usePreviousSearches } from './helpers';
 
 import Card from '../../elements/Card';
 import SearchSection from './SearchSection';
@@ -20,11 +20,10 @@ const ERP_SEARCH_QUERY = gql`
   }
 `;
 
-const PREVIOUS_RESULTS = [];
-
 function Search({ className }) {
   const [searchText, setSearchText] = useState('');
   const [shouldShowSearchResults, setShouldShowSearchResults] = useState(false);
+  const [previousSearches, addPreviousSearch] = usePreviousSearches();
 
   const searchBoxRef = useRef(null);
   const onWindowClick = useCallback((e) => {
@@ -37,18 +36,19 @@ function Search({ className }) {
     return () => document.removeEventListener('click', onWindowClick);
   }, [onWindowClick]);
 
-  const { data } = useQuery(ERP_SEARCH_QUERY, {
+  const { data, loading } = useQuery(ERP_SEARCH_QUERY, {
     variables: { term: searchText },
     skip: _.isEmpty(searchText),
   });
   const searchResults = _.get(data, 'erpSearch');
 
-  const handleRouteClick = () => {
+  const handleRouteClick = (item) => {
+    addPreviousSearch(item);
     setShouldShowSearchResults(false);
     setSearchText('');
   };
 
-  const hasSomethingToShow = isPresent(searchResults) || false; // Saved results
+  const hasSomethingToShow = isPresent(searchResults) || isPresent(previousSearches);
 
   return (
     <div ref={searchBoxRef} className={cx(className, 'relative')}>
@@ -62,24 +62,36 @@ function Search({ className }) {
       {shouldShowSearchResults && hasSomethingToShow ? (
         <div className='absolute w-full' style={{ paddingTop: 1 }}>
           <Card>
-            {isPresent(searchResults) ? (
-              <React.Fragment>
-                <SearchSection
-                  title='Customers'
-                  items={_.filter(searchResults, { objectType: 'customer' })}
-                  routeFunc={routes.showCustomer}
-                  onRouteClick={handleRouteClick}
-                />
+            {isPresent(searchText.trim()) ? (
+              isPresent(searchResults) ? (
+                <React.Fragment>
+                  <SearchSection
+                    title='Customers'
+                    items={_.filter(searchResults, { objectType: 'customer' })}
+                    onRouteClick={handleRouteClick}
+                  />
 
-                <SearchSection
-                  className='border-t'
-                  title='Products'
-                  items={_.filter(searchResults, { objectType: 'product' })}
-                  routeFunc={routes.showCommodity}
-                  onRouteClick={handleRouteClick}
-                />
-              </React.Fragment>
-            ) : null}
+                  <SearchSection
+                    className='border-t'
+                    title='Products'
+                    items={_.filter(searchResults, { objectType: 'product' })}
+                    onRouteClick={handleRouteClick}
+                  />
+                </React.Fragment>
+              ) : (
+                !loading ? (
+                  <div className='p-4 text-center'>
+                    No Results Found
+                  </div>
+                ) : null
+              )
+            ) : (
+              <SearchSection
+                title='Recent Searches'
+                items={previousSearches}
+                onRouteClick={handleRouteClick}
+              />
+            )}
           </Card>
         </div>
       ) : null}
