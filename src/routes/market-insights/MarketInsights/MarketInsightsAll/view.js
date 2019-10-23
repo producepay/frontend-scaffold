@@ -61,10 +61,12 @@ function MarketInsightsAllView(props) {
       })
     });
 
+    
+
     const isSubscribed = !_.find(data.userCommodityVarietyPreferences, {
       commodityVarietyInfo: { 
-        commodity: { uuid: pricingData[0].commodityUuid },
-        variety: { uuid: pricingData[0].varietyUuid }
+        commodity: { id: String(pricingData[0].commodityId) },
+        variety: { id: String(pricingData[0].varietyId)}
       }
     })
 
@@ -74,9 +76,7 @@ function MarketInsightsAllView(props) {
       pricingWeekChange: pricingPercentages[1],
       commodityUsdaName: pricingData[0].commodityUsdaName,
       commodityId: pricingData[0].commodityId,
-      commodityUuid: pricingData[0].commodityUuid,
       varietyId: pricingData[0].varietyId,
-      varietyUuid: pricingData[0].varietyUuid,
       varietyUsdaName: pricingData[0].varietyUsdaName,
       movementDayChange: movementDayChange,
       movementWeekChange: movementWeekChange,
@@ -115,9 +115,7 @@ function MarketInsightsAllView(props) {
                 <UpdatePreferences
                   initIsSubscribed={commodity.isSubscribed ? true : false}
                   commodityId={commodity.commodityId}
-                  commodityUuid={commodity.commodityUuid}
                   varietyId={commodity.varietyId}
-                  varietyUuid={commodity.varietyUuid}
                 />
               </tr>
             )

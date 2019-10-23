@@ -6,17 +6,20 @@ const UPDATE_USER_PREFERENCES = gql`
 
   mutation ToggleUserPreferences(
     $commodityId: Int!,
-    $commodityUuid: String!,
-    $varietyId: Int,
-    $varietyUuid: String
+    $varietyId: Int
   ) {
     toggleUserPreferences(
       commodityId: $commodityId,
-      commodityUuid: $commodityUuid,
-      varietyId: $varietyId,
-      varietyUuid: $varietyUuid
+      varietyId: $varietyId
     ) {
-      id
+      commodityVarietyInfo {
+        commodity {
+          id
+        }
+        variety {
+          id
+        }
+      }
     }
   }
 `;
@@ -24,9 +27,7 @@ const UPDATE_USER_PREFERENCES = gql`
 function UpdatePreferences(props) {
   const {
     commodityId,
-    commodityUuid,
     varietyId,
-    varietyUuid,
     initIsSubscribed
   } = props;
 
@@ -35,21 +36,24 @@ function UpdatePreferences(props) {
   const [updatePreferences] = useMutation(UPDATE_USER_PREFERENCES);
 
   return (
-    <td key={`${commodityUuid}-${varietyUuid}`}>
+    <td key={`${commodityId}-${varietyId}`}>
       <form
         onSubmit={e => {
           e.preventDefault();
           const savedIsSubscribedState = isSubscribed;
           updatePreferences({ variables: {
             commodityId: commodityId,
-            commodityUuid: commodityUuid,
             varietyId: varietyId || null,
-            varietyUuid: varietyUuid || null
           } })
           .catch(() => {
             setIsSubscribed(savedIsSubscribedState);
           })
-          setIsSubscribed(!isSubscribed);
+          .then(({ data: { toggleUserPreferences } }) => {
+            if(toggleUserPreferences.commodityVarietyInfo.commodity.id === String(commodityId) &&
+              toggleUserPreferences.commodityVarietyInfo.variety.id === String(varietyId)) {
+              setIsSubscribed(!isSubscribed);
+            }
+          })
         }}
       >
         <button type="submit">{ isSubscribed ? "Subscribe" : "Unsubscribe" }</button>
