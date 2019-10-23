@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import routes from '../../../routes';
-import { useAuth } from '../../../contexts/auth';
 import { SIDEBAR_WIDTH } from '../../../styles/constants';
+import { useAuth } from '../../../contexts/auth';
+
+import Search from './Search';
 
 import logo from '../../../assets/images/pp-logo.svg';
 
@@ -11,7 +13,7 @@ const LINK_CNAME = 'h-full flex items-center px-4 hover:bg-gray-200';
 
 function NavBar({ className }) {
   const { logout } = useAuth();
-  const [searchText, setSearchText] = useState('');
+  
 
   return (
     <React.Fragment>
@@ -20,12 +22,7 @@ function NavBar({ className }) {
           <img src={logo} alt='ProducePay' />
         </div>
 
-        <input
-          className='h-full w-full py-4 outline-none'
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          placeholder='Search Commodity or Customer'
-        />
+        <Search className='h-full w-full' />
 
         <div className='flex whitespace-no-wrap font-medium'>
           <Link to={routes.dashboard()} className={LINK_CNAME}>
