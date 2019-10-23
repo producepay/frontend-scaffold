@@ -12,6 +12,7 @@ import PerformanceGraph from '../../molecules/PerformanceGraph';
 import PerformanceSummary from '../../molecules/PerformanceSummary';
 
 export const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
+export const BOTTOMLESS_SECTION_SPACING = 'pt-4 px-4 md:pt-6 md:px-6 lg:pt-8 lg:px-8';
 
 function PerformanceDisplayView({
   loading,

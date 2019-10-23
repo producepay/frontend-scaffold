@@ -6,12 +6,10 @@ function ShowCustomerPerformanceView(props) {
   const { graphqlQuery, graphqlFilters } = props;
 
   return (
-    <div>
-      <PerformanceDisplay
-        graphqlQuery={graphqlQuery}
-        graphqlFilters={graphqlFilters}
-      />
-    </div>
+    <PerformanceDisplay
+      graphqlQuery={graphqlQuery}
+      graphqlFilters={graphqlFilters}
+    />
   );
 }
 
