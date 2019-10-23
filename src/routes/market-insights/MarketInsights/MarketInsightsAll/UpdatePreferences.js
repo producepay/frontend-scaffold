@@ -49,9 +49,16 @@ function UpdatePreferences(props) {
             setIsSubscribed(savedIsSubscribedState);
           })
           .then(({ data: { toggleUserPreferences } }) => {
-            if(toggleUserPreferences.commodityVarietyInfo.commodity.id === String(commodityId) &&
-              toggleUserPreferences.commodityVarietyInfo.variety.id === String(varietyId)) {
-              setIsSubscribed(!isSubscribed);
+            if (varietyId) {
+              if (toggleUserPreferences.commodityVarietyInfo.commodity.id === String(commodityId) &&
+                toggleUserPreferences.commodityVarietyInfo.variety.id === String(varietyId)) {
+                setIsSubscribed(!isSubscribed);
+              }
+            }
+            else {
+              if (toggleUserPreferences.commodityVarietyInfo.commodity.id === String(commodityId)) {
+                setIsSubscribed(!isSubscribed);
+              }
             }
           })
         }}
