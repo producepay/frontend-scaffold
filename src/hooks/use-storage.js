@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-export function useSessionStorage(key, initialValue) {
+export default function useStorage(key, initialValue, storage = window.sessionStorage) {
   const [storedValue, setStoredValue] = useState(() => {
     try {
-      const item = sessionStorage.getItem(key);
+      const item = storage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       return initialValue;
@@ -16,7 +16,7 @@ export function useSessionStorage(key, initialValue) {
       const valueToStore =
         value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
-      sessionStorage.setItem(key, JSON.stringify(valueToStore));
+      storage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
     }
   };

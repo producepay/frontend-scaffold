@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useContext, useCallback } from 'react';
 import _ from 'lodash';
 import subISOYears from 'date-fns/sub_iso_years';
 
-import { useSessionStorage } from '../../hooks/use-session-storage';
+import useStorage from '../../hooks/use-storage';
 import { notEq } from '../../helpers/lodash';
 
 import { FILTER_CONTEXT_ACTION_TYPES } from './helpers';
@@ -72,7 +72,7 @@ const FilterStateContext = React.createContext();
 function FilterStateProvider(props) {
   const { children } = props;
 
-  const [sessionFilters, setSessionFilters] = useSessionStorage('filters', {});
+  const [sessionFilters, setSessionFilters] = useStorage('filters', {});
   const [state, dispatch] = useReducer(graphqlFiltersReducer, {
     ...sessionFilters,
     ...{ startDate: sessionFilters.startDate ? new Date(sessionFilters.startDate) : subISOYears(new Date(), 1) },
