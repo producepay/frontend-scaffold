@@ -10,9 +10,8 @@ import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
 import PerformanceGraph from '../../molecules/PerformanceGraph';
 import PerformanceSummary from '../../molecules/PerformanceSummary';
-import PerformanceDateFilter from '../../molecules/PerformanceDateFilter';
 
-const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
+export const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
 
 function PerformanceDisplayView({
   loading,
@@ -35,20 +34,7 @@ function PerformanceDisplayView({
   return loading ? (
     <PageSpinner />
   ) : (
-    <div className=''>
-      <div className={`${SECTION_SPACING} border-b`}>
-        <div className='flex justify-between'>
-          <div><h3 className='font-semibold text-xl'>Performance</h3></div>
-          <div>
-            <PerformanceDateFilter
-              onRangeSelected={handleDateRangeSelected}
-              startDate={startDate}
-              endDate={endDate}
-            />
-          </div>
-        </div>
-      </div>
-
+    <React.Fragment>
       {!_.isEmpty(thisYearSummary) ? (
         <div className={`${SECTION_SPACING} border-b`}>
           <PerformanceSummary
@@ -133,7 +119,7 @@ function PerformanceDisplayView({
           </Grid>
         </div>
       ) : null}
-    </div>
+    </React.Fragment>
   );
 }
 

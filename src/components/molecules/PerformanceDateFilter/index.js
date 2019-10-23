@@ -3,12 +3,17 @@ import startOfYear from 'date-fns/start_of_year';
 import endOfYear from 'date-fns/end_of_year';
 import subMonths from 'date-fns/sub_months';
 
+import { useFilterState } from '../../../contexts/FilterState';
+
 import DateRangePicker, { DEFAULT_PRESETS } from '../../elements/DateRangePicker';
 
-function PerformanceDateFilter({ startDate, endDate, onRangeSelected, ...rest }) {
+function PerformanceDateFilter(props) {
+  const { filterValues, handleDateRangeSelected } = useFilterState();
+  const { startDate, endDate } = filterValues;
+
   return (
     <DateRangePicker
-      onRangeSelected={onRangeSelected}
+      onRangeSelected={handleDateRangeSelected}
       defaultFrom={startDate}
       defaultTo={endDate}
       month={subMonths(new Date(), 1)}
@@ -23,6 +28,7 @@ function PerformanceDateFilter({ startDate, endDate, onRangeSelected, ...rest })
         start: startOfYear(new Date()),
         end: endOfYear(new Date()),
       }]}
+      {...props}
     />
   );
 }
