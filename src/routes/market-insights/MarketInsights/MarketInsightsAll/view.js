@@ -63,7 +63,7 @@ function MarketInsightsAllView(props) {
 
     
 
-    const isSubscribed = !_.find(data.userCommodityVarietyPreferences, {
+    const isSubscribed = _.find(data.userCommodityVarietyPreferences, {
       commodityVarietyInfo: { 
         commodity: { id: String(pricingData[0].commodityId) },
         variety: { id: String(pricingData[0].varietyId) }

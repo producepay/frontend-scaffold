@@ -49,21 +49,16 @@ function UpdatePreferences(props) {
             setIsSubscribed(savedIsSubscribedState);
           })
           .then(({ data: { toggleUserPreferences } }) => {
-            if (varietyId) {
-              if (toggleUserPreferences.commodityVarietyInfo.commodity.id === String(commodityId) &&
-                toggleUserPreferences.commodityVarietyInfo.variety.id === String(varietyId)) {
-                setIsSubscribed(!isSubscribed);
-              }
+            if (toggleUserPreferences) {
+              setIsSubscribed(true)
             }
             else {
-              if (toggleUserPreferences.commodityVarietyInfo.commodity.id === String(commodityId)) {
-                setIsSubscribed(!isSubscribed);
-              }
+              setIsSubscribed(false)
             }
           })
         }}
       >
-        <button type="submit">{ isSubscribed ? "Subscribe" : "Unsubscribe" }</button>
+        <button type="submit">{ isSubscribed ? "Unsubscribe" : "Subscribe" }</button>
       </form>
     </td>
   )
