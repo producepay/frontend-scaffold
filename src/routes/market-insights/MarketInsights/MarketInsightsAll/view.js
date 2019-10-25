@@ -1,5 +1,6 @@
 import React from 'react';
 import { getPricingPercentagesAndDayBefore, getMovementPercentages, getPricingDayLabel } from '../../../../helpers/summary-percentages'
+import { getRoundedPercentage } from '../../../../helpers/format'
 import PageSpinner from '../../../../components/elements/PageSpinner'
 import TH from '../../../../components/elements/table/TH'
 import '../../../../components/elements/table/table.css'
@@ -61,15 +62,18 @@ function MarketInsightsAllView(props) {
       })
     });
 
-    
-
-    const isSubscribed = _.find(data.userCommodityVarietyPreferences, {
-      commodityVarietyInfo: { 
-        commodity: { id: String(pricingData[0].commodityId) },
-        variety: { id: String(pricingData[0].varietyId) }
-      }
-    })
-
+    const isSubscribed = pricingData[0].varietyId ? 
+      _.find(data.userCommodityVarietyPreferences, {
+        commodityVarietyInfo: { 
+          commodity: { id: String(pricingData[0].commodityId) },
+          variety: { id: String(pricingData[0].varietyId) }
+        }
+      }) :
+      _.find(data.userCommodityVarietyPreferences, {
+        commodityVarietyInfo: { 
+          commodity: { id: String(pricingData[0].commodityId) }
+        }
+      })
 
     return ({
       pricingDayChange: pricingPercentages[0],

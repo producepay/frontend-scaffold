@@ -85,17 +85,9 @@ const FETCH_DATA = gql`
   }
 `
 
-const commodityUuids = _.uniq(_.map(allCommoditiesAndVarieties, 'commodityUuid'), (commodityAndVariety) => {
-  return [
-    commodityAndVariety.commodityUuid
-  ]
-})
+const commodityUuids = _.uniq(_.map(allCommoditiesAndVarieties, 'commodityUuid'))
 
-const varietyUuids = _.uniq(_.map(allCommoditiesAndVarieties, 'varietyUuid'), (commodityAndVariety) => {
-  return [
-    commodityAndVariety.varietyUuid
-  ]
-})
+const varietyUuids = _.uniq(_.map(allCommoditiesAndVarieties, 'varietyUuid'))
 
 const commonMovementFilters = {
   impExpFlag: ['D', 'I'],
@@ -130,7 +122,6 @@ function MarketInsightsAll(props) {
       },
       summaryThisYearMovementFilters: {
         ...commonMovementFilters,
-        isCurrentSeason: true,
         dateRanges: [{
           startDate: gqlF(subDays(startOfWeek, 14)),
           endDate: gqlF(endOfLastWeek),
@@ -138,7 +129,6 @@ function MarketInsightsAll(props) {
       },
       summaryLastYearMovementFilters: {
         ...commonMovementFilters,
-        isLastSeason: true,
         dateRanges: [{
           startDate: gqlF(subISOYears(subDays(startOfWeek, 7), 1)),
           endDate: gqlF(subISOYears(endOfLastWeek, 1)),

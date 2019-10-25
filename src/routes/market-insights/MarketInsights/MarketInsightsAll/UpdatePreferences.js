@@ -40,14 +40,10 @@ function UpdatePreferences(props) {
       <form
         onSubmit={e => {
           e.preventDefault();
-          const savedIsSubscribedState = isSubscribed;
           updatePreferences({ variables: {
-            commodityId: commodityId,
+            commodityId,
             varietyId: varietyId || null,
           } })
-          .catch(() => {
-            setIsSubscribed(savedIsSubscribedState);
-          })
           .then(({ data: { toggleUserPreferences } }) => {
             if (toggleUserPreferences) {
               setIsSubscribed(true)
