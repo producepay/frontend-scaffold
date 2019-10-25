@@ -1,8 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import startOfYear from 'date-fns/start_of_year';
-import endOfYear from 'date-fns/end_of_year';
-import subMonths from 'date-fns/sub_months';
 
 import { formatPrice, formatLargeLoads } from '../../../helpers/format';
 import routes from '../../../routes';
@@ -13,9 +10,9 @@ import RankingHeader from '../../molecules/RankingHeader';
 import RankingBars from '../../molecules/RankingBars';
 import PerformanceGraph from '../../molecules/PerformanceGraph';
 import PerformanceSummary from '../../molecules/PerformanceSummary';
-import DateRangePicker, { DEFAULT_PRESETS } from '../../elements/DateRangePicker';
 
-const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
+export const SECTION_SPACING = 'p-4 md:p-6 lg:p-8';
+export const BOTTOMLESS_SECTION_SPACING = 'pt-4 px-4 md:pt-6 md:px-6 lg:pt-8 lg:px-8';
 
 function PerformanceDisplayView({
   loading,
@@ -38,32 +35,7 @@ function PerformanceDisplayView({
   return loading ? (
     <PageSpinner />
   ) : (
-    <div className=''>
-      <div className={`${SECTION_SPACING} border-b`}>
-        <div className='flex justify-between'>
-          <div><h3 className='font-semibold text-xl'>Performance</h3></div>
-          <div>
-            <DateRangePicker
-              onRangeSelected={handleDateRangeSelected}
-              defaultFrom={startDate}
-              defaultTo={endDate}
-              month={subMonths(new Date(), 1)}
-              format="MMM DD YYYY"
-              inputProps={{
-                className: 'px-6',
-              }}
-              alignRight
-              showWeekNumbers
-              presets={[...DEFAULT_PRESETS, {
-                label: "This Year",
-                start: startOfYear(new Date()),
-                end: endOfYear(new Date()),
-              }]}
-            />
-          </div>
-        </div>
-      </div>
-
+    <React.Fragment>
       {!_.isEmpty(thisYearSummary) ? (
         <div className={`${SECTION_SPACING} border-b`}>
           <PerformanceSummary
@@ -148,7 +120,7 @@ function PerformanceDisplayView({
           </Grid>
         </div>
       ) : null}
-    </div>
+    </React.Fragment>
   );
 }
 

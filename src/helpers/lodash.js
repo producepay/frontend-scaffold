@@ -19,3 +19,5 @@ export function takeNth(arr, nth) {
 export function notEq(obj) {
   return _.negate(_.matches(obj));
 }
+
+export const isPresent = _.negate(_.isEmpty);

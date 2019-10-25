@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cx from 'classnames';
 import { ResponsiveLine } from '@nivo/line';
+import { useTheme } from '@nivo/core';
+
 import TooltipWrapper from '../../elements/Nivo/TooltipWrapper';
 import { useWidth } from '../../../helpers/dom';
 import { formatPrice, formatLargeLoads } from '../../../helpers/format';
 
 const LineGraph = ({ yUnit, tickValues, ...rest }) => {
+  const theme = useTheme();
   const { width } = useWidth();
   const { data } = rest;
 
@@ -58,7 +61,7 @@ const LineGraph = ({ yUnit, tickValues, ...rest }) => {
 
   const finalProps = _.merge(defaultLineGraphProps, rest); // deep merge
 
-  return <ResponsiveLine {...finalProps} />;
+  return <ResponsiveLine theme={theme} {...finalProps} />;
 }
 
 LineGraph.propTypes = {

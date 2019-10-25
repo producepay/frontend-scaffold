@@ -1,7 +1,9 @@
 import React from 'react';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import routes from '../../../routes';
+
+import DetailHeader from '../../../components/molecules/DetailHeader';
 
 import ShowCommodityPerformance from './ShowCommodityPerformance';
 import ShowCommodityCustomers from './ShowCommodityCustomers';
@@ -13,12 +15,15 @@ function ShowCommodityView(props) {
 
   return (
     <React.Fragment>
-      <div>
-        <Link to={routes.showCommoditySales(commodityName)}>Sales Performance</Link>
-        <Link to={routes.showCommodityCustomers(commodityName)}>Customers</Link>
-        <Link to={routes.showCommodityTransactions(commodityName)}>Transactions</Link>
-        <Link to={routes.showCommodityInsights(commodityName)}>Market Insights</Link>
-      </div>
+      <DetailHeader
+        title={commodityName}
+        links={[
+          { label: 'Sales Performance', to: routes.showCommoditySales(commodityName) },
+          { label: 'Customers', to: routes.showCommodityCustomers(commodityName) },
+          { label: 'Transactions', to: routes.showCommodityTransactions(commodityName) },
+          { label: 'Market Insights', to: routes.showCommodityInsights(commodityName) },
+        ]}
+      />
 
       <Switch>
         <Route exact path={routes.showCommoditySales()} component={ShowCommodityPerformance} />

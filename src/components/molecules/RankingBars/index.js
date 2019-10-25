@@ -9,14 +9,16 @@ const MAX_TO_DISPLAY = 15;
 function RankingBars(props) {
   const { items, valueKey, groupedByKey, onRowClick, formatter } = props;
 
-  const { ref: widthRef, width: barMaxWidth } = useWidth();
+  const { ref: containerWidthRef, width: containerWidth } = useWidth();
+  const { ref: labelWidthRef, width: labelWidth } = useWidth();
+  const maxBarWidth = (containerWidth && labelWidth) ? containerWidth - labelWidth : 0;
 
   const sortedItems = _.orderBy(items, [valueKey], ['desc']);
   const maxValue = (_.maxBy(items, valueKey) || {})[valueKey];
 
   return (
     <div>
-      <table>
+      <table className='w-full table-fixed'>
         <tbody className='text-sm'>
           {sortedItems.slice(0, MAX_TO_DISPLAY).map((data, idx) => {
             const label = data[groupedByKey];
@@ -28,17 +30,20 @@ function RankingBars(props) {
                 className='cursor-pointer hover:bg-gray-200'
                 onClick={() => onRowClick(data)}
               >
-                <td className='whitespace-no-wrap py-1 pr-2'>{label}</td>
+                <td className='whitespace-no-wrap py-1 pr-2 w-2/5'>
+                  <div className='truncate'>{label}</div>
+                </td>
 
-                <td className='w-full py-1'>
-                  <div className='flex'>
+                <td className='w-3/5 py-1'>
+                  <div ref={idx === 0 ? containerWidthRef : null} className='flex overflow-hidden'>
                     <div
-                      ref={idx === 0 ? widthRef : null}
-                      className='h-4 w-full bg-primary'
-                      style={{ width: barMaxWidth ? (value / maxValue) * barMaxWidth : null }}
+                      className='h-4 bg-primary'
+                      style={{ width: (value / maxValue) * maxBarWidth }}
                     />
 
-                    <div className='ml-1'>{formatter(value)}</div>
+                    <div ref={idx === 0 ? labelWidthRef : null} className='pl-1'>
+                      {formatter(value)}
+                    </div>
                   </div>
                 </td>
               </tr>

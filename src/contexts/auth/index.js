@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 
 import { identifyUser } from '../../helpers/tracking';
+import { useFilterState } from '../FilterState';
 
 const AUTH_TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -34,6 +35,8 @@ const getStoredUser = () => {
 const AuthContext = React.createContext();
 
 function AuthProvider(props) {
+  const { setSessionFilters } = useFilterState();
+
   const [loginRequest] = useMutation(LOGIN);
 
   const { location: { search }, children } = props;
@@ -70,6 +73,8 @@ function AuthProvider(props) {
 
     setAuthToken(null);
     window.localStorage.removeItem(AUTH_TOKEN_KEY);
+
+    setSessionFilters({});
   }
 
   return (

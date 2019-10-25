@@ -5,11 +5,11 @@ import { FilterStateProvider } from './FilterState';
 
 function AppProviders(props) {
   return (
-    <AuthProvider>
-      <FilterStateProvider>
+    <FilterStateProvider>
+      <AuthProvider>
         {props.children}
-      </FilterStateProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </FilterStateProvider>
   );
 }
 
