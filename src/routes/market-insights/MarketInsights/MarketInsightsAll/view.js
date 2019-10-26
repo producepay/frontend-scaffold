@@ -62,8 +62,6 @@ function MarketInsightsAllView(props) {
       })
     });
 
-    console.log(data.userCommodityVarietyPreferences)
-
     const isSubscribed = pricingData[0].varietyId ? 
       _.find(data.userCommodityVarietyPreferences, {
         commodityVarietyInfo: { 
