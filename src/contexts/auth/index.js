@@ -18,6 +18,7 @@ const LOGIN = gql`
         id
         email
         accessToken
+        unsubscribedAt
       }
     }
   }

@@ -1,9 +1,9 @@
 import React from 'react';
 import format from 'date-fns/format';
-import isYesterday from 'date-fns/is_yesterday';
 
 import PercentagesWrapper from './PercentagesWrapper';
 import WeatherSection from './WeatherSection';
+import { getPricingDayLabel } from '../../../helpers/summary-percentages';
 
 const PERCENTAGE_CNAME = [
   'w-full sm:w-1/2 px-4 lg:px-8 py-4',
@@ -11,16 +11,12 @@ const PERCENTAGE_CNAME = [
   'border-b sm:border-b-0 sm:border-r',
 ].join(' ');
 
-const getPricingDayLabel = (pricingDayChange, dayBefore) => {
-  if (pricingDayChange === '--' || isYesterday(dayBefore)) return 'YESTERDAY';
-  return format(dayBefore, 'dddd').toUpperCase();
-};
-
 function SummaryHeaderView(props) {
   const { pricingPercentages, dayBefore, movementPercentages, weatherDataAvailable, alertsCount } = props;
 
   const [pricingDayChange, pricingWeekChange] = pricingPercentages;
   const [movementDayChange, movementWeekChange] = movementPercentages;
+
 
   return (
     <header className="bg-white shadow relative flex flex-col sm:flex-row">
