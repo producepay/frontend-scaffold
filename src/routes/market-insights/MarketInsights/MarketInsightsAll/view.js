@@ -1,6 +1,5 @@
 import React from 'react';
 import { getPricingPercentagesAndDayBefore, getMovementPercentages, getPricingDayLabel } from '../../../../helpers/summary-percentages'
-import { getRoundedPercentage } from '../../../../helpers/format'
 import PageSpinner from '../../../../components/elements/PageSpinner'
 import TH from '../../../../components/elements/table/TH'
 import '../../../../components/elements/table/table.css'
@@ -62,26 +61,20 @@ function MarketInsightsAllView(props) {
       })
     });
 
-    const isSubscribed = pricingData[0].varietyId ? 
-      _.find(data.userCommodityVarietyPreferences, {
-        commodityVarietyInfo: { 
-          commodity: { id: String(pricingData[0].commodityId) },
-          variety: { id: String(pricingData[0].varietyId) }
-        }
-      }) :
-      _.find(data.userCommodityVarietyPreferences, {
-        commodityVarietyInfo: { 
-          commodity: { id: String(pricingData[0].commodityId) },
-          variety: null
-        }
-      })
+    const { commodityId, varietyId } = pricingData[0];
+    const isSubscribed =  !!_.find(data.userCommodityVarietyPreferences, {
+      commodityVarietyInfo: { 
+        commodity: { id: String(pricingData[0].commodityId) },
+        variety: varietyId ? { id: String(varietyId) } : null
+      }
+    })
 
     return ({
       pricingDayChange: pricingPercentages[0],
       pricingWeekChange: pricingPercentages[1],
       commodityUsdaName: pricingData[0].commodityUsdaName,
-      commodityId: pricingData[0].commodityId,
-      varietyId: pricingData[0].varietyId,
+      commodityId: commodityId,
+      varietyId: varietyId,
       varietyUsdaName: pricingData[0].varietyUsdaName,
       movementDayChange: movementDayChange,
       movementWeekChange: movementWeekChange,
@@ -118,7 +111,7 @@ function MarketInsightsAllView(props) {
                 <td className="text-center">{commodity.movementWeekChange ? `${commodity.movementWeekChange}%` : '--'}</td>
                 <td className="text-center text-red-500">{commodity.alertsCount ? `${commodity.alertsCount} alerts` : '--'}</td>
                 <UpdatePreferences
-                  initIsSubscribed={commodity.isSubscribed ? true : false}
+                  initIsSubscribed={commodity.isSubscribed}
                   commodityId={commodity.commodityId}
                   varietyId={commodity.varietyId}
                 />

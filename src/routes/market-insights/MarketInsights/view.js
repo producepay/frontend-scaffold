@@ -9,7 +9,7 @@ import MarketInsightsAll from './MarketInsightsAll';
 
 function MarketInsightsView() {
   const { user } = useAuth()
-  const [isSubscribed, setIsSubscribed] = useState(user.unsubscribedAt)
+  const [isSubscribed, setIsSubscribed] = useState(!!user.unsubscribedAt)
 
   function toggleSubscription() {
     setIsSubscribed(!isSubscribed)
