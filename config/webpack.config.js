@@ -552,8 +552,19 @@ module.exports = function(webpackEnv) {
         }),
       isEnvProduction &&
         new PurgecssPlugin({
-          paths: glob.sync([paths.appHtml, `${paths.appSrc}/**/*`], { nodir: true }),
+          paths: glob.sync(
+            [
+              paths.appHtml,
+              `${paths.appSrc}/**/*`,
+              `${paths.appNodeModules}/react-day-picker/**/*`,
+            ],
+            { nodir: true },
+          ),
           defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+          whitelistPatterns: [
+            /.*DayPicker.*/,
+            /.*textfield.*/,
+          ],
         }),
       isEnvProduction &&
         new RollbarSourceMapPlugin({
