@@ -1,0 +1,44 @@
+.checkbox-size-small {
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-size-large {
+  width: 24px;
+  height: 24px;
+}
+
+.checkbox-wrapper .checkbox-span:after {
+  position: absolute;
+  content: "";
+  height: 0;
+  width: 0;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked ~ .checkbox-span {
+  @apply bg-primary text-white border-primary
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked ~ .checkbox-span:after {
+  -webkit-transform: rotate(45deg) scale(1);
+  -ms-transform: rotate(45deg) scale(1);
+  transform: rotate(45deg) scale(1);
+  opacity: 1; 
+  background-color: transparent;
+  border: solid #FFFFFF;
+  border-width: 0 2px 2px 0;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked ~ .checkbox-size-small.checkbox-span:after {
+  width: 6px;
+  height: 12px;
+  top: 0px;
+  left: 4px;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked ~ .checkbox-size-large.checkbox-span:after {
+  width: 10px;
+  height: 18px;
+  top: 0px;
+  left: 6px;
+}

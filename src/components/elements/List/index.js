@@ -24,25 +24,25 @@ function List(props) {
       {children
         ? children
         : items.map((item, index) => {
-            const computedClassName = cx({
-              'rounded-t': index === 0 && !square,
-              'rounded-b': index === items.length - 1 && !square,
-              'bg-primary text-white': activeItem.value === item.value,
-              itemClassName,
-            });
-            return (
-              <ListItem
-                selectable={selectable}
-                borderless={borderless}
-                key={item.value}
-                onClick={() => onClick(item)}
-                className={computedClassName}
-                {...ListItemProps}
-              >
-                {item.label}
-              </ListItem>
-            );
-          })}
+          const computedClassName = cx({
+            'rounded-t': index === 0 && !square,
+            'rounded-b': index === items.length - 1 && !square,
+            'bg-primary text-white': activeItem.value === item.value,
+            itemClassName,
+          });
+          return (
+            <ListItem
+              selectable={selectable}
+              borderless={borderless}
+              key={item.value}
+              onClick={() => onClick(item)}
+              className={computedClassName}
+              {...ListItemProps}
+            >
+              {item.label}
+            </ListItem>
+          );
+        })}
     </div>
   );
 }

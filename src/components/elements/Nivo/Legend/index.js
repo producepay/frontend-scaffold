@@ -13,6 +13,9 @@ function Legend(props) {
     flexDirection,
     itemDirection,
     selectable,
+    colorClassName,
+    labelClassName,
+    labelFontWeight,
   } = props;
 
   const parentClassName = cx(
@@ -34,10 +37,12 @@ function Legend(props) {
     itemClassName,
   );
 
-  const colorClassName = cx('w-4 h-4', {
+  const baseColorClassName = cx('w-4 h-4', {
     'mr-1': itemDirection === 'row',
     'mb-2 h-4': itemDirection === 'column',
-  });
+  }, colorClassName);
+
+  const baseLabelClassName = cx(`font-${labelFontWeight}`, labelClassName);
 
   return (
     <div className={parentClassName}>
@@ -64,12 +69,12 @@ function Legend(props) {
                     value={item.label}
                   />
                 ) : (
-                  <div className={colorClassName} style={{ backgroundColor: item.color }}></div>
+                  <div className={baseColorClassName} style={{ backgroundColor: item.color }}></div>
                 )}
 
                 <div
-                  className='font-medium'
-                  style={{ color: item.color }}
+                  className={baseLabelClassName}
+                  style={{ color: item.labelColor || item.color }}
                 >
                   {item.label}
                 </div>
@@ -85,10 +90,14 @@ function Legend(props) {
 Legend.propTypes = {
   className: PropTypes.string,
   itemClassName: PropTypes.string,
+  colorClassName: PropTypes.string,
+  labelClassName: PropTypes.string,
+  labelFontWeight: PropTypes.string,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       color: PropTypes.string.isRequired,
+      labelColor: PropTypes.string,
     }),
   ).isRequired,
   selectable: PropTypes.bool,
@@ -115,11 +124,14 @@ Legend.propTypes = {
 Legend.defaultProps = {
   className: '',
   itemClassName: '',
+  colorClassName: '',
+  labelClassName: '',
   selectable: false,
   activeItems: null,
   onChange: null,
   flexDirection: 'row',
   itemDirection: 'row',
+  labelFontWeight: 'medium',
 };
 
 export default React.memo(Legend);

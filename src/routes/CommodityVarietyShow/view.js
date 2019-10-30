@@ -22,9 +22,10 @@ function CommodityVarietyShow(props) {
     commodityUuid,
     varietyUuid,
     loading,
-    error,
     data,
   } = props;
+
+  if (!loading && !data) return null;
 
   const { label: commodityName } = itemFromUuids(commodityUuid, varietyUuid);
 

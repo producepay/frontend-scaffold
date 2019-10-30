@@ -1,0 +1,29 @@
+.InsightsDatePicker .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  @apply bg-primary-light text-white
+}
+
+.InsightsDatePicker .DayPicker-Day {
+  border-radius: 0 !important;
+}
+
+.InsightsDatePicker .DayPicker-Day--start:not(.DayPicker-Day--outside) {
+  background-color: #23926d !important;
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+
+.InsightsDatePicker .DayPicker-Day--end:not(.DayPicker-Day--outside) {
+  background-color: #23926d !important;
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+
+.InsightsDatePicker .DayPicker-Day--today {
+  @apply text-primary
+}
+
+.InsightsDatePickerOverlayAlignRight {
+  left: auto !important;
+  right: 0 !important;
+  margin-right: 16px;
+}

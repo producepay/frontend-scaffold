@@ -13,7 +13,7 @@ function PricingSubtable({ label, reports }) {
   return (
     <React.Fragment>
       <tr>
-        <td colSpan={4} className='pt-3'>
+        <td colSpan={4} className='pt-3' style={{ paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }}>
           <div className='py-2 px-4 bg-gray-200 border rounded-sm text-xs font-semibold tracking-wide leading-none'>
             {label}
           </div>
@@ -21,7 +21,7 @@ function PricingSubtable({ label, reports }) {
       </tr>
 
       {orderedReports.map((report, idx) => {
-        const className = cx('py-3 px-2 text-sm', {
+        const className = cx('text-sm', {
           'bg-gray-200': idx % 2 !== 0,
         });
 

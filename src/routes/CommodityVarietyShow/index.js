@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import format from 'date-fns/format';
 import subDays from 'date-fns/sub_days';
 import startOfISOWeek from 'date-fns/start_of_iso_week';
@@ -25,7 +25,6 @@ const FETCH_DATA = gql`
     resolvedHighPriceMax
     resolvedAveragePrice
   }
-
   fragment movementGraphFragment on MovementReport {
     reportDate
     year
@@ -33,7 +32,6 @@ const FETCH_DATA = gql`
     commodityUsdaName
     packageWeight
   }
-
   query loadCommodityVarietyData(
     $commodityUuids: [String!],
     $varietyUuids: [String!],
@@ -72,19 +70,16 @@ const FETCH_DATA = gql`
       reportDate
       packageWeight
     }
-
     tablePricingData: shippingPointPriceReports(group: $tableGroups, filter: $tableFilters) {
       ...pricingDataFragment
       gradeUsdaName
       varietyUsdaName
       sizeUsdaName
     }
-
     graphPricingData: shippingPointPriceReports(group: $graphGroups, filter: $graphFilters) {
       ...pricingDataFragment
       varietyUsdaName
     }
-
     currentYearMovementReports: movementReports(
       filter: $currentYearMovementFilters
       group: $movementGroups
@@ -97,7 +92,6 @@ const FETCH_DATA = gql`
     ) {
       ...movementGraphFragment
     }
-
     growingRegions(commodityUuids: $commodityUuids, inSeason: true) {
       name
       weatherForecasts {
@@ -108,7 +102,6 @@ const FETCH_DATA = gql`
         }
       }
     }
-
     mostPopularSkus(commodityUuids: $commodityUuids, varietyUuids: $varietyUuids) {
       varietySkuName
     }
@@ -197,7 +190,7 @@ function CommodityVarietyShow(props) {
         ...commonMovementFilters,
         dateRanges: [{
           startDate: gqlF(subWeeks(startOfWeek, MOVEMENT_GRAPH_WEEKS_BACK)),
-          endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), {weekStartsOn: 1})),
+          endDate: gqlF(endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 })),
         }],
       },
       lastYearMovementFilters: {

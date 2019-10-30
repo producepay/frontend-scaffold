@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { interpolateYlGn } from 'd3-scale-chromatic';
 import { storiesOf } from '@storybook/react';
-import { concat, remove } from 'lodash';
 
 import Legend from './index';
 
@@ -40,10 +39,9 @@ storiesOf('Elements/Legend', module)
     />
   </div>
 ))
-.add('item column aligned', () => (
+.add('different label color', () => (
   <Legend
-    items={LEGEND_ITEMS}
-    itemDirection="column"
+    items={LEGEND_ITEMS.map(item => ({ label: item.label, color: item.color, labelColor: '#333333' }))}
   />
 ))
 .add('selectable', () => <LegendContainer />);

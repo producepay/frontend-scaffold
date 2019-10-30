@@ -7,10 +7,13 @@ import Grid from '../../../components/elements/Grid';
 import TH from '../../../components/elements/table/TH';
 import PricingSubtable from './pricing-subtable';
 
+import '../../../components/elements/table/table.css';
+
 const PricingTable = props => {
   const { latestReports } = props;
 
   const cityGroupedLatestReports = _.groupBy(latestReports, 'cityName');
+  const thProps = { weight: "semibold" }
 
   return (
     <React.Fragment>
@@ -22,13 +25,13 @@ const PricingTable = props => {
 
             return (
               <Grid key={cityName} md="1/2" spacing={32}>
-                <table className="w-full">
+                <table className="table-primary table-p-sm w-full">
                   <thead>
                     <tr>
-                      <TH align="left">{capitalizeEachWord(cityName)}</TH>
-                      <TH size="xs">LOW</TH>
-                      <TH size="xs">HIGH</TH>
-                      <TH size="xs">AVG</TH>
+                      <TH align="left" uppercase={false} {...thProps}>{capitalizeEachWord(cityName)}</TH>
+                      <TH size="xs" {...thProps}>LOW</TH>
+                      <TH size="xs" {...thProps}>HIGH</TH>
+                      <TH size="xs" {...thProps}>AVG</TH>
                     </tr>
                   </thead>
 
