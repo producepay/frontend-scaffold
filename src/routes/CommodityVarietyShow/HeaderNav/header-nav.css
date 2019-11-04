@@ -1,9 +1,0 @@
-.text-field-change {
-  top: 14px;
-  right: 14px;
-}
-
-.list-container {
-  height: calc(100vh - 2rem - 20px);
-  -webkit-overflow-scrolling: touch;
-}

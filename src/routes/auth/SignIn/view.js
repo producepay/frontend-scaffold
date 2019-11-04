@@ -18,12 +18,10 @@ function SignInView({ login }) {
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={SIGN_IN_SCHEMA}
-        onSubmit={(values) => {
+        onSubmit={(values, { setSubmitting }) => {
           login(_.pick(values, ['email', 'password']))
-          .then((res) => {
-            console.log(res);
-          })
           .catch((e) => {
+            setSubmitting(false);
             console.log(e);
           })
         }}

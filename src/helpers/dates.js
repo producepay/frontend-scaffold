@@ -39,6 +39,7 @@ export function isBetween(d, dStart, dEnd) {
 }
 
 // Convert a date string in the format YYYY-MM-DD 00:00:00 UTC to YYYY-MM-DD 07:00:00
+// Useful for Nivo
 export function utcDateStrToTimeZoneOffset(dateStr) {
   const timezoneOffset = new Date().getTimezoneOffset();
   const hoursOffset = _.padStart(Math.floor(timezoneOffset / 60), 2, '0');

@@ -1,14 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import gql from 'graphql-tag';
-import qs from 'qs';
-import { withRouter } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
+import _ from 'lodash';
 
 import { identifyUser } from '../../helpers/tracking';
-import { useFilterState } from '../FilterState';
+import useStorage from '../../hooks/use-storage';
 
-const AUTH_TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
+const AUTH_TOKEN_KEY = 'auth-token';
 
 const LOGIN = gql`
   mutation signInUser($email: String!, $password: String!) {
@@ -24,47 +23,28 @@ const LOGIN = gql`
   }
 `;
 
-const storeUser = (userObj) => window.localStorage.setItem(USER_KEY, JSON.stringify(userObj));
-const getStoredUser = () => {
-  try {
-    return JSON.parse(window.localStorage.getItem(USER_KEY));
-  } catch (e) {
-    return {};
-  }
-}
-
 const AuthContext = React.createContext();
 
 function AuthProvider(props) {
-  const { setSessionFilters } = useFilterState();
-
   const [loginRequest] = useMutation(LOGIN);
 
-  const { location: { search }, children } = props;
-  const { token, email } = qs.parse(search, { ignoreQueryPrefix: true });
+  const { children } = props;
 
-  const [unauthenticatedUser, setUnauthenticatedUser] = useState({ token, email });
+  const [user, setUser] = useStorage(USER_KEY, {}, window.localStorage);
+  const [authToken, setAuthToken] = useStorage(AUTH_TOKEN_KEY, null, window.localStorage);
+  
   useEffect(() => {
-    const userData = identifyUser({ token, email });
-    setUnauthenticatedUser((prevUser) => ({ ...prevUser, ...userData }));
-  }, [token, email]);
-
-  const [user, setUser] = useState(getStoredUser());
-  const [authToken, setAuthToken] = useState(window.localStorage.getItem(AUTH_TOKEN_KEY));
+    const email = _.get(user, 'email');
+    if (email) identifyUser(email);
+  }, [user]);
 
   function login(variables) {
     return loginRequest({ variables }).then(({ data: { signInUser } }) => {
       const { token: jwtToken, user } = signInUser;
 
-      const unauthenticatedUserPayload = { token: user.accessToken, email: user.email };
-      setUnauthenticatedUser(unauthenticatedUserPayload);
-      identifyUser(unauthenticatedUserPayload);
-
+      identifyUser(user.email);
       setUser(user);
-      storeUser(user);
-
       setAuthToken(jwtToken);
-      window.localStorage.setItem(AUTH_TOKEN_KEY, jwtToken);
     });
   }
 
@@ -74,14 +54,11 @@ function AuthProvider(props) {
 
     setAuthToken(null);
     window.localStorage.removeItem(AUTH_TOKEN_KEY);
-
-    setSessionFilters({});
   }
 
   return (
     <AuthContext.Provider
       value={{
-        unauthenticatedUser,
         user,
         login,
         logout,
@@ -97,10 +74,8 @@ function useAuth() {
   return useContext(AuthContext);
 }
 
-const WrappedAuthProvider = withRouter(React.memo(AuthProvider));
-
 export {
-  WrappedAuthProvider as AuthProvider,
+  AuthProvider,
   useAuth,
   AUTH_TOKEN_KEY,
 };
